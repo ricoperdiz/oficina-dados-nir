@@ -919,7 +919,15 @@ class: inverse, center, middle
 
 # Pausa para o café e PERGUNTAS
 
-<iframe src="https://giphy.com/embed/M4ecx9P2jI4tq" width="480" height="359" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/coffee-winks-M4ecx9P2jI4tq">GIPHY</a></p>
+.center[
+![](https://escolaconquer.com.br/blog/wp-content/uploads/2018/07/café.gif)
+]
+
+.footnote[
+
+Fonte do gif: <https://escolaconquer.com.br/blog/wp-content/uploads/2018/07/café.gif> 
+
+]
 
 
 ---
@@ -1240,7 +1248,15 @@ class: inverse, center, middle
 
 # Pausa para o café e PERGUNTAS
 
-<iframe src="https://giphy.com/embed/M4ecx9P2jI4tq" width="480" height="359" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/coffee-winks-M4ecx9P2jI4tq">GIPHY</a></p>
+.center[
+![](https://escolaconquer.com.br/blog/wp-content/uploads/2018/07/café.gif)
+]
+
+.footnote[
+
+Fonte do gif: <https://escolaconquer.com.br/blog/wp-content/uploads/2018/07/café.gif> 
+
+]
 
 ---
 name: pca
@@ -1470,7 +1486,15 @@ class: inverse, center, middle
 
 # PERGUNTAS?
 
-<iframe src="https://giphy.com/embed/M4ecx9P2jI4tq" width="480" height="359" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/coffee-winks-M4ecx9P2jI4tq">GIPHY</a></p>
+.center[
+![](https://escolaconquer.com.br/blog/wp-content/uploads/2018/07/café.gif)
+]
+
+.footnote[
+
+Fonte do gif: <https://escolaconquer.com.br/blog/wp-content/uploads/2018/07/café.gif> 
+
+]
 
 ---
 
