@@ -94,7 +94,7 @@ meta() %>%
   meta_social(
     title = "Oficina de análise de dados NIR em ambiente R - Partes 4—5 - LDA e PLS",
     url = "https://oficina-dados-nir-dia02.netlify.app",
-    image = "https://github.com/ricoperdiz/oficina-dados-nir/-/blob/main/02_dia2/share-card.png",
+    image = "https://raw.githubusercontent.com/ricoperdiz/oficina-dados-nir/main/02_dia2/share-card.png",
     image_alt = paste(
       "Slide título da oficina Análise de dados NIR em ambiente R:",
       "LDA e PLS,",

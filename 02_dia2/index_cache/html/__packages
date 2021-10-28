@@ -1,10 +1,4 @@
 base
-methods
-datasets
-utils
-grDevices
-graphics
-stats
 xaringanthemer
 ggplot2
 tidymodels
@@ -31,3 +25,4 @@ data.table
 metathis
 DiagrammeR
 MASS
+pls

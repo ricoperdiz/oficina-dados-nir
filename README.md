@@ -73,10 +73,10 @@ Duas opções:
 
 -   Apresentação do dia 01:
     [Slides](https://oficina-dados-nir-dia01.netlify.app) \| [Código
-    fonte](https://gitlab.com/ricoperdiz/oficina-dados-nir/-/blob/main/01_dia1/index.Rmd)  
+    fonte](https://github.com/ricoperdiz/oficina-dados-nir/blob/main/01_dia1/index.Rmd)  
 -   Apresentação do dia 02:
     [Slides](https://oficina-dados-nir-dia02.netlify.app) \| [Código
-    fonte](https://gitlab.com/ricoperdiz/oficina-dados-nir/-/blob/main/02_dia2/index.Rmd)
+    fonte](https://github.com/ricoperdiz/oficina-dados-nir/blob/main/02_dia2/index.Rmd)
 
 # Dúvidas, informações adicionais
 

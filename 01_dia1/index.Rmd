@@ -85,7 +85,7 @@ meta() %>%
   meta_social(
     title = "Oficina de análise de dados NIR em ambiente R - Partes 1—3 - Manejo de dados com *dplyr*, preparação de dados, e PCA",
     url = "https://oficina-dados-nir-dia01.netlify.app",
-    image = "https://github.com/ricoperdiz/oficina-dados-nir/-/blob/main/01_dia1/share-card.png",
+    image = "https://raw.githubusercontent.com/ricoperdiz/oficina-dados-nir/main/01_dia1/share-card.png",
     image_alt = paste(
       "Slide título da oficina Análise de dados NIR em ambiente R:",
       "Manejo de dados com *dplyr*, preparação de dados, e PCA,",

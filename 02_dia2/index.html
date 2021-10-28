@@ -21,7 +21,7 @@
     <meta name="twitter:title" content="Oficina de análise de dados NIR em ambiente R - Partes 4—5 - LDA e PLS"/>
     <meta name="twitter:description" content="Oficina para aprendizagem prática em ambiente R de ferramentas para manipular, pré-processar e analisar dados de espectroscopia no infravermelho próximo (NIR)."/>
     <meta name="twitter:url" content="https://oficina-dados-nir-dia02.netlify.app"/>
-    <meta name="twitter:image:src" content="https://github.com/ricoperdiz/oficina-dados-nir/-/blob/main/02_dia2/share-card.png"/>
+    <meta name="twitter:image:src" content="https://raw.githubusercontent.com/ricoperdiz/oficina-dados-nir/main/02_dia2/share-card.png"/>
     <meta name="twitter:image:alt" content="Slide título da oficina Análise de dados NIR em ambiente R: LDA e PLS, apresentado de forma privada a um grupo de estudantes no dia 2 de julho de 2021."/>
     <meta name="twitter:card" content="summary_large_image"/>
     <meta name="twitter:creator" content="@ricoperdiz"/>
@@ -29,7 +29,7 @@
     <meta property="og:title" content="Oficina de análise de dados NIR em ambiente R - Partes 4—5 - LDA e PLS"/>
     <meta property="og:description" content="Oficina para aprendizagem prática em ambiente R de ferramentas para manipular, pré-processar e analisar dados de espectroscopia no infravermelho próximo (NIR)."/>
     <meta property="og:url" content="https://oficina-dados-nir-dia02.netlify.app"/>
-    <meta property="og:image" content="https://github.com/ricoperdiz/oficina-dados-nir/-/blob/main/02_dia2/share-card.png"/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/ricoperdiz/oficina-dados-nir/main/02_dia2/share-card.png"/>
     <meta property="og:image:alt" content="Slide título da oficina Análise de dados NIR em ambiente R: LDA e PLS, apresentado de forma privada a um grupo de estudantes no dia 2 de julho de 2021."/>
     <meta property="og:type" content="website"/>
     <meta property="og:locale" content="en_US"/>
@@ -323,22 +323,22 @@ pca_tabela
 ## # A tibble: 16 × 4
 ##    terms          value component id       
 ##    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    
-##  1 Sepal.Length  0.521  PC1       pca_FDoGp
-##  2 Sepal.Width  -0.269  PC1       pca_FDoGp
-##  3 Petal.Length  0.580  PC1       pca_FDoGp
-##  4 Petal.Width   0.565  PC1       pca_FDoGp
-##  5 Sepal.Length -0.377  PC2       pca_FDoGp
-##  6 Sepal.Width  -0.923  PC2       pca_FDoGp
-##  7 Petal.Length -0.0245 PC2       pca_FDoGp
-##  8 Petal.Width  -0.0669 PC2       pca_FDoGp
-##  9 Sepal.Length  0.720  PC3       pca_FDoGp
-## 10 Sepal.Width  -0.244  PC3       pca_FDoGp
-## 11 Petal.Length -0.142  PC3       pca_FDoGp
-## 12 Petal.Width  -0.634  PC3       pca_FDoGp
-## 13 Sepal.Length  0.261  PC4       pca_FDoGp
-## 14 Sepal.Width  -0.124  PC4       pca_FDoGp
-## 15 Petal.Length -0.801  PC4       pca_FDoGp
-## 16 Petal.Width   0.524  PC4       pca_FDoGp
+##  1 Sepal.Length  0.521  PC1       pca_8Npt3
+##  2 Sepal.Width  -0.269  PC1       pca_8Npt3
+##  3 Petal.Length  0.580  PC1       pca_8Npt3
+##  4 Petal.Width   0.565  PC1       pca_8Npt3
+##  5 Sepal.Length -0.377  PC2       pca_8Npt3
+##  6 Sepal.Width  -0.923  PC2       pca_8Npt3
+##  7 Petal.Length -0.0245 PC2       pca_8Npt3
+##  8 Petal.Width  -0.0669 PC2       pca_8Npt3
+##  9 Sepal.Length  0.720  PC3       pca_8Npt3
+## 10 Sepal.Width  -0.244  PC3       pca_8Npt3
+## 11 Petal.Length -0.142  PC3       pca_8Npt3
+## 12 Petal.Width  -0.634  PC3       pca_8Npt3
+## 13 Sepal.Length  0.261  PC4       pca_8Npt3
+## 14 Sepal.Width  -0.124  PC4       pca_8Npt3
+## 15 Petal.Length -0.801  PC4       pca_8Npt3
+## 16 Petal.Width   0.524  PC4       pca_8Npt3
 ```
 
 ---
@@ -428,8 +428,8 @@ caret::trainControl()
 ## Fluxograma de um perfil básico de análise
 
 .center2[
-<div id="htmlwidget-ea93935ff263b657f13e" style="width:504px;height:504px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ea93935ff263b657f13e">{"x":{"diagram":"\ndigraph fluxograma_modelagem {\n\n# a \"graph\" statement\n  graph [overlap = true, fontname = Helvetica, fontsize = 150]\n\n# node definitions\nnode [shape = box]\n\na [label = \"Dados\"]\nb [label = \"Quebra dos dados \n rsample::initial_split()\"]\ne [label = \"Receita  \n recipes::recipe()\"]\nf [label = \"Interface caret \n train()\"]\nj [label = \"Predições\"]\nk [label = \"Avaliação \n performance\"]\n\nnode [shape = circle]\n\nc [label = \"Treino\"]\nd [label = \"Teste\"]\ng [label = \"PCA\"]\nh [label = \"LDA\"]\ni [label = \"PLS-DA\"]\n\n# edge definitions with the node IDs\na -> b\nb -> c\nb -> d\na -> e\nc -> e\ne -> f\ne -> g\nf -> h\nf -> i\n{a c} -> f\ng -> h\n{h i} -> j\nj -> k\nd -> j\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-18605c3c3e7145bb854a" style="width:504px;height:504px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-18605c3c3e7145bb854a">{"x":{"diagram":"\ndigraph fluxograma_modelagem {\n\n# a \"graph\" statement\n  graph [overlap = true, fontname = Helvetica, fontsize = 150]\n\n# node definitions\nnode [shape = box]\n\na [label = \"Dados\"]\nb [label = \"Quebra dos dados \n rsample::initial_split()\"]\ne [label = \"Receita  \n recipes::recipe()\"]\nf [label = \"Interface caret \n train()\"]\nj [label = \"Predições\"]\nk [label = \"Avaliação \n performance\"]\n\nnode [shape = circle]\n\nc [label = \"Treino\"]\nd [label = \"Teste\"]\ng [label = \"PCA\"]\nh [label = \"LDA\"]\ni [label = \"PLS-DA\"]\n\n# edge definitions with the node IDs\na -> b\nb -> c\nb -> d\na -> e\nc -> e\ne -> f\ne -> g\nf -> h\nf -> i\n{a c} -> f\ng -> h\n{h i} -> j\nj -> k\nd -> j\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
 ]
 
@@ -592,11 +592,11 @@ predicao_lda_basico
 ```
 
 ```
-##  [1] setosa     setosa     setosa     setosa     setosa     setosa     setosa     setosa    
-##  [9] setosa     setosa     setosa     setosa     setosa     versicolor versicolor versicolor
-## [17] versicolor versicolor versicolor versicolor versicolor versicolor versicolor versicolor
-## [25] versicolor versicolor virginica  virginica  virginica  virginica  virginica  virginica 
-## [33] virginica  virginica  virginica  virginica  virginica  virginica  virginica 
+##  [1] setosa     setosa     setosa     setosa     setosa     setosa     setosa     setosa     setosa    
+## [10] setosa     setosa     setosa     setosa     versicolor versicolor versicolor versicolor versicolor
+## [19] versicolor versicolor versicolor versicolor versicolor versicolor versicolor versicolor virginica 
+## [28] virginica  virginica  virginica  virginica  virginica  virginica  virginica  virginica  virginica 
+## [37] virginica  virginica  virginica 
 ## Levels: setosa versicolor virginica
 ```
 ]
@@ -720,11 +720,9 @@ names(ldafit_cv_10fold)
 ```
 
 ```
-##  [1] "method"       "modelInfo"    "modelType"    "recipe"       "results"     
-##  [6] "pred"         "bestTune"     "call"         "dots"         "metric"      
-## [11] "control"      "finalModel"   "trainingData" "resample"     "resampledCM" 
-## [16] "perfNames"    "maximize"     "yLimits"      "times"        "levels"      
-## [21] "rs_seed"
+##  [1] "method"       "modelInfo"    "modelType"    "recipe"       "results"      "pred"         "bestTune"    
+##  [8] "call"         "dots"         "metric"       "control"      "finalModel"   "trainingData" "resample"    
+## [15] "resampledCM"  "perfNames"    "maximize"     "yLimits"      "times"        "levels"       "rs_seed"
 ```
 
 Para acessar as informações, basta executar um dos comandos abaixo:
@@ -1367,31 +1365,31 @@ confusionMatrix(data = predicao_plsfit_exemplo_loocv, reference = teste$Species)
 ##             Reference
 ## Prediction   setosa versicolor virginica
 ##   setosa         13          0         0
-##   versicolor      0         11         3
-##   virginica       0          2        10
+##   versicolor      0          5         3
+##   virginica       0          8        10
 ## 
 ## Overall Statistics
-##                                          
-##                Accuracy : 0.8718         
-##                  95% CI : (0.7257, 0.957)
-##     No Information Rate : 0.3333         
-##     P-Value [Acc &gt; NIR] : 4.89e-12       
-##                                          
-##                   Kappa : 0.8077         
-##                                          
-##  Mcnemar's Test P-Value : NA             
+##                                         
+##                Accuracy : 0.7179        
+##                  95% CI : (0.5513, 0.85)
+##     No Information Rate : 0.3333        
+##     P-Value [Acc &gt; NIR] : 1.039e-06     
+##                                         
+##                   Kappa : 0.5769        
+##                                         
+##  Mcnemar's Test P-Value : NA            
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: setosa Class: versicolor Class: virginica
-## Sensitivity                 1.0000            0.8462           0.7692
-## Specificity                 1.0000            0.8846           0.9231
-## Pos Pred Value              1.0000            0.7857           0.8333
-## Neg Pred Value              1.0000            0.9200           0.8889
+## Sensitivity                 1.0000            0.3846           0.7692
+## Specificity                 1.0000            0.8846           0.6923
+## Pos Pred Value              1.0000            0.6250           0.5556
+## Neg Pred Value              1.0000            0.7419           0.8571
 ## Prevalence                  0.3333            0.3333           0.3333
-## Detection Rate              0.3333            0.2821           0.2564
-## Detection Prevalence        0.3333            0.3590           0.3077
-## Balanced Accuracy           1.0000            0.8654           0.8462
+## Detection Rate              0.3333            0.1282           0.2564
+## Detection Prevalence        0.3333            0.2051           0.4615
+## Balanced Accuracy           1.0000            0.6346           0.7308
 ```
 ]
 
@@ -1485,28 +1483,24 @@ background-size: cover
 ## [25] tidymodels_0.1.3      ggplot2_3.3.5         xaringanthemer_0.3.4 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] colorspace_2.0-2     ellipsis_0.3.2       class_7.3-19         showtext_0.9-4      
-##  [5] proxy_0.4-26         xaringanExtra_0.5.2  rstudioapi_0.13      showtextdb_3.0      
-##  [9] listenv_0.8.0        furrr_0.2.2          farver_2.1.0         xaringan_0.21       
-## [13] prodlim_2019.11.13   fansi_0.5.0          lubridate_1.7.10     xml2_1.3.2          
-## [17] codetools_0.2-18     splines_4.1.1        knitr_1.34           jsonlite_1.7.2      
-## [21] pROC_1.17.0.1        icons_0.2.0          compiler_4.1.1       backports_1.2.1     
-## [25] assertthat_0.2.1     Matrix_1.3-4         fastmap_1.1.0        cli_3.0.1           
-## [29] NIRtools_0.0.0.9006  visNetwork_2.0.9     htmltools_0.5.2      tools_4.1.1         
-## [33] gtable_0.3.0         glue_1.4.2           reshape2_1.4.4       rappdirs_0.3.3      
-## [37] Rcpp_1.0.7           jquerylib_0.1.4      DiceDesign_1.9       vctrs_0.3.8         
-## [41] nlme_3.1-152         iterators_1.0.13     timeDate_3043.102    gower_0.2.2         
-## [45] xfun_0.25            stringr_1.4.0        globals_0.14.0       lifecycle_1.0.1     
-## [49] future_1.21.0        ipred_0.9-11         parallel_4.1.1       RColorBrewer_1.1-2  
-## [53] yaml_2.2.1           sass_0.4.0           rpart_4.1-15         stringi_1.7.5       
-## [57] highr_0.9            foreach_1.5.1        e1071_1.7-7          lhs_1.1.1           
-## [61] lava_1.6.9           rlang_0.4.12         pkgconfig_2.0.3      evaluate_0.14       
-## [65] htmlwidgets_1.5.3    labeling_0.4.2       tidyselect_1.1.1     parallelly_1.26.0   
-## [69] plyr_1.8.6           R6_2.5.1             generics_0.1.0       DBI_1.1.1           
-## [73] pillar_1.6.4         whisker_0.4          withr_2.4.2          survival_3.2-11     
-## [77] nnet_7.3-16          crayon_1.4.1         utf8_1.2.2           rmarkdown_2.10      
-## [81] sysfonts_0.8.3       grid_4.1.1           ModelMetrics_1.2.2.2 digest_0.6.28       
-## [85] stats4_4.1.1         GPfit_1.0-8          munsell_0.5.0        bslib_0.2.5.1
+##  [1] colorspace_2.0-2     ellipsis_0.3.2       class_7.3-19         showtext_0.9-4       proxy_0.4-26        
+##  [6] xaringanExtra_0.5.2  rstudioapi_0.13      showtextdb_3.0       listenv_0.8.0        furrr_0.2.2         
+## [11] farver_2.1.0         xaringan_0.21        prodlim_2019.11.13   fansi_0.5.0          lubridate_1.7.10    
+## [16] xml2_1.3.2           codetools_0.2-18     splines_4.1.1        knitr_1.34           jsonlite_1.7.2      
+## [21] pROC_1.17.0.1        icons_0.2.0          compiler_4.1.1       backports_1.2.1      assertthat_0.2.1    
+## [26] Matrix_1.3-4         fastmap_1.1.0        cli_3.0.1            NIRtools_0.0.0.9006  visNetwork_2.0.9    
+## [31] htmltools_0.5.2      tools_4.1.1          gtable_0.3.0         glue_1.4.2           reshape2_1.4.4      
+## [36] rappdirs_0.3.3       Rcpp_1.0.7           jquerylib_0.1.4      DiceDesign_1.9       vctrs_0.3.8         
+## [41] nlme_3.1-152         iterators_1.0.13     timeDate_3043.102    gower_0.2.2          xfun_0.25           
+## [46] stringr_1.4.0        globals_0.14.0       lifecycle_1.0.1      future_1.21.0        ipred_0.9-11        
+## [51] parallel_4.1.1       RColorBrewer_1.1-2   yaml_2.2.1           sass_0.4.0           rpart_4.1-15        
+## [56] stringi_1.7.5        highr_0.9            foreach_1.5.1        e1071_1.7-7          lhs_1.1.1           
+## [61] lava_1.6.9           rlang_0.4.12         pkgconfig_2.0.3      evaluate_0.14        htmlwidgets_1.5.3   
+## [66] labeling_0.4.2       tidyselect_1.1.1     parallelly_1.26.0    plyr_1.8.6           R6_2.5.1            
+## [71] generics_0.1.0       DBI_1.1.1            pillar_1.6.4         whisker_0.4          withr_2.4.2         
+## [76] survival_3.2-11      nnet_7.3-16          crayon_1.4.1         utf8_1.2.2           rmarkdown_2.10      
+## [81] sysfonts_0.8.3       grid_4.1.1           ModelMetrics_1.2.2.2 digest_0.6.28        stats4_4.1.1        
+## [86] GPfit_1.0-8          munsell_0.5.0        bslib_0.2.5.1
 ```
 
     </textarea>
