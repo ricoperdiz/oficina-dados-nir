@@ -11,10 +11,15 @@
     <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
     <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
     <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
-    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
     <script src="libs/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
     <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
     <script src="libs/panelset-0.2.6/panelset.js"></script>
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
+    <script src="libs/shareon-1.4.1/shareon.min.js"></script>
+    <link href="libs/xaringanExtra-shareagain-0.2.6/shareagain.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-shareagain-0.2.6/shareagain.js"></script>
     <meta name="description" content="Oficina para aprendizagem prática em ambiente R de ferramentas para manipular, pré-processar e analisar dados de espectroscopia no infravermelho próximo (NIR)."/>
     <meta name="generator" content="xaringan e remark.js"/>
     <meta name="github-repo" content="ricoperdiz/oficina-dados-nir"/>
@@ -304,8 +309,8 @@ dados_completos_receita_pca_pre
 ## 
 ## Operations:
 ## 
-## Centering and scaling for Sepal.Length, Sepal.Width, Petal.Length, Petal.Width [trained]
-## PCA extraction with Sepal.Length, Sepal.Width, Petal.Length, Petal.Width [trained]
+## Centering and scaling for Sepal.Length, Sepal.Width, ... [trained]
+## PCA extraction with Sepal.Length, Sepal.Width, ... [trained]
 ```
 
 
@@ -323,22 +328,22 @@ pca_tabela
 ## # A tibble: 16 × 4
 ##    terms          value component id       
 ##    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    
-##  1 Sepal.Length  0.521  PC1       pca_8Npt3
-##  2 Sepal.Width  -0.269  PC1       pca_8Npt3
-##  3 Petal.Length  0.580  PC1       pca_8Npt3
-##  4 Petal.Width   0.565  PC1       pca_8Npt3
-##  5 Sepal.Length -0.377  PC2       pca_8Npt3
-##  6 Sepal.Width  -0.923  PC2       pca_8Npt3
-##  7 Petal.Length -0.0245 PC2       pca_8Npt3
-##  8 Petal.Width  -0.0669 PC2       pca_8Npt3
-##  9 Sepal.Length  0.720  PC3       pca_8Npt3
-## 10 Sepal.Width  -0.244  PC3       pca_8Npt3
-## 11 Petal.Length -0.142  PC3       pca_8Npt3
-## 12 Petal.Width  -0.634  PC3       pca_8Npt3
-## 13 Sepal.Length  0.261  PC4       pca_8Npt3
-## 14 Sepal.Width  -0.124  PC4       pca_8Npt3
-## 15 Petal.Length -0.801  PC4       pca_8Npt3
-## 16 Petal.Width   0.524  PC4       pca_8Npt3
+##  1 Sepal.Length  0.521  PC1       pca_jCGEQ
+##  2 Sepal.Width  -0.269  PC1       pca_jCGEQ
+##  3 Petal.Length  0.580  PC1       pca_jCGEQ
+##  4 Petal.Width   0.565  PC1       pca_jCGEQ
+##  5 Sepal.Length -0.377  PC2       pca_jCGEQ
+##  6 Sepal.Width  -0.923  PC2       pca_jCGEQ
+##  7 Petal.Length -0.0245 PC2       pca_jCGEQ
+##  8 Petal.Width  -0.0669 PC2       pca_jCGEQ
+##  9 Sepal.Length  0.720  PC3       pca_jCGEQ
+## 10 Sepal.Width  -0.244  PC3       pca_jCGEQ
+## 11 Petal.Length -0.142  PC3       pca_jCGEQ
+## 12 Petal.Width  -0.634  PC3       pca_jCGEQ
+## 13 Sepal.Length  0.261  PC4       pca_jCGEQ
+## 14 Sepal.Width  -0.124  PC4       pca_jCGEQ
+## 15 Petal.Length -0.801  PC4       pca_jCGEQ
+## 16 Petal.Width   0.524  PC4       pca_jCGEQ
 ```
 
 ---
@@ -428,8 +433,8 @@ caret::trainControl()
 ## Fluxograma de um perfil básico de análise
 
 .center2[
-<div id="htmlwidget-18605c3c3e7145bb854a" style="width:504px;height:504px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-18605c3c3e7145bb854a">{"x":{"diagram":"\ndigraph fluxograma_modelagem {\n\n# a \"graph\" statement\n  graph [overlap = true, fontname = Helvetica, fontsize = 150]\n\n# node definitions\nnode [shape = box]\n\na [label = \"Dados\"]\nb [label = \"Quebra dos dados \n rsample::initial_split()\"]\ne [label = \"Receita  \n recipes::recipe()\"]\nf [label = \"Interface caret \n train()\"]\nj [label = \"Predições\"]\nk [label = \"Avaliação \n performance\"]\n\nnode [shape = circle]\n\nc [label = \"Treino\"]\nd [label = \"Teste\"]\ng [label = \"PCA\"]\nh [label = \"LDA\"]\ni [label = \"PLS-DA\"]\n\n# edge definitions with the node IDs\na -> b\nb -> c\nb -> d\na -> e\nc -> e\ne -> f\ne -> g\nf -> h\nf -> i\n{a c} -> f\ng -> h\n{h i} -> j\nj -> k\nd -> j\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-1fb6ee197b7c0d98a2f7" style="width:504px;height:504px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1fb6ee197b7c0d98a2f7">{"x":{"diagram":"\ndigraph fluxograma_modelagem {\n\n# a \"graph\" statement\n  graph [overlap = true, fontname = Helvetica, fontsize = 150]\n\n# node definitions\nnode [shape = box]\n\na [label = \"Dados\"]\nb [label = \"Quebra dos dados \n rsample::initial_split()\"]\ne [label = \"Receita  \n recipes::recipe()\"]\nf [label = \"Interface caret \n train()\"]\nj [label = \"Predições\"]\nk [label = \"Avaliação \n performance\"]\n\nnode [shape = circle]\n\nc [label = \"Treino\"]\nd [label = \"Teste\"]\ng [label = \"PCA\"]\nh [label = \"LDA\"]\ni [label = \"PLS-DA\"]\n\n# edge definitions with the node IDs\na -> b\nb -> c\nb -> d\na -> e\nc -> e\ne -> f\ne -> g\nf -> h\nf -> i\n{a c} -> f\ng -> h\n{h i} -> j\nj -> k\nd -> j\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
 ]
 
@@ -592,11 +597,12 @@ predicao_lda_basico
 ```
 
 ```
-##  [1] setosa     setosa     setosa     setosa     setosa     setosa     setosa     setosa     setosa    
-## [10] setosa     setosa     setosa     setosa     versicolor versicolor versicolor versicolor versicolor
-## [19] versicolor versicolor versicolor versicolor versicolor versicolor versicolor versicolor virginica 
-## [28] virginica  virginica  virginica  virginica  virginica  virginica  virginica  virginica  virginica 
-## [37] virginica  virginica  virginica 
+##  [1] setosa     setosa     setosa     setosa     setosa     setosa     setosa    
+##  [8] setosa     setosa     setosa     setosa     setosa     setosa     versicolor
+## [15] versicolor versicolor versicolor virginica  versicolor versicolor versicolor
+## [22] versicolor versicolor versicolor versicolor versicolor virginica  virginica 
+## [29] virginica  virginica  virginica  virginica  virginica  virginica  virginica 
+## [36] virginica  virginica  virginica  virginica 
 ## Levels: setosa versicolor virginica
 ```
 ]
@@ -720,9 +726,11 @@ names(ldafit_cv_10fold)
 ```
 
 ```
-##  [1] "method"       "modelInfo"    "modelType"    "recipe"       "results"      "pred"         "bestTune"    
-##  [8] "call"         "dots"         "metric"       "control"      "finalModel"   "trainingData" "resample"    
-## [15] "resampledCM"  "perfNames"    "maximize"     "yLimits"      "times"        "levels"       "rs_seed"
+##  [1] "method"       "modelInfo"    "modelType"    "recipe"       "results"     
+##  [6] "pred"         "bestTune"     "call"         "dots"         "metric"      
+## [11] "control"      "finalModel"   "trainingData" "resample"     "resampledCM" 
+## [16] "perfNames"    "maximize"     "yLimits"      "times"        "levels"      
+## [21] "rs_seed"
 ```
 
 Para acessar as informações, basta executar um dos comandos abaixo:
@@ -753,9 +761,12 @@ ldafit_cv_10fold$pred %&gt;%
 ```
 
 ```
-##          obs rowIndex       pred       setosa versicolor virginica parameter Resample
-## 1 versicolor       64  virginica 7.082366e-31  0.1304324 0.8695676      none   Fold07
-## 2  virginica       99 versicolor 6.506261e-27  0.8282785 0.1717215      none   Fold10
+##          obs rowIndex       pred       setosa versicolor virginica parameter
+## 1 versicolor       64  virginica 7.082366e-31  0.1304324 0.8695676      none
+## 2  virginica       99 versicolor 6.506261e-27  0.8282785 0.1717215      none
+##   Resample
+## 1   Fold07
+## 2   Fold10
 ```
 
 ---
@@ -1020,31 +1031,31 @@ confusionMatrix(data = predicao_lda_sem_receita_basico, reference = teste$Specie
 ##             Reference
 ## Prediction   setosa versicolor virginica
 ##   setosa         13          0         0
-##   versicolor      0         13         0
-##   virginica       0          0        13
+##   versicolor      0         12         0
+##   virginica       0          1        13
 ## 
 ## Overall Statistics
-##                                      
-##                Accuracy : 1          
-##                  95% CI : (0.9097, 1)
-##     No Information Rate : 0.3333     
-##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16  
-##                                      
-##                   Kappa : 1          
-##                                      
-##  Mcnemar's Test P-Value : NA         
+##                                           
+##                Accuracy : 0.9744          
+##                  95% CI : (0.8652, 0.9994)
+##     No Information Rate : 0.3333          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.9615          
+##                                           
+##  Mcnemar's Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: setosa Class: versicolor Class: virginica
-## Sensitivity                 1.0000            1.0000           1.0000
-## Specificity                 1.0000            1.0000           1.0000
-## Pos Pred Value              1.0000            1.0000           1.0000
-## Neg Pred Value              1.0000            1.0000           1.0000
+## Sensitivity                 1.0000            0.9231           1.0000
+## Specificity                 1.0000            1.0000           0.9615
+## Pos Pred Value              1.0000            1.0000           0.9286
+## Neg Pred Value              1.0000            0.9630           1.0000
 ## Prevalence                  0.3333            0.3333           0.3333
-## Detection Rate              0.3333            0.3333           0.3333
-## Detection Prevalence        0.3333            0.3333           0.3333
-## Balanced Accuracy           1.0000            1.0000           1.0000
+## Detection Rate              0.3333            0.3077           0.3333
+## Detection Prevalence        0.3333            0.3077           0.3590
+## Balanced Accuracy           1.0000            0.9615           0.9808
 ```
 
 ]
@@ -1474,33 +1485,47 @@ background-size: cover
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] pls_2.7-3             MASS_7.3-54           DiagrammeR_1.0.6.9000 metathis_1.0.3       
-##  [5] data.table_1.14.0     magrittr_2.0.1        caret_6.0-88          lattice_0.20-44      
-##  [9] yardstick_0.0.8       workflowsets_0.0.2    workflows_0.2.2       tune_0.1.5           
-## [13] tidyr_1.1.4           tibble_3.1.5          rsample_0.1.0         recipes_0.1.16       
-## [17] purrr_0.3.4           parsnip_0.1.6         modeldata_0.1.0       infer_0.5.4          
-## [21] dplyr_1.0.7           dials_0.0.9           scales_1.1.1          broom_0.7.7          
+##  [1] pls_2.7-3             MASS_7.3-54           DiagrammeR_1.0.6.9000
+##  [4] metathis_1.0.3        data.table_1.14.0     magrittr_2.0.1       
+##  [7] caret_6.0-88          lattice_0.20-44       yardstick_0.0.8      
+## [10] workflowsets_0.0.2    workflows_0.2.2       tune_0.1.5           
+## [13] tidyr_1.1.4           tibble_3.1.5          rsample_0.1.0        
+## [16] recipes_0.1.16        purrr_0.3.4           parsnip_0.1.6        
+## [19] modeldata_0.1.0       infer_0.5.4           dplyr_1.0.7          
+## [22] dials_0.0.9           scales_1.1.1          broom_0.7.7          
 ## [25] tidymodels_0.1.3      ggplot2_3.3.5         xaringanthemer_0.3.4 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] colorspace_2.0-2     ellipsis_0.3.2       class_7.3-19         showtext_0.9-4       proxy_0.4-26        
-##  [6] xaringanExtra_0.5.2  rstudioapi_0.13      showtextdb_3.0       listenv_0.8.0        furrr_0.2.2         
-## [11] farver_2.1.0         xaringan_0.21        prodlim_2019.11.13   fansi_0.5.0          lubridate_1.7.10    
-## [16] xml2_1.3.2           codetools_0.2-18     splines_4.1.1        knitr_1.34           jsonlite_1.7.2      
-## [21] pROC_1.17.0.1        icons_0.2.0          compiler_4.1.1       backports_1.2.1      assertthat_0.2.1    
-## [26] Matrix_1.3-4         fastmap_1.1.0        cli_3.0.1            NIRtools_0.0.0.9006  visNetwork_2.0.9    
-## [31] htmltools_0.5.2      tools_4.1.1          gtable_0.3.0         glue_1.4.2           reshape2_1.4.4      
-## [36] rappdirs_0.3.3       Rcpp_1.0.7           jquerylib_0.1.4      DiceDesign_1.9       vctrs_0.3.8         
-## [41] nlme_3.1-152         iterators_1.0.13     timeDate_3043.102    gower_0.2.2          xfun_0.25           
-## [46] stringr_1.4.0        globals_0.14.0       lifecycle_1.0.1      future_1.21.0        ipred_0.9-11        
-## [51] parallel_4.1.1       RColorBrewer_1.1-2   yaml_2.2.1           sass_0.4.0           rpart_4.1-15        
-## [56] stringi_1.7.5        highr_0.9            foreach_1.5.1        e1071_1.7-7          lhs_1.1.1           
-## [61] lava_1.6.9           rlang_0.4.12         pkgconfig_2.0.3      evaluate_0.14        htmlwidgets_1.5.3   
-## [66] labeling_0.4.2       tidyselect_1.1.1     parallelly_1.26.0    plyr_1.8.6           R6_2.5.1            
-## [71] generics_0.1.0       DBI_1.1.1            pillar_1.6.4         whisker_0.4          withr_2.4.2         
-## [76] survival_3.2-11      nnet_7.3-16          crayon_1.4.1         utf8_1.2.2           rmarkdown_2.10      
-## [81] sysfonts_0.8.3       grid_4.1.1           ModelMetrics_1.2.2.2 digest_0.6.28        stats4_4.1.1        
-## [86] GPfit_1.0-8          munsell_0.5.0        bslib_0.2.5.1
+##  [1] colorspace_2.0-2     ellipsis_0.3.2       class_7.3-19        
+##  [4] showtext_0.9-4       proxy_0.4-26         xaringanExtra_0.5.2 
+##  [7] rstudioapi_0.13      showtextdb_3.0       listenv_0.8.0       
+## [10] furrr_0.2.2          farver_2.1.0         xaringan_0.21       
+## [13] prodlim_2019.11.13   fansi_0.5.0          lubridate_1.7.10    
+## [16] xml2_1.3.2           codetools_0.2-18     splines_4.1.1       
+## [19] knitr_1.34           jsonlite_1.7.2       pROC_1.17.0.1       
+## [22] icons_0.2.0          compiler_4.1.1       backports_1.2.1     
+## [25] assertthat_0.2.1     Matrix_1.3-4         fastmap_1.1.0       
+## [28] cli_3.0.1            NIRtools_0.0.0.9006  visNetwork_2.0.9    
+## [31] htmltools_0.5.2      tools_4.1.1          gtable_0.3.0        
+## [34] glue_1.4.2           reshape2_1.4.4       rappdirs_0.3.3      
+## [37] Rcpp_1.0.7           jquerylib_0.1.4      DiceDesign_1.9      
+## [40] vctrs_0.3.8          nlme_3.1-152         iterators_1.0.13    
+## [43] timeDate_3043.102    gower_0.2.2          xfun_0.25           
+## [46] stringr_1.4.0        globals_0.14.0       lifecycle_1.0.1     
+## [49] future_1.21.0        ipred_0.9-11         parallel_4.1.1      
+## [52] RColorBrewer_1.1-2   yaml_2.2.1           sass_0.4.0          
+## [55] rpart_4.1-15         stringi_1.7.5        highr_0.9           
+## [58] foreach_1.5.1        e1071_1.7-7          lhs_1.1.1           
+## [61] lava_1.6.9           rlang_0.4.12         pkgconfig_2.0.3     
+## [64] evaluate_0.14        htmlwidgets_1.5.3    labeling_0.4.2      
+## [67] tidyselect_1.1.1     parallelly_1.26.0    plyr_1.8.6          
+## [70] R6_2.5.1             generics_0.1.0       DBI_1.1.1           
+## [73] pillar_1.6.4         whisker_0.4          withr_2.4.2         
+## [76] survival_3.2-11      nnet_7.3-16          crayon_1.4.1        
+## [79] utf8_1.2.2           rmarkdown_2.10       sysfonts_0.8.3      
+## [82] grid_4.1.1           ModelMetrics_1.2.2.2 digest_0.6.28       
+## [85] stats4_4.1.1         GPfit_1.0-8          munsell_0.5.0       
+## [88] bslib_0.2.5.1
 ```
 
     </textarea>

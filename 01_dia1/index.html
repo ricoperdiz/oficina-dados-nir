@@ -11,10 +11,15 @@
     <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
     <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
     <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
-    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
     <script src="libs/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
     <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
     <script src="libs/panelset-0.2.6/panelset.js"></script>
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
+    <script src="libs/shareon-1.4.1/shareon.min.js"></script>
+    <link href="libs/xaringanExtra-shareagain-0.2.6/shareagain.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-shareagain-0.2.6/shareagain.js"></script>
     <meta name="description" content="Oficina para aprendizagem prática em ambiente R de ferramentas para manipular, pré-processar e analisar dados de espectroscopia no infravermelho próximo (NIR)."/>
     <meta name="generator" content="xaringan e remark.js"/>
     <meta name="github-repo" content="ricoperdiz/oficina-dados-nir"/>
@@ -289,21 +294,21 @@ head(dados)
 
 ```
 ## # A tibble: 6 × 1,562
-##   especimenid SP1      face  coletor  number X10001.03
-##         &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;     &lt;int&gt;     &lt;dbl&gt;
-## 1       10194 P. arac… abax… Perdiz,…   2856     0.278
-## 2       10194 P. arac… adax… Perdiz,…   2856     0.254
-## 3       10194 P. arac… abax… Perdiz,…   2856     0.273
-## 4       10194 P. arac… adax… Perdiz,…   2856     0.258
-## 5       10194 P. arac… abax… Perdiz,…   2856     0.278
-## 6       10194 P. arac… adax… Perdiz,…   2856     0.254
-## # … with 1,556 more variables: X3999.64 &lt;dbl&gt;,
-## #   X4003.497 &lt;dbl&gt;, X4007.354 &lt;dbl&gt;,
-## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;,
-## #   X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
-## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;,
-## #   X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
-## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, …
+##   especimenid SP1     face   coletor number X10001.03 X3999.64 X4003.497 X4007.354
+##         &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1       10194 P. ara… abaxi… Perdiz…   2856     0.278    0.596     0.596     0.596
+## 2       10194 P. ara… adaxi… Perdiz…   2856     0.254    0.567     0.567     0.567
+## 3       10194 P. ara… abaxi… Perdiz…   2856     0.273    0.581     0.582     0.582
+## 4       10194 P. ara… adaxi… Perdiz…   2856     0.258    0.576     0.577     0.577
+## 5       10194 P. ara… abaxi… Perdiz…   2856     0.278    0.596     0.596     0.596
+## 6       10194 P. ara… adaxi… Perdiz…   2856     0.254    0.567     0.567     0.567
+## # … with 1,553 more variables: X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;,
+## #   X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;,
+## #   X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;,
+## #   X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;,
+## #   X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;,
+## #   X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;,
+## #   X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, …
 ```
 
 .footnote2[
@@ -326,18 +331,18 @@ dados[1:10, 1:5]
 
 ```
 ## # A tibble: 10 × 5
-##    especimenid SP1            face    coletor   number
-##          &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;   &lt;chr&gt;      &lt;int&gt;
-##  1       10194 P. aracouchini abaxial Perdiz, …   2856
-##  2       10194 P. aracouchini adaxial Perdiz, …   2856
-##  3       10194 P. aracouchini abaxial Perdiz, …   2856
-##  4       10194 P. aracouchini adaxial Perdiz, …   2856
-##  5       10194 P. aracouchini abaxial Perdiz, …   2856
-##  6       10194 P. aracouchini adaxial Perdiz, …   2856
-##  7       10194 P. aracouchini abaxial Perdiz, …   2856
-##  8       10194 P. aracouchini adaxial Perdiz, …   2856
-##  9       10196 P. aracouchini abaxial Perdiz, …   2858
-## 10       10196 P. aracouchini adaxial Perdiz, …   2858
+##    especimenid SP1            face    coletor      number
+##          &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;   &lt;chr&gt;         &lt;int&gt;
+##  1       10194 P. aracouchini abaxial Perdiz, R.O.   2856
+##  2       10194 P. aracouchini adaxial Perdiz, R.O.   2856
+##  3       10194 P. aracouchini abaxial Perdiz, R.O.   2856
+##  4       10194 P. aracouchini adaxial Perdiz, R.O.   2856
+##  5       10194 P. aracouchini abaxial Perdiz, R.O.   2856
+##  6       10194 P. aracouchini adaxial Perdiz, R.O.   2856
+##  7       10194 P. aracouchini abaxial Perdiz, R.O.   2856
+##  8       10194 P. aracouchini adaxial Perdiz, R.O.   2856
+##  9       10196 P. aracouchini abaxial Perdiz, R.O.   2858
+## 10       10196 P. aracouchini adaxial Perdiz, R.O.   2858
 ```
 
 ---
@@ -655,21 +660,21 @@ head(dados_1colunaremovida)
 
 ```
 ## # A tibble: 6 × 1,561
-##   SP1       face   coletor   number X10001.03 X3999.64
-##   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 P. araco… abaxi… Perdiz, …   2856     0.278    0.596
-## 2 P. araco… adaxi… Perdiz, …   2856     0.254    0.567
-## 3 P. araco… abaxi… Perdiz, …   2856     0.273    0.581
-## 4 P. araco… adaxi… Perdiz, …   2856     0.258    0.576
-## 5 P. araco… abaxi… Perdiz, …   2856     0.278    0.596
-## 6 P. araco… adaxi… Perdiz, …   2856     0.254    0.567
-## # … with 1,555 more variables: X4003.497 &lt;dbl&gt;,
-## #   X4007.354 &lt;dbl&gt;, X4011.211 &lt;dbl&gt;,
-## #   X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;,
-## #   X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
-## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;,
-## #   X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
-## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, …
+##   SP1      face   coletor  number X10001.03 X3999.64 X4003.497 X4007.354 X4011.211
+##   &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;     &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 P. arac… abaxi… Perdiz,…   2856     0.278    0.596     0.596     0.596     0.596
+## 2 P. arac… adaxi… Perdiz,…   2856     0.254    0.567     0.567     0.567     0.567
+## 3 P. arac… abaxi… Perdiz,…   2856     0.273    0.581     0.582     0.582     0.582
+## 4 P. arac… adaxi… Perdiz,…   2856     0.258    0.576     0.577     0.577     0.577
+## 5 P. arac… abaxi… Perdiz,…   2856     0.278    0.596     0.596     0.596     0.596
+## 6 P. arac… adaxi… Perdiz,…   2856     0.254    0.567     0.567     0.567     0.567
+## # … with 1,552 more variables: X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
+## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
+## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;,
+## #   X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;,
+## #   X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;,
+## #   X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;,
+## #   X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, X4115.348 &lt;dbl&gt;, …
 ```
 
 
@@ -687,21 +692,21 @@ head(dados_2colunasremovidas)
 
 ```
 ## # A tibble: 6 × 1,560
-##   face    coletor  number X10001.03 X3999.64 X4003.497
-##   &lt;chr&gt;   &lt;chr&gt;     &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1 abaxial Perdiz,…   2856     0.278    0.596     0.596
-## 2 adaxial Perdiz,…   2856     0.254    0.567     0.567
-## 3 abaxial Perdiz,…   2856     0.273    0.581     0.582
-## 4 adaxial Perdiz,…   2856     0.258    0.576     0.577
-## 5 abaxial Perdiz,…   2856     0.278    0.596     0.596
-## 6 adaxial Perdiz,…   2856     0.254    0.567     0.567
-## # … with 1,554 more variables: X4007.354 &lt;dbl&gt;,
-## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;,
-## #   X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
-## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;,
-## #   X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
-## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;,
-## #   X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;, …
+##   face   coletor number X10001.03 X3999.64 X4003.497 X4007.354 X4011.211 X4015.068
+##   &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 abaxi… Perdiz…   2856     0.278    0.596     0.596     0.596     0.596     0.596
+## 2 adaxi… Perdiz…   2856     0.254    0.567     0.567     0.567     0.567     0.567
+## 3 abaxi… Perdiz…   2856     0.273    0.581     0.582     0.582     0.582     0.581
+## 4 adaxi… Perdiz…   2856     0.258    0.576     0.577     0.577     0.577     0.576
+## 5 abaxi… Perdiz…   2856     0.278    0.596     0.596     0.596     0.596     0.596
+## 6 adaxi… Perdiz…   2856     0.254    0.567     0.567     0.567     0.567     0.567
+## # … with 1,551 more variables: X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
+## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
+## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;,
+## #   X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;,
+## #   X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;,
+## #   X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;,
+## #   X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, X4115.348 &lt;dbl&gt;, X4119.205 &lt;dbl&gt;, …
 ```
 
 
@@ -719,21 +724,21 @@ head(multiplas_colunas_removidas)
 
 ```
 ## # A tibble: 6 × 1,559
-##   coletor      number X10001.03 X3999.64 X4003.497
-##   &lt;chr&gt;         &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1 Perdiz, R.O.   2856     0.278    0.596     0.596
-## 2 Perdiz, R.O.   2856     0.254    0.567     0.567
-## 3 Perdiz, R.O.   2856     0.273    0.581     0.582
-## 4 Perdiz, R.O.   2856     0.258    0.576     0.577
-## 5 Perdiz, R.O.   2856     0.278    0.596     0.596
-## 6 Perdiz, R.O.   2856     0.254    0.567     0.567
-## # … with 1,554 more variables: X4007.354 &lt;dbl&gt;,
-## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;,
-## #   X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
-## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;,
-## #   X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
-## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;,
-## #   X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;, …
+##   coletor      number X10001.03 X3999.64 X4003.497 X4007.354 X4011.211 X4015.068
+##   &lt;chr&gt;         &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Perdiz, R.O.   2856     0.278    0.596     0.596     0.596     0.596     0.596
+## 2 Perdiz, R.O.   2856     0.254    0.567     0.567     0.567     0.567     0.567
+## 3 Perdiz, R.O.   2856     0.273    0.581     0.582     0.582     0.582     0.581
+## 4 Perdiz, R.O.   2856     0.258    0.576     0.577     0.577     0.577     0.576
+## 5 Perdiz, R.O.   2856     0.278    0.596     0.596     0.596     0.596     0.596
+## 6 Perdiz, R.O.   2856     0.254    0.567     0.567     0.567     0.567     0.567
+## # … with 1,551 more variables: X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
+## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
+## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;,
+## #   X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;,
+## #   X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;,
+## #   X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;,
+## #   X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, X4115.348 &lt;dbl&gt;, X4119.205 &lt;dbl&gt;, …
 ```
 
 ---
@@ -773,25 +778,25 @@ select(dados, coletor, number, everything())
 
 ```
 ## # A tibble: 48 × 1,562
-##    coletor  number especimenid SP1     face  X10001.03
-##    &lt;chr&gt;     &lt;int&gt;       &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;
-##  1 Perdiz,…   2856       10194 P. ara… abax…     0.278
-##  2 Perdiz,…   2856       10194 P. ara… adax…     0.254
-##  3 Perdiz,…   2856       10194 P. ara… abax…     0.273
-##  4 Perdiz,…   2856       10194 P. ara… adax…     0.258
-##  5 Perdiz,…   2856       10194 P. ara… abax…     0.278
-##  6 Perdiz,…   2856       10194 P. ara… adax…     0.254
-##  7 Perdiz,…   2856       10194 P. ara… abax…     0.273
-##  8 Perdiz,…   2856       10194 P. ara… adax…     0.258
-##  9 Perdiz,…   2858       10196 P. ara… abax…     0.274
-## 10 Perdiz,…   2858       10196 P. ara… adax…     0.278
-## # … with 38 more rows, and 1,556 more variables:
-## #   X3999.64 &lt;dbl&gt;, X4003.497 &lt;dbl&gt;, X4007.354 &lt;dbl&gt;,
-## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;,
-## #   X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
-## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;,
-## #   X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
-## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, …
+##    coletor  number especimenid SP1    face  X10001.03 X3999.64 X4003.497 X4007.354
+##    &lt;chr&gt;     &lt;int&gt;       &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Perdiz,…   2856       10194 P. ar… abax…     0.278    0.596     0.596     0.596
+##  2 Perdiz,…   2856       10194 P. ar… adax…     0.254    0.567     0.567     0.567
+##  3 Perdiz,…   2856       10194 P. ar… abax…     0.273    0.581     0.582     0.582
+##  4 Perdiz,…   2856       10194 P. ar… adax…     0.258    0.576     0.577     0.577
+##  5 Perdiz,…   2856       10194 P. ar… abax…     0.278    0.596     0.596     0.596
+##  6 Perdiz,…   2856       10194 P. ar… adax…     0.254    0.567     0.567     0.567
+##  7 Perdiz,…   2856       10194 P. ar… abax…     0.273    0.581     0.582     0.582
+##  8 Perdiz,…   2856       10194 P. ar… adax…     0.258    0.576     0.577     0.577
+##  9 Perdiz,…   2858       10196 P. ar… abax…     0.274    0.681     0.681     0.681
+## 10 Perdiz,…   2858       10196 P. ar… adax…     0.278    0.673     0.672     0.672
+## # … with 38 more rows, and 1,553 more variables: X4011.211 &lt;dbl&gt;,
+## #   X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
+## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
+## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;,
+## #   X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;,
+## #   X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;,
+## #   X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, …
 ```
 
 ---
@@ -977,25 +982,25 @@ arrange(dados, number)
 
 ```
 ## # A tibble: 48 × 1,562
-##    especimenid SP1     face   coletor number X10001.03
-##          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;     &lt;dbl&gt;
-##  1       10194 P. ara… abaxi… Perdiz…   2856     0.278
-##  2       10194 P. ara… adaxi… Perdiz…   2856     0.254
-##  3       10194 P. ara… abaxi… Perdiz…   2856     0.273
-##  4       10194 P. ara… adaxi… Perdiz…   2856     0.258
-##  5       10194 P. ara… abaxi… Perdiz…   2856     0.278
-##  6       10194 P. ara… adaxi… Perdiz…   2856     0.254
-##  7       10194 P. ara… abaxi… Perdiz…   2856     0.273
-##  8       10194 P. ara… adaxi… Perdiz…   2856     0.258
-##  9       10196 P. ara… abaxi… Perdiz…   2858     0.274
-## 10       10196 P. ara… adaxi… Perdiz…   2858     0.278
-## # … with 38 more rows, and 1,556 more variables:
-## #   X3999.64 &lt;dbl&gt;, X4003.497 &lt;dbl&gt;, X4007.354 &lt;dbl&gt;,
-## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;,
-## #   X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
-## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;,
-## #   X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
-## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, …
+##    especimenid SP1     face  coletor number X10001.03 X3999.64 X4003.497 X4007.354
+##          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1       10194 P. ara… abax… Perdiz…   2856     0.278    0.596     0.596     0.596
+##  2       10194 P. ara… adax… Perdiz…   2856     0.254    0.567     0.567     0.567
+##  3       10194 P. ara… abax… Perdiz…   2856     0.273    0.581     0.582     0.582
+##  4       10194 P. ara… adax… Perdiz…   2856     0.258    0.576     0.577     0.577
+##  5       10194 P. ara… abax… Perdiz…   2856     0.278    0.596     0.596     0.596
+##  6       10194 P. ara… adax… Perdiz…   2856     0.254    0.567     0.567     0.567
+##  7       10194 P. ara… abax… Perdiz…   2856     0.273    0.581     0.582     0.582
+##  8       10194 P. ara… adax… Perdiz…   2856     0.258    0.576     0.577     0.577
+##  9       10196 P. ara… abax… Perdiz…   2858     0.274    0.681     0.681     0.681
+## 10       10196 P. ara… adax… Perdiz…   2858     0.278    0.673     0.672     0.672
+## # … with 38 more rows, and 1,553 more variables: X4011.211 &lt;dbl&gt;,
+## #   X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
+## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
+## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;,
+## #   X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;,
+## #   X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;,
+## #   X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, …
 ```
 
 ---
@@ -1009,25 +1014,25 @@ arrange(dados, desc(number))
 
 ```
 ## # A tibble: 48 × 1,562
-##    especimenid SP1     face  coletor  number X10001.03
-##          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;     &lt;int&gt;     &lt;dbl&gt;
-##  1       12650 P. cal… abax… Perdiz,…   3239     0.349
-##  2       12650 P. cal… adax… Perdiz,…   3239     0.342
-##  3       12650 P. cal… abax… Perdiz,…   3239     0.342
-##  4       12650 P. cal… adax… Perdiz,…   3239     0.355
-##  5       12650 P. cal… abax… Perdiz,…   3239     0.349
-##  6       12650 P. cal… adax… Perdiz,…   3239     0.342
-##  7       12650 P. cal… abax… Perdiz,…   3239     0.342
-##  8       12650 P. cal… adax… Perdiz,…   3239     0.355
-##  9       12648 P. cal… abax… Perdiz,…   3237     0.402
-## 10       12648 P. cal… adax… Perdiz,…   3237     0.389
-## # … with 38 more rows, and 1,556 more variables:
-## #   X3999.64 &lt;dbl&gt;, X4003.497 &lt;dbl&gt;, X4007.354 &lt;dbl&gt;,
-## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;,
-## #   X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
-## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;,
-## #   X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
-## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, …
+##    especimenid SP1    face   coletor number X10001.03 X3999.64 X4003.497 X4007.354
+##          &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1       12650 P. ca… abaxi… Perdiz…   3239     0.349    0.733     0.733     0.733
+##  2       12650 P. ca… adaxi… Perdiz…   3239     0.342    0.744     0.744     0.744
+##  3       12650 P. ca… abaxi… Perdiz…   3239     0.342    0.713     0.714     0.714
+##  4       12650 P. ca… adaxi… Perdiz…   3239     0.355    0.773     0.773     0.773
+##  5       12650 P. ca… abaxi… Perdiz…   3239     0.349    0.733     0.733     0.733
+##  6       12650 P. ca… adaxi… Perdiz…   3239     0.342    0.744     0.744     0.744
+##  7       12650 P. ca… abaxi… Perdiz…   3239     0.342    0.713     0.714     0.714
+##  8       12650 P. ca… adaxi… Perdiz…   3239     0.355    0.773     0.773     0.773
+##  9       12648 P. ca… abaxi… Perdiz…   3237     0.402    0.745     0.746     0.745
+## 10       12648 P. ca… adaxi… Perdiz…   3237     0.389    0.757     0.757     0.757
+## # … with 38 more rows, and 1,553 more variables: X4011.211 &lt;dbl&gt;,
+## #   X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
+## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
+## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;,
+## #   X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;,
+## #   X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;,
+## #   X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, …
 ```
 
 ---
@@ -1041,25 +1046,25 @@ filter(dados, SP1 == "P. calanense")
 
 ```
 ## # A tibble: 24 × 1,562
-##    especimenid SP1     face  coletor  number X10001.03
-##          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;     &lt;int&gt;     &lt;dbl&gt;
-##  1       12647 P. cal… abax… Perdiz,…   3236     0.322
-##  2       12647 P. cal… adax… Perdiz,…   3236     0.329
-##  3       12647 P. cal… abax… Perdiz,…   3236     0.340
-##  4       12647 P. cal… adax… Perdiz,…   3236     0.320
-##  5       12647 P. cal… abax… Perdiz,…   3236     0.322
-##  6       12647 P. cal… adax… Perdiz,…   3236     0.329
-##  7       12647 P. cal… abax… Perdiz,…   3236     0.340
-##  8       12647 P. cal… adax… Perdiz,…   3236     0.320
-##  9       12648 P. cal… abax… Perdiz,…   3237     0.402
-## 10       12648 P. cal… adax… Perdiz,…   3237     0.389
-## # … with 14 more rows, and 1,556 more variables:
-## #   X3999.64 &lt;dbl&gt;, X4003.497 &lt;dbl&gt;, X4007.354 &lt;dbl&gt;,
-## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;,
-## #   X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
-## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;,
-## #   X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
-## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, …
+##    especimenid SP1    face   coletor number X10001.03 X3999.64 X4003.497 X4007.354
+##          &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1       12647 P. ca… abaxi… Perdiz…   3236     0.322    0.717     0.717     0.717
+##  2       12647 P. ca… adaxi… Perdiz…   3236     0.329    0.714     0.715     0.715
+##  3       12647 P. ca… abaxi… Perdiz…   3236     0.340    0.724     0.724     0.724
+##  4       12647 P. ca… adaxi… Perdiz…   3236     0.320    0.735     0.736     0.736
+##  5       12647 P. ca… abaxi… Perdiz…   3236     0.322    0.717     0.717     0.717
+##  6       12647 P. ca… adaxi… Perdiz…   3236     0.329    0.714     0.715     0.715
+##  7       12647 P. ca… abaxi… Perdiz…   3236     0.340    0.724     0.724     0.724
+##  8       12647 P. ca… adaxi… Perdiz…   3236     0.320    0.735     0.736     0.736
+##  9       12648 P. ca… abaxi… Perdiz…   3237     0.402    0.745     0.746     0.745
+## 10       12648 P. ca… adaxi… Perdiz…   3237     0.389    0.757     0.757     0.757
+## # … with 14 more rows, and 1,553 more variables: X4011.211 &lt;dbl&gt;,
+## #   X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
+## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
+## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;,
+## #   X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;,
+## #   X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;,
+## #   X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, …
 ```
 
 ---
@@ -1073,23 +1078,23 @@ filter(dados, SP1 == "P. calanense", number == 3237)
 
 ```
 ## # A tibble: 8 × 1,562
-##   especimenid SP1     face   coletor  number X10001.03
-##         &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;     &lt;int&gt;     &lt;dbl&gt;
-## 1       12648 P. cal… abaxi… Perdiz,…   3237     0.402
-## 2       12648 P. cal… adaxi… Perdiz,…   3237     0.389
-## 3       12648 P. cal… abaxi… Perdiz,…   3237     0.418
-## 4       12648 P. cal… adaxi… Perdiz,…   3237     0.363
-## 5       12648 P. cal… abaxi… Perdiz,…   3237     0.402
-## 6       12648 P. cal… adaxi… Perdiz,…   3237     0.389
-## 7       12648 P. cal… abaxi… Perdiz,…   3237     0.418
-## 8       12648 P. cal… adaxi… Perdiz,…   3237     0.363
-## # … with 1,556 more variables: X3999.64 &lt;dbl&gt;,
-## #   X4003.497 &lt;dbl&gt;, X4007.354 &lt;dbl&gt;,
-## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;,
-## #   X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
-## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;,
-## #   X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
-## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, …
+##   especimenid SP1     face  coletor  number X10001.03 X3999.64 X4003.497 X4007.354
+##         &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;     &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1       12648 P. cal… abax… Perdiz,…   3237     0.402    0.745     0.746     0.745
+## 2       12648 P. cal… adax… Perdiz,…   3237     0.389    0.757     0.757     0.757
+## 3       12648 P. cal… abax… Perdiz,…   3237     0.418    0.748     0.749     0.749
+## 4       12648 P. cal… adax… Perdiz,…   3237     0.363    0.725     0.725     0.725
+## 5       12648 P. cal… abax… Perdiz,…   3237     0.402    0.745     0.746     0.745
+## 6       12648 P. cal… adax… Perdiz,…   3237     0.389    0.757     0.757     0.757
+## 7       12648 P. cal… abax… Perdiz,…   3237     0.418    0.748     0.749     0.749
+## 8       12648 P. cal… adax… Perdiz,…   3237     0.363    0.725     0.725     0.725
+## # … with 1,553 more variables: X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;,
+## #   X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;,
+## #   X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;,
+## #   X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;,
+## #   X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;,
+## #   X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;,
+## #   X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, …
 ```
 
 ---
@@ -1172,15 +1177,14 @@ dados_agrupados[1:5, 1:10]
 ```
 ## # A tibble: 5 × 10
 ## # Groups:   SP1 [1]
-##   especimenid SP1      face  coletor  number X10001.03
-##         &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;     &lt;int&gt;     &lt;dbl&gt;
-## 1       10194 P. arac… abax… Perdiz,…   2856     0.278
-## 2       10194 P. arac… adax… Perdiz,…   2856     0.254
-## 3       10194 P. arac… abax… Perdiz,…   2856     0.273
-## 4       10194 P. arac… adax… Perdiz,…   2856     0.258
-## 5       10194 P. arac… abax… Perdiz,…   2856     0.278
-## # … with 4 more variables: X3999.64 &lt;dbl&gt;,
-## #   X4003.497 &lt;dbl&gt;, X4007.354 &lt;dbl&gt;, X4011.211 &lt;dbl&gt;
+##   especimenid SP1     face   coletor number X10001.03 X3999.64 X4003.497 X4007.354
+##         &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1       10194 P. ara… abaxi… Perdiz…   2856     0.278    0.596     0.596     0.596
+## 2       10194 P. ara… adaxi… Perdiz…   2856     0.254    0.567     0.567     0.567
+## 3       10194 P. ara… abaxi… Perdiz…   2856     0.273    0.581     0.582     0.582
+## 4       10194 P. ara… adaxi… Perdiz…   2856     0.258    0.576     0.577     0.577
+## 5       10194 P. ara… abaxi… Perdiz…   2856     0.278    0.596     0.596     0.596
+## # … with 1 more variable: X4011.211 &lt;dbl&gt;
 ```
 
 --
@@ -1244,17 +1248,17 @@ summarise_all(dados_agrupados2, .funs = mean)
 
 ```
 ## # A tibble: 2 × 172
-##   SP1          X4003.497 X4053.637 X4103.777 X4153.917
-##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 P. aracouch…     0.651     0.626     0.576     0.547
-## 2 P. calanense     0.736     0.709     0.653     0.622
-## # … with 167 more variables: X4204.057 &lt;dbl&gt;,
-## #   X4238.77 &lt;dbl&gt;, X4254.197 &lt;dbl&gt;, X4292.767 &lt;dbl&gt;,
-## #   X4304.337 &lt;dbl&gt;, X4342.907 &lt;dbl&gt;,
-## #   X4393.047 &lt;dbl&gt;, X4443.187 &lt;dbl&gt;, X4489.47 &lt;dbl&gt;,
-## #   X4493.327 &lt;dbl&gt;, X4543.467 &lt;dbl&gt;,
-## #   X4582.037 &lt;dbl&gt;, X4593.607 &lt;dbl&gt;,
-## #   X4632.177 &lt;dbl&gt;, X4682.317 &lt;dbl&gt;, …
+##   SP1         X4003.497 X4053.637 X4103.777 X4153.917 X4204.057 X4238.77 X4254.197
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 P. aracouc…     0.651     0.626     0.576     0.547     0.544    0.546     0.551
+## 2 P. calanen…     0.736     0.709     0.653     0.622     0.620    0.625     0.629
+## # … with 164 more variables: X4292.767 &lt;dbl&gt;, X4304.337 &lt;dbl&gt;, X4342.907 &lt;dbl&gt;,
+## #   X4393.047 &lt;dbl&gt;, X4443.187 &lt;dbl&gt;, X4489.47 &lt;dbl&gt;, X4493.327 &lt;dbl&gt;,
+## #   X4543.467 &lt;dbl&gt;, X4582.037 &lt;dbl&gt;, X4593.607 &lt;dbl&gt;, X4632.177 &lt;dbl&gt;,
+## #   X4682.317 &lt;dbl&gt;, X4732.457 &lt;dbl&gt;, X4782.597 &lt;dbl&gt;, X4821.167 &lt;dbl&gt;,
+## #   X4832.737 &lt;dbl&gt;, X4871.307 &lt;dbl&gt;, X4882.877 &lt;dbl&gt;, X4921.447 &lt;dbl&gt;,
+## #   X4971.587 &lt;dbl&gt;, X5017.87 &lt;dbl&gt;, X5021.727 &lt;dbl&gt;, X5071.867 &lt;dbl&gt;,
+## #   X5110.437 &lt;dbl&gt;, X5122.007 &lt;dbl&gt;, X5160.577 &lt;dbl&gt;, X5172.147 &lt;dbl&gt;, …
 ```
 
 ---
@@ -1296,16 +1300,16 @@ summarise_all(group_by(filter(select(dados, SP1, ends_with("7")), SP1 == "P. cal
 
 ```
 ## # A tibble: 1 × 172
-##   SP1          X4003.497 X4053.637 X4103.777 X4153.917
-##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 P. calanense     0.736     0.709     0.653     0.622
-## # … with 167 more variables: X4204.057 &lt;dbl&gt;,
-## #   X4238.77 &lt;dbl&gt;, X4254.197 &lt;dbl&gt;, X4292.767 &lt;dbl&gt;,
-## #   X4304.337 &lt;dbl&gt;, X4342.907 &lt;dbl&gt;,
-## #   X4393.047 &lt;dbl&gt;, X4443.187 &lt;dbl&gt;, X4489.47 &lt;dbl&gt;,
-## #   X4493.327 &lt;dbl&gt;, X4543.467 &lt;dbl&gt;,
-## #   X4582.037 &lt;dbl&gt;, X4593.607 &lt;dbl&gt;,
-## #   X4632.177 &lt;dbl&gt;, X4682.317 &lt;dbl&gt;, …
+##   SP1         X4003.497 X4053.637 X4103.777 X4153.917 X4204.057 X4238.77 X4254.197
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 P. calanen…     0.736     0.709     0.653     0.622     0.620    0.625     0.629
+## # … with 164 more variables: X4292.767 &lt;dbl&gt;, X4304.337 &lt;dbl&gt;, X4342.907 &lt;dbl&gt;,
+## #   X4393.047 &lt;dbl&gt;, X4443.187 &lt;dbl&gt;, X4489.47 &lt;dbl&gt;, X4493.327 &lt;dbl&gt;,
+## #   X4543.467 &lt;dbl&gt;, X4582.037 &lt;dbl&gt;, X4593.607 &lt;dbl&gt;, X4632.177 &lt;dbl&gt;,
+## #   X4682.317 &lt;dbl&gt;, X4732.457 &lt;dbl&gt;, X4782.597 &lt;dbl&gt;, X4821.167 &lt;dbl&gt;,
+## #   X4832.737 &lt;dbl&gt;, X4871.307 &lt;dbl&gt;, X4882.877 &lt;dbl&gt;, X4921.447 &lt;dbl&gt;,
+## #   X4971.587 &lt;dbl&gt;, X5017.87 &lt;dbl&gt;, X5021.727 &lt;dbl&gt;, X5071.867 &lt;dbl&gt;,
+## #   X5110.437 &lt;dbl&gt;, X5122.007 &lt;dbl&gt;, X5160.577 &lt;dbl&gt;, X5172.147 &lt;dbl&gt;, …
 ```
 
 ---
@@ -1323,16 +1327,16 @@ summarise_all(dados_agrupados3, .funs = mean)
 
 ```
 ## # A tibble: 1 × 172
-##   SP1          X4003.497 X4053.637 X4103.777 X4153.917
-##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 P. calanense     0.736     0.709     0.653     0.622
-## # … with 167 more variables: X4204.057 &lt;dbl&gt;,
-## #   X4238.77 &lt;dbl&gt;, X4254.197 &lt;dbl&gt;, X4292.767 &lt;dbl&gt;,
-## #   X4304.337 &lt;dbl&gt;, X4342.907 &lt;dbl&gt;,
-## #   X4393.047 &lt;dbl&gt;, X4443.187 &lt;dbl&gt;, X4489.47 &lt;dbl&gt;,
-## #   X4493.327 &lt;dbl&gt;, X4543.467 &lt;dbl&gt;,
-## #   X4582.037 &lt;dbl&gt;, X4593.607 &lt;dbl&gt;,
-## #   X4632.177 &lt;dbl&gt;, X4682.317 &lt;dbl&gt;, …
+##   SP1         X4003.497 X4053.637 X4103.777 X4153.917 X4204.057 X4238.77 X4254.197
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 P. calanen…     0.736     0.709     0.653     0.622     0.620    0.625     0.629
+## # … with 164 more variables: X4292.767 &lt;dbl&gt;, X4304.337 &lt;dbl&gt;, X4342.907 &lt;dbl&gt;,
+## #   X4393.047 &lt;dbl&gt;, X4443.187 &lt;dbl&gt;, X4489.47 &lt;dbl&gt;, X4493.327 &lt;dbl&gt;,
+## #   X4543.467 &lt;dbl&gt;, X4582.037 &lt;dbl&gt;, X4593.607 &lt;dbl&gt;, X4632.177 &lt;dbl&gt;,
+## #   X4682.317 &lt;dbl&gt;, X4732.457 &lt;dbl&gt;, X4782.597 &lt;dbl&gt;, X4821.167 &lt;dbl&gt;,
+## #   X4832.737 &lt;dbl&gt;, X4871.307 &lt;dbl&gt;, X4882.877 &lt;dbl&gt;, X4921.447 &lt;dbl&gt;,
+## #   X4971.587 &lt;dbl&gt;, X5017.87 &lt;dbl&gt;, X5021.727 &lt;dbl&gt;, X5071.867 &lt;dbl&gt;,
+## #   X5110.437 &lt;dbl&gt;, X5122.007 &lt;dbl&gt;, X5160.577 &lt;dbl&gt;, X5172.147 &lt;dbl&gt;, …
 ```
 
 ???
@@ -1353,16 +1357,16 @@ select(dados, SP1, ends_with("7")) %&gt;%
 
 ```
 ## # A tibble: 1 × 172
-##   SP1          X4003.497 X4053.637 X4103.777 X4153.917
-##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 P. calanense     0.736     0.709     0.653     0.622
-## # … with 167 more variables: X4204.057 &lt;dbl&gt;,
-## #   X4238.77 &lt;dbl&gt;, X4254.197 &lt;dbl&gt;, X4292.767 &lt;dbl&gt;,
-## #   X4304.337 &lt;dbl&gt;, X4342.907 &lt;dbl&gt;,
-## #   X4393.047 &lt;dbl&gt;, X4443.187 &lt;dbl&gt;, X4489.47 &lt;dbl&gt;,
-## #   X4493.327 &lt;dbl&gt;, X4543.467 &lt;dbl&gt;,
-## #   X4582.037 &lt;dbl&gt;, X4593.607 &lt;dbl&gt;,
-## #   X4632.177 &lt;dbl&gt;, X4682.317 &lt;dbl&gt;, …
+##   SP1         X4003.497 X4053.637 X4103.777 X4153.917 X4204.057 X4238.77 X4254.197
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 P. calanen…     0.736     0.709     0.653     0.622     0.620    0.625     0.629
+## # … with 164 more variables: X4292.767 &lt;dbl&gt;, X4304.337 &lt;dbl&gt;, X4342.907 &lt;dbl&gt;,
+## #   X4393.047 &lt;dbl&gt;, X4443.187 &lt;dbl&gt;, X4489.47 &lt;dbl&gt;, X4493.327 &lt;dbl&gt;,
+## #   X4543.467 &lt;dbl&gt;, X4582.037 &lt;dbl&gt;, X4593.607 &lt;dbl&gt;, X4632.177 &lt;dbl&gt;,
+## #   X4682.317 &lt;dbl&gt;, X4732.457 &lt;dbl&gt;, X4782.597 &lt;dbl&gt;, X4821.167 &lt;dbl&gt;,
+## #   X4832.737 &lt;dbl&gt;, X4871.307 &lt;dbl&gt;, X4882.877 &lt;dbl&gt;, X4921.447 &lt;dbl&gt;,
+## #   X4971.587 &lt;dbl&gt;, X5017.87 &lt;dbl&gt;, X5021.727 &lt;dbl&gt;, X5071.867 &lt;dbl&gt;,
+## #   X5110.437 &lt;dbl&gt;, X5122.007 &lt;dbl&gt;, X5160.577 &lt;dbl&gt;, X5172.147 &lt;dbl&gt;, …
 ```
 
 ---
@@ -1397,21 +1401,21 @@ summarise_all(
 ```
 ## # A tibble: 6 × 1,559
 ## # Groups:   especimenid [6]
-##   especimenid SP1         X10001.03 X3999.64 X4003.497
-##         &lt;int&gt; &lt;chr&gt;           &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1       10194 P. aracouc…     0.266    0.580     0.581
-## 2       10196 P. aracouc…     0.274    0.692     0.692
-## 3       10197 P. aracouc…     0.274    0.680     0.680
-## 4       12647 P. calanen…     0.328    0.723     0.723
-## 5       12648 P. calanen…     0.393    0.744     0.744
-## 6       12650 P. calanen…     0.347    0.741     0.741
-## # … with 1,554 more variables: X4007.354 &lt;dbl&gt;,
-## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;,
-## #   X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
-## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;,
-## #   X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
-## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;,
-## #   X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;, …
+##   especimenid SP1       X10001.03 X3999.64 X4003.497 X4007.354 X4011.211 X4015.068
+##         &lt;int&gt; &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1       10194 P. araco…     0.266    0.580     0.581     0.580     0.580     0.580
+## 2       10196 P. araco…     0.274    0.692     0.692     0.692     0.691     0.690
+## 3       10197 P. araco…     0.274    0.680     0.680     0.680     0.680     0.679
+## 4       12647 P. calan…     0.328    0.723     0.723     0.723     0.723     0.722
+## 5       12648 P. calan…     0.393    0.744     0.744     0.744     0.744     0.744
+## 6       12650 P. calan…     0.347    0.741     0.741     0.741     0.741     0.741
+## # … with 1,551 more variables: X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
+## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
+## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;,
+## #   X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;,
+## #   X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;,
+## #   X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;,
+## #   X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, X4115.348 &lt;dbl&gt;, X4119.205 &lt;dbl&gt;, …
 ```
 
 ---
@@ -1433,21 +1437,21 @@ dados %&gt;%
 ```
 ## # A tibble: 6 × 1,559
 ## # Groups:   especimenid [6]
-##   especimenid SP1         X10001.03 X3999.64 X4003.497
-##         &lt;int&gt; &lt;chr&gt;           &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1       10194 P. aracouc…     0.266    0.580     0.581
-## 2       10196 P. aracouc…     0.274    0.692     0.692
-## 3       10197 P. aracouc…     0.274    0.680     0.680
-## 4       12647 P. calanen…     0.328    0.723     0.723
-## 5       12648 P. calanen…     0.393    0.744     0.744
-## 6       12650 P. calanen…     0.347    0.741     0.741
-## # … with 1,554 more variables: X4007.354 &lt;dbl&gt;,
-## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;,
-## #   X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
-## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;,
-## #   X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
-## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;,
-## #   X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;, …
+##   especimenid SP1       X10001.03 X3999.64 X4003.497 X4007.354 X4011.211 X4015.068
+##         &lt;int&gt; &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1       10194 P. araco…     0.266    0.580     0.581     0.580     0.580     0.580
+## 2       10196 P. araco…     0.274    0.692     0.692     0.692     0.691     0.690
+## 3       10197 P. araco…     0.274    0.680     0.680     0.680     0.680     0.679
+## 4       12647 P. calan…     0.328    0.723     0.723     0.723     0.723     0.722
+## 5       12648 P. calan…     0.393    0.744     0.744     0.744     0.744     0.744
+## 6       12650 P. calan…     0.347    0.741     0.741     0.741     0.741     0.741
+## # … with 1,551 more variables: X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
+## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
+## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;,
+## #   X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;,
+## #   X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;,
+## #   X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;,
+## #   X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, X4115.348 &lt;dbl&gt;, X4119.205 &lt;dbl&gt;, …
 ```
 
 ---
@@ -1466,27 +1470,27 @@ summarise_all(
 ```
 ## # A tibble: 12 × 1,560
 ## # Groups:   especimenid, SP1 [6]
-##    especimenid SP1            face  X10001.03 X3999.64
-##          &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-##  1       10194 P. aracouchini abax…     0.275    0.589
-##  2       10194 P. aracouchini adax…     0.256    0.572
-##  3       10196 P. aracouchini abax…     0.275    0.692
-##  4       10196 P. aracouchini adax…     0.272    0.692
-##  5       10197 P. aracouchini abax…     0.273    0.675
-##  6       10197 P. aracouchini adax…     0.274    0.686
-##  7       12647 P. calanense   abax…     0.331    0.720
-##  8       12647 P. calanense   adax…     0.324    0.725
-##  9       12648 P. calanense   abax…     0.410    0.747
-## 10       12648 P. calanense   adax…     0.376    0.741
-## 11       12650 P. calanense   abax…     0.346    0.723
-## 12       12650 P. calanense   adax…     0.349    0.758
-## # … with 1,555 more variables: X4003.497 &lt;dbl&gt;,
-## #   X4007.354 &lt;dbl&gt;, X4011.211 &lt;dbl&gt;,
-## #   X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;,
-## #   X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
-## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;,
-## #   X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
-## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, …
+##    especimenid SP1         face   X10001.03 X3999.64 X4003.497 X4007.354 X4011.211
+##          &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1       10194 P. aracouc… abaxi…     0.275    0.589     0.589     0.589     0.589
+##  2       10194 P. aracouc… adaxi…     0.256    0.572     0.572     0.572     0.572
+##  3       10196 P. aracouc… abaxi…     0.275    0.692     0.692     0.692     0.691
+##  4       10196 P. aracouc… adaxi…     0.272    0.692     0.692     0.692     0.691
+##  5       10197 P. aracouc… abaxi…     0.273    0.675     0.675     0.675     0.674
+##  6       10197 P. aracouc… adaxi…     0.274    0.686     0.686     0.685     0.685
+##  7       12647 P. calanen… abaxi…     0.331    0.720     0.721     0.720     0.720
+##  8       12647 P. calanen… adaxi…     0.324    0.725     0.725     0.725     0.725
+##  9       12648 P. calanen… abaxi…     0.410    0.747     0.747     0.747     0.747
+## 10       12648 P. calanen… adaxi…     0.376    0.741     0.741     0.741     0.741
+## 11       12650 P. calanen… abaxi…     0.346    0.723     0.723     0.724     0.723
+## 12       12650 P. calanen… adaxi…     0.349    0.758     0.759     0.759     0.759
+## # … with 1,552 more variables: X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
+## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
+## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;,
+## #   X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;,
+## #   X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;,
+## #   X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;,
+## #   X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, X4115.348 &lt;dbl&gt;, …
 ```
 
 ---
@@ -1508,27 +1512,27 @@ dados %&gt;%
 ```
 ## # A tibble: 12 × 1,560
 ## # Groups:   especimenid, SP1 [6]
-##    especimenid SP1            face  X10001.03 X3999.64
-##          &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-##  1       10194 P. aracouchini abax…     0.275    0.589
-##  2       10194 P. aracouchini adax…     0.256    0.572
-##  3       10196 P. aracouchini abax…     0.275    0.692
-##  4       10196 P. aracouchini adax…     0.272    0.692
-##  5       10197 P. aracouchini abax…     0.273    0.675
-##  6       10197 P. aracouchini adax…     0.274    0.686
-##  7       12647 P. calanense   abax…     0.331    0.720
-##  8       12647 P. calanense   adax…     0.324    0.725
-##  9       12648 P. calanense   abax…     0.410    0.747
-## 10       12648 P. calanense   adax…     0.376    0.741
-## 11       12650 P. calanense   abax…     0.346    0.723
-## 12       12650 P. calanense   adax…     0.349    0.758
-## # … with 1,555 more variables: X4003.497 &lt;dbl&gt;,
-## #   X4007.354 &lt;dbl&gt;, X4011.211 &lt;dbl&gt;,
-## #   X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;,
-## #   X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
-## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;,
-## #   X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
-## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, …
+##    especimenid SP1         face   X10001.03 X3999.64 X4003.497 X4007.354 X4011.211
+##          &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1       10194 P. aracouc… abaxi…     0.275    0.589     0.589     0.589     0.589
+##  2       10194 P. aracouc… adaxi…     0.256    0.572     0.572     0.572     0.572
+##  3       10196 P. aracouc… abaxi…     0.275    0.692     0.692     0.692     0.691
+##  4       10196 P. aracouc… adaxi…     0.272    0.692     0.692     0.692     0.691
+##  5       10197 P. aracouc… abaxi…     0.273    0.675     0.675     0.675     0.674
+##  6       10197 P. aracouc… adaxi…     0.274    0.686     0.686     0.685     0.685
+##  7       12647 P. calanen… abaxi…     0.331    0.720     0.721     0.720     0.720
+##  8       12647 P. calanen… adaxi…     0.324    0.725     0.725     0.725     0.725
+##  9       12648 P. calanen… abaxi…     0.410    0.747     0.747     0.747     0.747
+## 10       12648 P. calanen… adaxi…     0.376    0.741     0.741     0.741     0.741
+## 11       12650 P. calanen… abaxi…     0.346    0.723     0.723     0.724     0.723
+## 12       12650 P. calanen… adaxi…     0.349    0.758     0.759     0.759     0.759
+## # … with 1,552 more variables: X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
+## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
+## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;,
+## #   X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;,
+## #   X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;,
+## #   X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;,
+## #   X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, X4115.348 &lt;dbl&gt;, …
 ```
 
 ---
@@ -1694,48 +1698,27 @@ head(training(iris_split), 20)
 ```
 
 ```
-##    Sepal.Length Sepal.Width Petal.Length Petal.Width
-## 1           5.1         3.5          1.4         0.2
-## 2           4.9         3.0          1.4         0.2
-## 3           4.7         3.2          1.3         0.2
-## 5           5.0         3.6          1.4         0.2
-## 8           5.0         3.4          1.5         0.2
-## 9           4.4         2.9          1.4         0.2
-## 10          4.9         3.1          1.5         0.1
-## 12          4.8         3.4          1.6         0.2
-## 13          4.8         3.0          1.4         0.1
-## 14          4.3         3.0          1.1         0.1
-## 15          5.8         4.0          1.2         0.2
-## 16          5.7         4.4          1.5         0.4
-## 18          5.1         3.5          1.4         0.3
-## 19          5.7         3.8          1.7         0.3
-## 20          5.1         3.8          1.5         0.3
-## 23          4.6         3.6          1.0         0.2
-## 25          4.8         3.4          1.9         0.2
-## 26          5.0         3.0          1.6         0.2
-## 27          5.0         3.4          1.6         0.4
-## 28          5.2         3.5          1.5         0.2
-##    Species
-## 1   setosa
-## 2   setosa
-## 3   setosa
-## 5   setosa
-## 8   setosa
-## 9   setosa
-## 10  setosa
-## 12  setosa
-## 13  setosa
-## 14  setosa
-## 15  setosa
-## 16  setosa
-## 18  setosa
-## 19  setosa
-## 20  setosa
-## 23  setosa
-## 25  setosa
-## 26  setosa
-## 27  setosa
-## 28  setosa
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1           5.1         3.5          1.4         0.2  setosa
+## 2           4.9         3.0          1.4         0.2  setosa
+## 3           4.7         3.2          1.3         0.2  setosa
+## 5           5.0         3.6          1.4         0.2  setosa
+## 8           5.0         3.4          1.5         0.2  setosa
+## 9           4.4         2.9          1.4         0.2  setosa
+## 10          4.9         3.1          1.5         0.1  setosa
+## 12          4.8         3.4          1.6         0.2  setosa
+## 13          4.8         3.0          1.4         0.1  setosa
+## 14          4.3         3.0          1.1         0.1  setosa
+## 15          5.8         4.0          1.2         0.2  setosa
+## 16          5.7         4.4          1.5         0.4  setosa
+## 18          5.1         3.5          1.4         0.3  setosa
+## 19          5.7         3.8          1.7         0.3  setosa
+## 20          5.1         3.8          1.5         0.3  setosa
+## 23          4.6         3.6          1.0         0.2  setosa
+## 25          4.8         3.4          1.9         0.2  setosa
+## 26          5.0         3.0          1.6         0.2  setosa
+## 27          5.0         3.4          1.6         0.4  setosa
+## 28          5.2         3.5          1.5         0.2  setosa
 ```
 
 ---
@@ -1955,27 +1938,27 @@ teste_processado
 
 ```
 ## # A tibble: 12 × 1,562
-##    especimenid face  coletor number X10001.03 X3999.64
-##          &lt;int&gt; &lt;fct&gt; &lt;fct&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-##  1       10194 adax… Perdiz…   2856     0.254    0.567
-##  2       10194 abax… Perdiz…   2856     0.273    0.581
-##  3       10194 abax… Perdiz…   2856     0.278    0.596
-##  4       10194 adax… Perdiz…   2856     0.258    0.576
-##  5       10196 adax… Perdiz…   2858     0.278    0.673
-##  6       10196 adax… Perdiz…   2858     0.267    0.712
-##  7       12647 adax… Perdiz…   3236     0.329    0.714
-##  8       12647 adax… Perdiz…   3236     0.329    0.714
-##  9       12647 adax… Perdiz…   3236     0.320    0.735
-## 10       12650 abax… Perdiz…   3239     0.349    0.733
-## 11       12650 adax… Perdiz…   3239     0.355    0.773
-## 12       12650 adax… Perdiz…   3239     0.342    0.744
-## # … with 1,556 more variables: X4003.497 &lt;dbl&gt;,
-## #   X4007.354 &lt;dbl&gt;, X4011.211 &lt;dbl&gt;,
-## #   X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;,
-## #   X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
-## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;,
-## #   X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
-## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, …
+##    especimenid face    coletor      number X10001.03 X3999.64 X4003.497 X4007.354
+##          &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;         &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1       10196 adaxial Perdiz, R.O.   2858     0.278    0.673     0.672     0.672
+##  2       10196 adaxial Perdiz, R.O.   2858     0.267    0.712     0.712     0.711
+##  3       10196 abaxial Perdiz, R.O.   2858     0.274    0.681     0.681     0.681
+##  4       10196 adaxial Perdiz, R.O.   2858     0.278    0.673     0.672     0.672
+##  5       10196 abaxial Perdiz, R.O.   2858     0.276    0.703     0.703     0.703
+##  6       10197 abaxial Perdiz, R.O.   2859     0.276    0.668     0.668     0.668
+##  7       12647 abaxial Perdiz, R.O.   3236     0.340    0.724     0.724     0.724
+##  8       12647 abaxial Perdiz, R.O.   3236     0.322    0.717     0.717     0.717
+##  9       12648 abaxial Perdiz, R.O.   3237     0.402    0.745     0.746     0.745
+## 10       12648 adaxial Perdiz, R.O.   3237     0.363    0.725     0.725     0.725
+## 11       12650 abaxial Perdiz, R.O.   3239     0.349    0.733     0.733     0.733
+## 12       12650 abaxial Perdiz, R.O.   3239     0.342    0.713     0.714     0.714
+## # … with 1,554 more variables: X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;,
+## #   X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;,
+## #   X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;,
+## #   X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;,
+## #   X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;,
+## #   X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;,
+## #   X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, …
 ```
 
 ---
@@ -1993,25 +1976,25 @@ teste_processado
 
 ```
 ## # A tibble: 36 × 1,562
-##    especimenid face  coletor number X10001.03 X3999.64
-##          &lt;int&gt; &lt;fct&gt; &lt;fct&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-##  1       10194 abax… Perdiz…   2856     0.278    0.596
-##  2       10194 adax… Perdiz…   2856     0.258    0.576
-##  3       10194 adax… Perdiz…   2856     0.254    0.567
-##  4       10194 abax… Perdiz…   2856     0.273    0.581
-##  5       10196 abax… Perdiz…   2858     0.274    0.681
-##  6       10196 abax… Perdiz…   2858     0.276    0.703
-##  7       10196 adax… Perdiz…   2858     0.267    0.712
-##  8       10196 abax… Perdiz…   2858     0.274    0.681
-##  9       10196 adax… Perdiz…   2858     0.278    0.673
-## 10       10196 abax… Perdiz…   2858     0.276    0.703
-## # … with 26 more rows, and 1,556 more variables:
-## #   X4003.497 &lt;dbl&gt;, X4007.354 &lt;dbl&gt;,
-## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;,
-## #   X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
-## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;,
-## #   X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
-## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, …
+##    especimenid face    coletor      number X10001.03 X3999.64 X4003.497 X4007.354
+##          &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;         &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1       10194 abaxial Perdiz, R.O.   2856     0.278    0.596     0.596     0.596
+##  2       10194 adaxial Perdiz, R.O.   2856     0.254    0.567     0.567     0.567
+##  3       10194 abaxial Perdiz, R.O.   2856     0.273    0.581     0.582     0.582
+##  4       10194 adaxial Perdiz, R.O.   2856     0.258    0.576     0.577     0.577
+##  5       10194 abaxial Perdiz, R.O.   2856     0.278    0.596     0.596     0.596
+##  6       10194 adaxial Perdiz, R.O.   2856     0.254    0.567     0.567     0.567
+##  7       10194 abaxial Perdiz, R.O.   2856     0.273    0.581     0.582     0.582
+##  8       10194 adaxial Perdiz, R.O.   2856     0.258    0.576     0.577     0.577
+##  9       10196 abaxial Perdiz, R.O.   2858     0.274    0.681     0.681     0.681
+## 10       10196 abaxial Perdiz, R.O.   2858     0.276    0.703     0.703     0.703
+## # … with 26 more rows, and 1,554 more variables: X4011.211 &lt;dbl&gt;,
+## #   X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
+## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
+## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;,
+## #   X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;,
+## #   X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;,
+## #   X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, …
 ```
 
 ---
@@ -2172,7 +2155,7 @@ dados_receita_pca_prep
 ## 
 ## Operations:
 ## 
-## PCA extraction with X10001.03, ... [trained]
+## PCA extraction with X10001.03, X3999.64, X4003.497, ... [trained]
 ```
 
 ---
@@ -2194,10 +2177,10 @@ pca_tabela
 ##  3 X4003.497 -0.0440 PC1       pca_OTwyZ
 ##  4 X4007.354 -0.0440 PC1       pca_OTwyZ
 ##  5 X4011.211 -0.0440 PC1       pca_OTwyZ
-##  6 X4015.068 -0.0439 PC1       pca_OTwyZ
+##  6 X4015.068 -0.0440 PC1       pca_OTwyZ
 ##  7 X4018.925 -0.0439 PC1       pca_OTwyZ
 ##  8 X4022.781 -0.0438 PC1       pca_OTwyZ
-##  9 X4026.638 -0.0436 PC1       pca_OTwyZ
+##  9 X4026.638 -0.0437 PC1       pca_OTwyZ
 ## 10 X4030.495 -0.0435 PC1       pca_OTwyZ
 ## # … with 56,042 more rows
 ```
@@ -2210,42 +2193,42 @@ pca_tabela
 
 ```
 ##     pcs variacao_porcentagem variacao_cumulativa
-## 1   PC1         9.982759e+01            99.82759
-## 2   PC2         1.691209e-01            99.99671
-## 3   PC3         1.828844e-03            99.99854
-## 4   PC4         7.562666e-04            99.99929
-## 5   PC5         3.785989e-04            99.99967
-## 6   PC6         1.649059e-04            99.99984
-## 7   PC7         1.185518e-04            99.99996
-## 8   PC8         1.810303e-05            99.99997
-## 9   PC9         1.032631e-05            99.99998
-## 10 PC10         4.615173e-06            99.99999
-## 11 PC11         3.146628e-06            99.99999
-## 12 PC12         1.941074e-06            99.99999
-## 13 PC13         1.440759e-06           100.00000
-## 14 PC14         1.273571e-06           100.00000
-## 15 PC15         7.716838e-07           100.00000
-## 16 PC16         6.194058e-07           100.00000
-## 17 PC17         4.809990e-07           100.00000
-## 18 PC18         4.024043e-07           100.00000
-## 19 PC19         3.054648e-07           100.00000
-## 20 PC20         2.618565e-07           100.00000
-## 21 PC21         2.345445e-07           100.00000
-## 22 PC22         1.968339e-07           100.00000
-## 23 PC23         1.715763e-07           100.00000
-## 24 PC24         9.964549e-31           100.00000
-## 25 PC25         9.964549e-31           100.00000
-## 26 PC26         9.964549e-31           100.00000
-## 27 PC27         9.964549e-31           100.00000
-## 28 PC28         9.964549e-31           100.00000
-## 29 PC29         9.964549e-31           100.00000
-## 30 PC30         9.964549e-31           100.00000
-## 31 PC31         9.964549e-31           100.00000
-## 32 PC32         9.964549e-31           100.00000
-## 33 PC33         9.964549e-31           100.00000
-## 34 PC34         9.964549e-31           100.00000
-## 35 PC35         9.964549e-31           100.00000
-## 36 PC36         9.964549e-31           100.00000
+## 1   PC1         9.985854e+01            99.85854
+## 2   PC2         1.370164e-01            99.99556
+## 3   PC3         2.781365e-03            99.99834
+## 4   PC4         9.573442e-04            99.99930
+## 5   PC5         3.655038e-04            99.99966
+## 6   PC6         1.673787e-04            99.99983
+## 7   PC7         1.257896e-04            99.99996
+## 8   PC8         1.430221e-05            99.99997
+## 9   PC9         1.283616e-05            99.99998
+## 10 PC10         5.029179e-06            99.99999
+## 11 PC11         3.206668e-06            99.99999
+## 12 PC12         2.421529e-06            99.99999
+## 13 PC13         1.684311e-06           100.00000
+## 14 PC14         1.135292e-06           100.00000
+## 15 PC15         8.596246e-07           100.00000
+## 16 PC16         6.167369e-07           100.00000
+## 17 PC17         4.302474e-07           100.00000
+## 18 PC18         3.280557e-07           100.00000
+## 19 PC19         3.136051e-07           100.00000
+## 20 PC20         2.956547e-07           100.00000
+## 21 PC21         2.776415e-07           100.00000
+## 22 PC22         2.196317e-07           100.00000
+## 23 PC23         1.869919e-07           100.00000
+## 24 PC24         9.967603e-31           100.00000
+## 25 PC25         9.967603e-31           100.00000
+## 26 PC26         9.967603e-31           100.00000
+## 27 PC27         9.967603e-31           100.00000
+## 28 PC28         9.967603e-31           100.00000
+## 29 PC29         9.967603e-31           100.00000
+## 30 PC30         9.967603e-31           100.00000
+## 31 PC31         9.967603e-31           100.00000
+## 32 PC32         9.967603e-31           100.00000
+## 33 PC33         9.967603e-31           100.00000
+## 34 PC34         9.967603e-31           100.00000
+## 35 PC35         9.967603e-31           100.00000
+## 36 PC36         9.967603e-31           100.00000
 ```
 ]
 
@@ -2317,8 +2300,8 @@ dados_receita_normal_pca
 ## 
 ## Operations:
 ## 
-## Centering and scaling for X10001.03, ... [trained]
-## PCA extraction with X10001.03, ... [trained]
+## Centering and scaling for X10001.03, X3999.64, X4003.497, ... [trained]
+## PCA extraction with X10001.03, X3999.64, X4003.497, ... [trained]
 ```
 
 ---
@@ -2336,16 +2319,16 @@ tidy(dados_receita_normal_pca, 1)
 ## # A tibble: 3,114 × 4
 ##    terms     statistic value id             
 ##    &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;          
-##  1 X10001.03 mean      0.317 normalize_0VXeM
-##  2 X3999.64  mean      0.699 normalize_0VXeM
-##  3 X4003.497 mean      0.699 normalize_0VXeM
-##  4 X4007.354 mean      0.699 normalize_0VXeM
-##  5 X4011.211 mean      0.699 normalize_0VXeM
-##  6 X4015.068 mean      0.698 normalize_0VXeM
-##  7 X4018.925 mean      0.697 normalize_0VXeM
-##  8 X4022.781 mean      0.696 normalize_0VXeM
-##  9 X4026.638 mean      0.694 normalize_0VXeM
-## 10 X4030.495 mean      0.691 normalize_0VXeM
+##  1 X10001.03 mean      0.313 normalize_0VXeM
+##  2 X3999.64  mean      0.689 normalize_0VXeM
+##  3 X4003.497 mean      0.689 normalize_0VXeM
+##  4 X4007.354 mean      0.689 normalize_0VXeM
+##  5 X4011.211 mean      0.689 normalize_0VXeM
+##  6 X4015.068 mean      0.689 normalize_0VXeM
+##  7 X4018.925 mean      0.688 normalize_0VXeM
+##  8 X4022.781 mean      0.686 normalize_0VXeM
+##  9 X4026.638 mean      0.684 normalize_0VXeM
+## 10 X4030.495 mean      0.682 normalize_0VXeM
 ## # … with 3,104 more rows
 ```
 
@@ -2363,16 +2346,16 @@ tidy(dados_receita_normal_pca, 1) %&gt;%
 ## # A tibble: 1,557 × 4
 ##    terms     statistic value id             
 ##    &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;          
-##  1 X10001.03 mean      0.317 normalize_0VXeM
-##  2 X3999.64  mean      0.699 normalize_0VXeM
-##  3 X4003.497 mean      0.699 normalize_0VXeM
-##  4 X4007.354 mean      0.699 normalize_0VXeM
-##  5 X4011.211 mean      0.699 normalize_0VXeM
-##  6 X4015.068 mean      0.698 normalize_0VXeM
-##  7 X4018.925 mean      0.697 normalize_0VXeM
-##  8 X4022.781 mean      0.696 normalize_0VXeM
-##  9 X4026.638 mean      0.694 normalize_0VXeM
-## 10 X4030.495 mean      0.691 normalize_0VXeM
+##  1 X10001.03 mean      0.313 normalize_0VXeM
+##  2 X3999.64  mean      0.689 normalize_0VXeM
+##  3 X4003.497 mean      0.689 normalize_0VXeM
+##  4 X4007.354 mean      0.689 normalize_0VXeM
+##  5 X4011.211 mean      0.689 normalize_0VXeM
+##  6 X4015.068 mean      0.689 normalize_0VXeM
+##  7 X4018.925 mean      0.688 normalize_0VXeM
+##  8 X4022.781 mean      0.686 normalize_0VXeM
+##  9 X4026.638 mean      0.684 normalize_0VXeM
+## 10 X4030.495 mean      0.682 normalize_0VXeM
 ## # … with 1,547 more rows
 ```
 
@@ -2390,16 +2373,16 @@ tidy(dados_receita_normal_pca, 1) %&gt;%
 ## # A tibble: 1,557 × 4
 ##    terms     statistic  value id             
 ##    &lt;chr&gt;     &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;          
-##  1 X10001.03 sd        0.0512 normalize_0VXeM
-##  2 X3999.64  sd        0.0516 normalize_0VXeM
-##  3 X4003.497 sd        0.0517 normalize_0VXeM
-##  4 X4007.354 sd        0.0517 normalize_0VXeM
-##  5 X4011.211 sd        0.0518 normalize_0VXeM
-##  6 X4015.068 sd        0.0518 normalize_0VXeM
-##  7 X4018.925 sd        0.0518 normalize_0VXeM
-##  8 X4022.781 sd        0.0517 normalize_0VXeM
-##  9 X4026.638 sd        0.0517 normalize_0VXeM
-## 10 X4030.495 sd        0.0515 normalize_0VXeM
+##  1 X10001.03 sd        0.0500 normalize_0VXeM
+##  2 X3999.64  sd        0.0654 normalize_0VXeM
+##  3 X4003.497 sd        0.0655 normalize_0VXeM
+##  4 X4007.354 sd        0.0655 normalize_0VXeM
+##  5 X4011.211 sd        0.0655 normalize_0VXeM
+##  6 X4015.068 sd        0.0655 normalize_0VXeM
+##  7 X4018.925 sd        0.0655 normalize_0VXeM
+##  8 X4022.781 sd        0.0654 normalize_0VXeM
+##  9 X4026.638 sd        0.0653 normalize_0VXeM
+## 10 X4030.495 sd        0.0651 normalize_0VXeM
 ## # … with 1,547 more rows
 ```
 
@@ -2418,15 +2401,15 @@ pca_tabela_normalizada
 ##    terms      value component id       
 ##    &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    
 ##  1 X10001.03 0.0257 PC1       pca_lZPx9
-##  2 X3999.64  0.0214 PC1       pca_lZPx9
-##  3 X4003.497 0.0214 PC1       pca_lZPx9
-##  4 X4007.354 0.0215 PC1       pca_lZPx9
-##  5 X4011.211 0.0215 PC1       pca_lZPx9
-##  6 X4015.068 0.0216 PC1       pca_lZPx9
-##  7 X4018.925 0.0216 PC1       pca_lZPx9
-##  8 X4022.781 0.0216 PC1       pca_lZPx9
-##  9 X4026.638 0.0217 PC1       pca_lZPx9
-## 10 X4030.495 0.0217 PC1       pca_lZPx9
+##  2 X3999.64  0.0219 PC1       pca_lZPx9
+##  3 X4003.497 0.0219 PC1       pca_lZPx9
+##  4 X4007.354 0.0220 PC1       pca_lZPx9
+##  5 X4011.211 0.0220 PC1       pca_lZPx9
+##  6 X4015.068 0.0220 PC1       pca_lZPx9
+##  7 X4018.925 0.0221 PC1       pca_lZPx9
+##  8 X4022.781 0.0221 PC1       pca_lZPx9
+##  9 X4026.638 0.0221 PC1       pca_lZPx9
+## 10 X4030.495 0.0221 PC1       pca_lZPx9
 ## # … with 56,042 more rows
 ```
 
@@ -2439,42 +2422,42 @@ pca_tabela_normalizada
 
 ```
 ##     pcs variacao_porcentagem variacao_cumulativa
-## 1   PC1         9.508952e+01            95.08952
-## 2   PC2         4.666683e+00            99.75621
-## 3   PC3         1.509489e-01            99.90716
-## 4   PC4         5.345715e-02            99.96061
-## 5   PC5         1.837684e-02            99.97899
-## 6   PC6         1.325063e-02            99.99224
-## 7   PC7         4.851599e-03            99.99709
-## 8   PC8         1.243345e-03            99.99834
-## 9   PC9         5.286828e-04            99.99886
-## 10 PC10         3.979277e-04            99.99926
-## 11 PC11         2.506385e-04            99.99951
-## 12 PC12         1.173493e-04            99.99963
-## 13 PC13         1.054001e-04            99.99974
-## 14 PC14         6.231878e-05            99.99980
-## 15 PC15         4.796445e-05            99.99985
-## 16 PC16         3.399282e-05            99.99988
-## 17 PC17         3.152791e-05            99.99991
-## 18 PC18         2.315667e-05            99.99993
-## 19 PC19         1.952355e-05            99.99995
-## 20 PC20         1.815224e-05            99.99997
-## 21 PC21         1.546764e-05            99.99999
-## 22 PC22         1.189231e-05           100.00000
-## 23 PC23         1.812227e-29           100.00000
-## 24 PC24         8.117101e-31           100.00000
-## 25 PC25         8.117101e-31           100.00000
-## 26 PC26         8.117101e-31           100.00000
-## 27 PC27         8.117101e-31           100.00000
-## 28 PC28         8.117101e-31           100.00000
-## 29 PC29         8.117101e-31           100.00000
-## 30 PC30         8.117101e-31           100.00000
-## 31 PC31         8.117101e-31           100.00000
-## 32 PC32         8.117101e-31           100.00000
-## 33 PC33         8.117101e-31           100.00000
-## 34 PC34         8.117101e-31           100.00000
-## 35 PC35         8.117101e-31           100.00000
-## 36 PC36         8.117101e-31           100.00000
+## 1   PC1         9.496806e+01            94.96806
+## 2   PC2         4.813018e+00            99.78107
+## 3   PC3         1.376769e-01            99.91875
+## 4   PC4         4.888044e-02            99.96763
+## 5   PC5         1.687018e-02            99.98450
+## 6   PC6         9.575990e-03            99.99408
+## 7   PC7         3.591555e-03            99.99767
+## 8   PC8         8.282035e-04            99.99850
+## 9   PC9         5.542793e-04            99.99905
+## 10 PC10         2.908187e-04            99.99934
+## 11 PC11         2.043393e-04            99.99955
+## 12 PC12         1.297325e-04            99.99968
+## 13 PC13         8.517100e-05            99.99976
+## 14 PC14         5.438800e-05            99.99982
+## 15 PC15         4.679312e-05            99.99986
+## 16 PC16         2.790423e-05            99.99989
+## 17 PC17         2.340695e-05            99.99991
+## 18 PC18         2.025337e-05            99.99993
+## 19 PC19         1.960995e-05            99.99995
+## 20 PC20         1.842898e-05            99.99997
+## 21 PC21         1.471458e-05            99.99999
+## 22 PC22         1.228660e-05           100.00000
+## 23 PC23         1.932017e-29           100.00000
+## 24 PC24         8.660295e-31           100.00000
+## 25 PC25         8.660295e-31           100.00000
+## 26 PC26         8.660295e-31           100.00000
+## 27 PC27         8.660295e-31           100.00000
+## 28 PC28         8.660295e-31           100.00000
+## 29 PC29         8.660295e-31           100.00000
+## 30 PC30         8.660295e-31           100.00000
+## 31 PC31         8.660295e-31           100.00000
+## 32 PC32         8.660295e-31           100.00000
+## 33 PC33         8.660295e-31           100.00000
+## 34 PC34         8.660295e-31           100.00000
+## 35 PC35         8.660295e-31           100.00000
+## 36 PC36         7.552548e-31           100.00000
 ```
 ]
 

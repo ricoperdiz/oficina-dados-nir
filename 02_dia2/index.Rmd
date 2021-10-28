@@ -35,9 +35,10 @@ style_duo_accent(
 
 ```{r xaringanExtra, include=FALSE}
 xaringanExtra::use_xaringan_extra(c("tile_view", "scribble"))
-xaringanExtra::use_tachyons()
 xaringanExtra::use_fit_screen()
 xaringanExtra::use_panelset()
+xaringanExtra::use_tachyons()
+xaringanExtra::use_share_again()
 ```
 
 ```{r load_pkgs, include=FALSE}
