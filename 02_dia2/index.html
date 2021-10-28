@@ -328,22 +328,22 @@ pca_tabela
 ## # A tibble: 16 × 4
 ##    terms          value component id       
 ##    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    
-##  1 Sepal.Length  0.521  PC1       pca_jCGEQ
-##  2 Sepal.Width  -0.269  PC1       pca_jCGEQ
-##  3 Petal.Length  0.580  PC1       pca_jCGEQ
-##  4 Petal.Width   0.565  PC1       pca_jCGEQ
-##  5 Sepal.Length -0.377  PC2       pca_jCGEQ
-##  6 Sepal.Width  -0.923  PC2       pca_jCGEQ
-##  7 Petal.Length -0.0245 PC2       pca_jCGEQ
-##  8 Petal.Width  -0.0669 PC2       pca_jCGEQ
-##  9 Sepal.Length  0.720  PC3       pca_jCGEQ
-## 10 Sepal.Width  -0.244  PC3       pca_jCGEQ
-## 11 Petal.Length -0.142  PC3       pca_jCGEQ
-## 12 Petal.Width  -0.634  PC3       pca_jCGEQ
-## 13 Sepal.Length  0.261  PC4       pca_jCGEQ
-## 14 Sepal.Width  -0.124  PC4       pca_jCGEQ
-## 15 Petal.Length -0.801  PC4       pca_jCGEQ
-## 16 Petal.Width   0.524  PC4       pca_jCGEQ
+##  1 Sepal.Length  0.521  PC1       pca_3EQcj
+##  2 Sepal.Width  -0.269  PC1       pca_3EQcj
+##  3 Petal.Length  0.580  PC1       pca_3EQcj
+##  4 Petal.Width   0.565  PC1       pca_3EQcj
+##  5 Sepal.Length -0.377  PC2       pca_3EQcj
+##  6 Sepal.Width  -0.923  PC2       pca_3EQcj
+##  7 Petal.Length -0.0245 PC2       pca_3EQcj
+##  8 Petal.Width  -0.0669 PC2       pca_3EQcj
+##  9 Sepal.Length  0.720  PC3       pca_3EQcj
+## 10 Sepal.Width  -0.244  PC3       pca_3EQcj
+## 11 Petal.Length -0.142  PC3       pca_3EQcj
+## 12 Petal.Width  -0.634  PC3       pca_3EQcj
+## 13 Sepal.Length  0.261  PC4       pca_3EQcj
+## 14 Sepal.Width  -0.124  PC4       pca_3EQcj
+## 15 Petal.Length -0.801  PC4       pca_3EQcj
+## 16 Petal.Width   0.524  PC4       pca_3EQcj
 ```
 
 ---
@@ -433,8 +433,8 @@ caret::trainControl()
 ## Fluxograma de um perfil básico de análise
 
 .center2[
-<div id="htmlwidget-1fb6ee197b7c0d98a2f7" style="width:504px;height:504px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1fb6ee197b7c0d98a2f7">{"x":{"diagram":"\ndigraph fluxograma_modelagem {\n\n# a \"graph\" statement\n  graph [overlap = true, fontname = Helvetica, fontsize = 150]\n\n# node definitions\nnode [shape = box]\n\na [label = \"Dados\"]\nb [label = \"Quebra dos dados \n rsample::initial_split()\"]\ne [label = \"Receita  \n recipes::recipe()\"]\nf [label = \"Interface caret \n train()\"]\nj [label = \"Predições\"]\nk [label = \"Avaliação \n performance\"]\n\nnode [shape = circle]\n\nc [label = \"Treino\"]\nd [label = \"Teste\"]\ng [label = \"PCA\"]\nh [label = \"LDA\"]\ni [label = \"PLS-DA\"]\n\n# edge definitions with the node IDs\na -> b\nb -> c\nb -> d\na -> e\nc -> e\ne -> f\ne -> g\nf -> h\nf -> i\n{a c} -> f\ng -> h\n{h i} -> j\nj -> k\nd -> j\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-3b5aa6e29cc8430ddeb8" style="width:504px;height:504px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3b5aa6e29cc8430ddeb8">{"x":{"diagram":"\ndigraph fluxograma_modelagem {\n\n# a \"graph\" statement\n  graph [overlap = true, fontname = Helvetica, fontsize = 150]\n\n# node definitions\nnode [shape = box]\n\na [label = \"Dados\"]\nb [label = \"Quebra dos dados \n rsample::initial_split()\"]\ne [label = \"Receita  \n recipes::recipe()\"]\nf [label = \"Interface caret \n train()\"]\nj [label = \"Predições\"]\nk [label = \"Avaliação \n performance\"]\n\nnode [shape = circle]\n\nc [label = \"Treino\"]\nd [label = \"Teste\"]\ng [label = \"PCA\"]\nh [label = \"LDA\"]\ni [label = \"PLS-DA\"]\n\n# edge definitions with the node IDs\na -> b\nb -> c\nb -> d\na -> e\nc -> e\ne -> f\ne -> g\nf -> h\nf -> i\n{a c} -> f\ng -> h\n{h i} -> j\nj -> k\nd -> j\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
 ]
 
@@ -597,12 +597,13 @@ predicao_lda_basico
 ```
 
 ```
-##  [1] setosa     setosa     setosa     setosa     setosa     setosa     setosa    
-##  [8] setosa     setosa     setosa     setosa     setosa     setosa     versicolor
-## [15] versicolor versicolor versicolor virginica  versicolor versicolor versicolor
-## [22] versicolor versicolor versicolor versicolor versicolor virginica  virginica 
-## [29] virginica  virginica  virginica  virginica  virginica  virginica  virginica 
-## [36] virginica  virginica  virginica  virginica 
+##  [1] setosa     setosa     setosa     setosa     setosa     setosa    
+##  [7] setosa     setosa     setosa     setosa     setosa     setosa    
+## [13] setosa     versicolor versicolor versicolor versicolor versicolor
+## [19] versicolor versicolor versicolor versicolor versicolor versicolor
+## [25] versicolor versicolor virginica  virginica  virginica  virginica 
+## [31] virginica  virginica  virginica  virginica  virginica  virginica 
+## [37] virginica  virginica  virginica 
 ## Levels: setosa versicolor virginica
 ```
 ]
@@ -726,10 +727,11 @@ names(ldafit_cv_10fold)
 ```
 
 ```
-##  [1] "method"       "modelInfo"    "modelType"    "recipe"       "results"     
-##  [6] "pred"         "bestTune"     "call"         "dots"         "metric"      
-## [11] "control"      "finalModel"   "trainingData" "resample"     "resampledCM" 
-## [16] "perfNames"    "maximize"     "yLimits"      "times"        "levels"      
+##  [1] "method"       "modelInfo"    "modelType"    "recipe"      
+##  [5] "results"      "pred"         "bestTune"     "call"        
+##  [9] "dots"         "metric"       "control"      "finalModel"  
+## [13] "trainingData" "resample"     "resampledCM"  "perfNames"   
+## [17] "maximize"     "yLimits"      "times"        "levels"      
 ## [21] "rs_seed"
 ```
 
@@ -761,12 +763,12 @@ ldafit_cv_10fold$pred %&gt;%
 ```
 
 ```
-##          obs rowIndex       pred       setosa versicolor virginica parameter
-## 1 versicolor       64  virginica 7.082366e-31  0.1304324 0.8695676      none
-## 2  virginica       99 versicolor 6.506261e-27  0.8282785 0.1717215      none
-##   Resample
-## 1   Fold07
-## 2   Fold10
+##          obs rowIndex       pred       setosa versicolor virginica
+## 1 versicolor       64  virginica 7.082366e-31  0.1304324 0.8695676
+## 2  virginica       99 versicolor 6.506261e-27  0.8282785 0.1717215
+##   parameter Resample
+## 1      none   Fold07
+## 2      none   Fold10
 ```
 
 ---
@@ -1031,31 +1033,31 @@ confusionMatrix(data = predicao_lda_sem_receita_basico, reference = teste$Specie
 ##             Reference
 ## Prediction   setosa versicolor virginica
 ##   setosa         13          0         0
-##   versicolor      0         12         0
-##   virginica       0          1        13
+##   versicolor      0         13         0
+##   virginica       0          0        13
 ## 
 ## Overall Statistics
-##                                           
-##                Accuracy : 0.9744          
-##                  95% CI : (0.8652, 0.9994)
-##     No Information Rate : 0.3333          
-##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
-##                                           
-##                   Kappa : 0.9615          
-##                                           
-##  Mcnemar's Test P-Value : NA              
+##                                      
+##                Accuracy : 1          
+##                  95% CI : (0.9097, 1)
+##     No Information Rate : 0.3333     
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16  
+##                                      
+##                   Kappa : 1          
+##                                      
+##  Mcnemar's Test P-Value : NA         
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: setosa Class: versicolor Class: virginica
-## Sensitivity                 1.0000            0.9231           1.0000
-## Specificity                 1.0000            1.0000           0.9615
-## Pos Pred Value              1.0000            1.0000           0.9286
-## Neg Pred Value              1.0000            0.9630           1.0000
+## Sensitivity                 1.0000            1.0000           1.0000
+## Specificity                 1.0000            1.0000           1.0000
+## Pos Pred Value              1.0000            1.0000           1.0000
+## Neg Pred Value              1.0000            1.0000           1.0000
 ## Prevalence                  0.3333            0.3333           0.3333
-## Detection Rate              0.3333            0.3077           0.3333
-## Detection Prevalence        0.3333            0.3077           0.3590
-## Balanced Accuracy           1.0000            0.9615           0.9808
+## Detection Rate              0.3333            0.3333           0.3333
+## Detection Prevalence        0.3333            0.3333           0.3333
+## Balanced Accuracy           1.0000            1.0000           1.0000
 ```
 
 ]
