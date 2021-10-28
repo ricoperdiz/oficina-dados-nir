@@ -1,0 +1,2652 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Oficina de análise de dados NIR em ambiente R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ricardo Perdiz (Luz da Floresta)" />
+    <script src="libs/header-attrs-2.10/header-attrs.js"></script>
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <script src="libs/fabric-4.3.1/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
+    <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset-0.2.6/panelset.js"></script>
+    <meta name="description" content="Oficina para aprendizagem prática em ambiente R de ferramentas para manipular, pré-processar e analisar dados de espectroscopia no infravermelho próximo (NIR)."/>
+    <meta name="generator" content="xaringan e remark.js"/>
+    <meta name="gitlab-repo" content="ricoperdiz/oficina-dados-nir"/>
+    <meta name="twitter:title" content="Oficina de análise de dados NIR em ambiente R - Partes 1—3 - Manejo de dados com *dplyr*, preparação de dados, e PCA"/>
+    <meta name="twitter:description" content="Oficina para aprendizagem prática em ambiente R de ferramentas para manipular, pré-processar e analisar dados de espectroscopia no infravermelho próximo (NIR)."/>
+    <meta name="twitter:url" content="https://oficina-dados-nir-dia01.netlify.app"/>
+    <meta name="twitter:image:src" content="https://gitlab.com/ricoperdiz/oficina-dados-nir/-/blob/main/01_dia1/share-card.png"/>
+    <meta name="twitter:image:alt" content="Slide título da oficina Análise de dados NIR em ambiente R: Manejo de dados com *dplyr*, preparação de dados, e PCA, apresentado de forma privada a um grupo de estudantes no dia 30 de junho de 2021."/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:creator" content="@ricoperdiz"/>
+    <meta name="twitter:site" content="@ricoperdiz"/>
+    <meta property="og:title" content="Oficina de análise de dados NIR em ambiente R - Partes 1—3 - Manejo de dados com *dplyr*, preparação de dados, e PCA"/>
+    <meta property="og:description" content="Oficina para aprendizagem prática em ambiente R de ferramentas para manipular, pré-processar e analisar dados de espectroscopia no infravermelho próximo (NIR)."/>
+    <meta property="og:url" content="https://oficina-dados-nir-dia01.netlify.app"/>
+    <meta property="og:image" content="https://gitlab.com/ricoperdiz/oficina-dados-nir/-/blob/main/01_dia1/share-card.png"/>
+    <meta property="og:image:alt" content="Slide título da oficina Análise de dados NIR em ambiente R: Manejo de dados com *dplyr*, preparação de dados, e PCA, apresentado de forma privada a um grupo de estudantes no dia 30 de junho de 2021."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="article:author" content="Ricardo de Oliveira Perdiz"/>
+    <link rel="stylesheet" href="css/xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="css/footer-header.css" type="text/css" />
+    <link rel="stylesheet" href="css/ribbon.css" type="text/css" />
+    <link rel="stylesheet" href="css/custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+layout: false
+
+name: title
+class: left, bottom
+background-image: url("figuras/title-slide.001.jpeg")
+background-size: contain
+
+.pull-left[
+
+# .midlarge[.black[Oficina de análise de dados NIR em ambiente R]]
+
+## .mid[.black[Partes 1—3 - Manejo de dados com *dplyr*, preparação de dados, e PCA]]
+
+#### .large[.black[Ricardo Perdiz (Luz da Floresta) | 2021/06/30]]
+
+]
+
+&lt;div class="cr cr-top cr-left cr-sticky cr-black"&gt;COVID19&lt;/div&gt;
+
+---
+
+
+
+class: middle, center, hide_logo
+background-image: url("figuras/who-am-i.001.jpeg")
+background-size: cover
+
+
+.pull-left[
+
+### Sobre mim
+
+&lt;img style="border-radius: 60%;" src="figuras/ROPerdiz.jpg" width="100px"/&gt;
+
+  **Dr. em Botânica (INPA)**  
+  **Analista de dados**  
+  
+  [&lt;svg viewBox="0 0 496 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"&gt;&lt;/path&gt;&lt;/svg&gt; @ricoperdiz](https://github.com/ricoperdiz)  
+  [&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"&gt;&lt;/path&gt;&lt;/svg&gt; @ricoperdiz](https://twitter.com/ricoperdiz)  
+  [&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"&gt;&lt;/path&gt;&lt;/svg&gt; ricardoperdiz.com](https://ricardoperdiz.com)  
+  [&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z"&gt;&lt;/path&gt;&lt;/svg&gt; ricoperdiz@gmail.com](mailto:ricoperdiz@gmail.com)  
+
+]
+
+&lt;div class="cr cr-top cr-left cr-sticky cr-black"&gt;COVID19&lt;/div&gt;
+
+---
+
+layout: true
+
+&lt;div class="cr cr-top cr-left cr-sticky cr-black"&gt;COVID19&lt;/div&gt;
+
+&lt;a class="footer-link" href="https://gitlab.com/ricoperdiz/oficina-dados-nir"&gt;Análise de dados NIR em R&lt;/a&gt;
+
+---
+
+# Sumário
+
+
+### Uma breve [introdução](#intro)
+
+--
+
+### Manipulação de dados com o pacote [dplyr](#dplyr)
+
+--
+
+### [Preparação dos dados](#prep-dados) para análise
+
+--
+
+### Análise de componentes principais [(PCA)](#pca)
+
+---
+name: intro
+# "There should be one – and preferably only one – obvious way to do it." (The Zen of Python)&lt;sup&gt;1&lt;/sup&gt;
+
+--
+
+#### *Paradigma em linguagens de programação.*  
+
+--
+
+## "There’s more than one way to do it" (**Perl**, **R**)
+
+
+.footnote2[
+1: [The Zen of Python](https://zen-of-python.info/beautiful-is-better-than-ugly.html)
+]
+
+
+---
+
+# Há mais de uma maneira de se fazer uma determinada ação no R
+
+
+```r
+plot(mtcars$hp, mtcars$mpg)
+
+
+plot(mpg ~ hp, data = mtcars)
+
+library(lattice)
+xyplot(mpg ~ hp, data = mtcars)
+
+library(ggplot2)
+ggplot(mtcars, aes(x = hp, y = mpg)) + geom_point()
+```
+
+???
+
+Várias maneiras de se fazer algo em R, todas com vantagens e desvantagens.
+O guia de desenvolvedor do Python afirma:
+R é muito diferente de Python nesse aspecto. Uma vantagem da diversidade de interfaces do R é que ela pode se desenvolver com o tempo e se ajustar às diferentes necessidades dos usuários.
+
+---
+class:center, inverse, middle
+
+# Por que ensinar ferramentas do *tidyverse*, *caret* e *tidymodels*?
+
+--
+
+### Enraizar a idéia de ter *UM* conjunto de ferramentas para trabalhar e analisar os dados
+
+---
+
+# Instruções gerais
+
+
+```r
+data.frame(a = 1:10, b = 1:10)
+```
+
+--
+
+### Um código por linha!
+
+
+```r
+data.frame(
+  a = 1:10,
+  b = 1:10)
+```
+
+---
+
+# Instruções gerais
+
+### Dúvidas?
+
+--
+
+### Dúvidas de R básico, eu vou apontar onde descobrir a solução, mas não vou focar em resolver nesta oficina.
+
+--
+
+### Podem parar e perguntar!
+
+
+---
+
+# Dados para a oficina
+
+--
+
+### 1. Conjunto de dados `nir_data`&lt;sup&gt;1&lt;/sup&gt;, que acompanha o pacote `NIRtools`&lt;sup&gt;2&lt;/sup&gt;.  
+--
+
+### 2. Próprios dados
+
+
+.footnote2[
+1. Perdiz (2020) Delimitação específica e filogeografia do complexo *Protium aracouchini* (Aubl.) Marchand (Burseraceae). Tese de doutorado. Programa de pós-graduação em Ciências Biológicas, INPA, Manaus, Amazonas, Brasil. &lt;https://repositorio.inpa.gov.br/handle/1/36948&gt;  
+
+2. Perdiz (2021) &lt;https://github.com/ricoperdiz/NIRtools&gt;  
+
+]
+
+???
+
+Vou utilizar o conjunto de dados `nir_data`, um subconjunto proveniente de minha tese de doutorado (Perdiz 2020), e que acompanha o pacote `NIRtools` (Perdiz 2021) para servir como exemplo para as análises neste tutorial.
+Vale ressaltar que esse conjunto de dados é **extremamente pequeno**, por isso desconsidere os resultados das análises.
+Ele servirá apenas de guia para abordar os procedimentos aqui abordados.  
+
+---
+name: dados
+## Importação dos dados `nir_data`&lt;sup&gt;1&lt;/sup&gt;
+
+Para ler o conjunto de dados que utilizarei nesta oficina, basta rodar o comando abaixo:
+
+
+```r
+dados &lt;-
+  read.table("https://raw.githubusercontent.com/ricoperdiz/NIRtools/master/inst/extdata/nir_data.csv", sep = "\t", header = TRUE, as.is = TRUE)
+```
+
+.footnote2[
+
+1. Perdiz (2020) &lt;https://repositorio.inpa.gov.br/handle/1/36948&gt;  
+
+]
+
+--
+
+De maneira alternativa, você pode ler estes dados utilizando a função `fread()` do pacote `data.table`:
+
+
+```r
+library("data.table")
+dados &lt;-
+  fread("https://raw.githubusercontent.com/ricoperdiz/NIRtools/master/inst/extdata/nir_data.csv")
+```
+
+
+
+---
+
+## Importação de dados próprios
+
+De maneira alternativa, como no exemplo anterior, você pode utilizar a função `fread()` do pacote `data.table`. Esta função não exige a especificação do separador, pois é automaticamente descoberto:
+
+
+```r
+library("data.table")
+dados &lt;- fread("MEUSDADOS.csv")
+```
+
+---
+
+## Transformação do `data.frame` em um `tibble`&lt;sup&gt;1&lt;/sup&gt;
+
+
+```r
+library("tibble")
+dados &lt;- as_tibble(dados)
+head(dados)
+```
+
+```
+## # A tibble: 6 × 1,562
+##   especimenid SP1            face  coletor number X10001.03 X3999.64 X4003.497
+##         &lt;int&gt; &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1       10194 P. aracouchini abax… Perdiz…   2856     0.278    0.596     0.596
+## 2       10194 P. aracouchini adax… Perdiz…   2856     0.254    0.567     0.567
+## 3       10194 P. aracouchini abax… Perdiz…   2856     0.273    0.581     0.582
+## 4       10194 P. aracouchini adax… Perdiz…   2856     0.258    0.576     0.577
+## 5       10194 P. aracouchini abax… Perdiz…   2856     0.278    0.596     0.596
+## 6       10194 P. aracouchini adax… Perdiz…   2856     0.254    0.567     0.567
+## # … with 1,554 more variables: X4007.354 &lt;dbl&gt;, X4011.211 &lt;dbl&gt;,
+## #   X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
+## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
+## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;,
+## #   X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;,
+## #   X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;,
+## #   X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, …
+```
+
+.footnote2[
+
+1. Este passo **NÃO É NECESSÁRIO**. Ele facilita apenas a visualização dos dados no console, e indica o tipo de cada variável em seu conjunto de dados. Saiba mais sobre um `tibble` em [https://r4ds.had.co.nz/tibbles.html](https://r4ds.had.co.nz/tibbles.html).  
+
+]
+
+---
+
+
+## Checagem básica
+
+Primeiras 10 linhas e 5 colunas
+
+
+```r
+dados[1:10, 1:5]
+```
+
+```
+## # A tibble: 10 × 5
+##    especimenid SP1            face    coletor      number
+##          &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;   &lt;chr&gt;         &lt;int&gt;
+##  1       10194 P. aracouchini abaxial Perdiz, R.O.   2856
+##  2       10194 P. aracouchini adaxial Perdiz, R.O.   2856
+##  3       10194 P. aracouchini abaxial Perdiz, R.O.   2856
+##  4       10194 P. aracouchini adaxial Perdiz, R.O.   2856
+##  5       10194 P. aracouchini abaxial Perdiz, R.O.   2856
+##  6       10194 P. aracouchini adaxial Perdiz, R.O.   2856
+##  7       10194 P. aracouchini abaxial Perdiz, R.O.   2856
+##  8       10194 P. aracouchini adaxial Perdiz, R.O.   2856
+##  9       10196 P. aracouchini abaxial Perdiz, R.O.   2858
+## 10       10196 P. aracouchini adaxial Perdiz, R.O.   2858
+```
+
+---
+
+## Estrutura dos dados
+
+
+```r
+str(dados[, 1:15])
+```
+
+```
+## tibble [48 × 15] (S3: tbl_df/tbl/data.frame)
+##  $ especimenid: int [1:48] 10194 10194 10194 10194 10194 10194 10194 10194 10196 10196 ...
+##  $ SP1        : chr [1:48] "P. aracouchini" "P. aracouchini" "P. aracouchini" "P. aracouchini" ...
+##  $ face       : chr [1:48] "abaxial" "adaxial" "abaxial" "adaxial" ...
+##  $ coletor    : chr [1:48] "Perdiz, R.O." "Perdiz, R.O." "Perdiz, R.O." "Perdiz, R.O." ...
+##  $ number     : int [1:48] 2856 2856 2856 2856 2856 2856 2856 2856 2858 2858 ...
+##  $ X10001.03  : num [1:48] 0.278 0.254 0.273 0.258 0.278 ...
+##  $ X3999.64   : num [1:48] 0.596 0.567 0.581 0.576 0.596 ...
+##  $ X4003.497  : num [1:48] 0.596 0.567 0.582 0.577 0.596 ...
+##  $ X4007.354  : num [1:48] 0.596 0.567 0.582 0.577 0.596 ...
+##  $ X4011.211  : num [1:48] 0.596 0.567 0.582 0.577 0.596 ...
+##  $ X4015.068  : num [1:48] 0.596 0.567 0.581 0.576 0.596 ...
+##  $ X4018.925  : num [1:48] 0.595 0.566 0.58 0.575 0.595 ...
+##  $ X4022.781  : num [1:48] 0.593 0.565 0.579 0.574 0.593 ...
+##  $ X4026.638  : num [1:48] 0.592 0.563 0.578 0.573 0.592 ...
+##  $ X4030.495  : num [1:48] 0.59 0.562 0.576 0.571 0.59 ...
+##  - attr(*, ".internal.selfref")=&lt;externalptr&gt;
+```
+
+---
+
+## Contagem de número de amostras por determinada categoria
+
+`SP1` é a variável que contem nome de espécie em meu conjunto de dados: 
+
+
+```r
+table(dados$SP1)
+```
+
+```
+## 
+## P. aracouchini   P. calanense 
+##             24             24
+```
+
+
+---
+
+.pull-left[
+## Plot - `NIRtools`&lt;sup&gt;1&lt;/sup&gt;
+
+Função `nirdf()`&lt;sup&gt;2,3&lt;/sup&gt; converte um objeto com dados NIR em um objeto de classe `nirdf`, o que permite então utilizar u método próprio para plotar em R usando a função `plot()`.  
+
+
+```r
+nirdad &lt;-
+  NIRtools::nirdf(
+    dados,
+    category = "SP1",
+    measure_columns = grep("^X", names(dados), value = TRUE),
+    measure_columns_prefix = "X"
+  )
+```
+]
+
+.pull-right[
+
+```r
+plot(nirdad, "SP1",
+     cex_pt = .7,
+     cex_leg = 2,
+     text_font = 3)
+```
+
+![](index_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+]
+
+.footnote2[
+1. Perdiz (2021). &lt;https://github.com/ricoperdiz/NIRtools&gt;.  
+2. Ver tutorial em &lt;https://github.com/ricoperdiz/NIRtools&gt; para aprender a usar a função `nirdad`.  
+
+3. Outra alternativa é utilizar os passos contidos em &lt;http://botanicaamazonica.wiki.br/labotam/doku.php?id=analises:nir:ver_spectra&gt;, de autoria do [Dr. Alberto Vicentini (INPA)](http://botanicaamazonica.wiki.br/labotam/doku.php?id=alunos:a.vicentini:inicio).  
+]
+
+---
+name: dplyr
+class: inverse, center, middle
+
+# Manipulação de dados com o pacote *dplyr*
+
+---
+class: middle
+
+.pull-left[
+# O que é o dplyr?
+
+![](doubt-1246169-639x521.jpg)
+
+]
+
+--
+
+.pull-right[
+
+### Funções ou **verbos** para manipular e sumarizar dados tabulados.  
+
+### **Não** é um pacote de **ações rápidas**.  
+
+### Nomes de funções facilitam a memorização.  
+
+### Nomes sem aspas dentro das funções!
+
+]
+
+???
+
+Este pacote possui uma série de funções/**verbos** para manipular e sumarizar dados tabulados.  
+Não é o pacote mais rápido ou eficiente para fazer tais ações.  
+Porém, o uso de funções cujos nomes nos remetem às ações que efetuamos rotineiramente com dados facilita a memorização.  
+Somado a isso, não temos a necessidade de usar aspas nos nomes das variáveis, o que acelera a digitação.  
+
+---
+
+## Principais funções do pacote `dplyr`
+
+* Seleção de colunas - `select()`
+
+--
+
+* Ordenar linhas - `arrange()`
+
+--
+
+* Filtrar linhas - `filter()`
+
+--
+
+* Criar novas colunas - `mutate()`
+
+--
+
+* Sumarizar resultados - `summarise()`
+
+--
+
+* Função especial para agrupamentos - `group_by()`
+
+---
+
+## Carregando o pacote
+
+
+```r
+library("dplyr")
+```
+
+---
+
+## Atenção na hora de carregar os pacotes
+
+--
+
+### Ordem de carregar pacotes é IMPORTANTE!
+
+
+
+```r
+library("MASS")
+library("dplyr")
+```
+
+![](figuras/library-mass-dplyr.png)
+
+---
+
+### `select()` do dplyr funciona!
+
+
+```r
+select(mtcars, mpg)
+```
+
+![](figuras/library-mass-dplyr-ok.png)
+
+---
+
+### Conflito com funções de mesmo nome!
+
+
+```r
+library("dplyr")
+library("MASS")
+```
+
+![](figuras/library-dplyr-mass.png)
+
+---
+
+### Erro em `select()` do dplyr!
+
+
+```r
+select(mtcars, mpg)
+```
+
+![](figuras/library-dplyr-mass-error.png)
+
+---
+
+## Selecionando colunas com `select()`
+
+**Podemos selecionar quantas colunas desejarmos.**  
+
+--
+
+### Uma coluna
+
+
+```r
+select(dados, especimenid)
+```
+
+```
+## # A tibble: 48 × 1
+##    especimenid
+##          &lt;int&gt;
+##  1       10194
+##  2       10194
+##  3       10194
+##  4       10194
+##  5       10194
+##  6       10194
+##  7       10194
+##  8       10194
+##  9       10196
+## 10       10196
+## # … with 38 more rows
+```
+
+???
+
+Para selecionar uma coluna, usamos a função select().
+O primeiro argumento é o nome do data.frame, `dados`; a partir do segundo argumento, colocamos os nomes das colunas sem aspas.
+
+---
+
+## Selecionando colunas com `select()`
+
+### *Duas* colunas
+
+
+```r
+select(dados, especimenid, SP1)
+```
+
+```
+## # A tibble: 48 × 2
+##    especimenid SP1           
+##          &lt;int&gt; &lt;chr&gt;         
+##  1       10194 P. aracouchini
+##  2       10194 P. aracouchini
+##  3       10194 P. aracouchini
+##  4       10194 P. aracouchini
+##  5       10194 P. aracouchini
+##  6       10194 P. aracouchini
+##  7       10194 P. aracouchini
+##  8       10194 P. aracouchini
+##  9       10196 P. aracouchini
+## 10       10196 P. aracouchini
+## # … with 38 more rows
+```
+
+---
+
+## Selecionando colunas com `select()`
+
+### *Múltiplas* colunas
+
+
+```r
+select(dados, especimenid, SP1, coletor, number)
+```
+
+```
+## # A tibble: 48 × 4
+##    especimenid SP1            coletor      number
+##          &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;         &lt;int&gt;
+##  1       10194 P. aracouchini Perdiz, R.O.   2856
+##  2       10194 P. aracouchini Perdiz, R.O.   2856
+##  3       10194 P. aracouchini Perdiz, R.O.   2856
+##  4       10194 P. aracouchini Perdiz, R.O.   2856
+##  5       10194 P. aracouchini Perdiz, R.O.   2856
+##  6       10194 P. aracouchini Perdiz, R.O.   2856
+##  7       10194 P. aracouchini Perdiz, R.O.   2856
+##  8       10194 P. aracouchini Perdiz, R.O.   2856
+##  9       10196 P. aracouchini Perdiz, R.O.   2858
+## 10       10196 P. aracouchini Perdiz, R.O.   2858
+## # … with 38 more rows
+```
+
+---
+
+## Remoção de colunas
+
+### Uma coluna
+
+
+```r
+dados_1colunaremovida &lt;- select(dados, -especimenid)
+head(dados_1colunaremovida)
+```
+
+```
+## # A tibble: 6 × 1,561
+##   SP1    face  coletor number X10001.03 X3999.64 X4003.497 X4007.354 X4011.211
+##   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 P. ar… abax… Perdiz…   2856     0.278    0.596     0.596     0.596     0.596
+## 2 P. ar… adax… Perdiz…   2856     0.254    0.567     0.567     0.567     0.567
+## 3 P. ar… abax… Perdiz…   2856     0.273    0.581     0.582     0.582     0.582
+## 4 P. ar… adax… Perdiz…   2856     0.258    0.576     0.577     0.577     0.577
+## 5 P. ar… abax… Perdiz…   2856     0.278    0.596     0.596     0.596     0.596
+## 6 P. ar… adax… Perdiz…   2856     0.254    0.567     0.567     0.567     0.567
+## # … with 1,552 more variables: X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;,
+## #   X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;,
+## #   X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;,
+## #   X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;,
+## #   X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;,
+## #   X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;,
+## #   X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, …
+```
+
+
+---
+
+## Remoção de colunas
+
+### Duas colunas
+
+
+```r
+dados_2colunasremovidas &lt;- select(dados, -especimenid, -SP1)
+head(dados_2colunasremovidas)
+```
+
+```
+## # A tibble: 6 × 1,560
+##   face    coletor      number X10001.03 X3999.64 X4003.497 X4007.354 X4011.211
+##   &lt;chr&gt;   &lt;chr&gt;         &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 abaxial Perdiz, R.O.   2856     0.278    0.596     0.596     0.596     0.596
+## 2 adaxial Perdiz, R.O.   2856     0.254    0.567     0.567     0.567     0.567
+## 3 abaxial Perdiz, R.O.   2856     0.273    0.581     0.582     0.582     0.582
+## 4 adaxial Perdiz, R.O.   2856     0.258    0.576     0.577     0.577     0.577
+## 5 abaxial Perdiz, R.O.   2856     0.278    0.596     0.596     0.596     0.596
+## 6 adaxial Perdiz, R.O.   2856     0.254    0.567     0.567     0.567     0.567
+## # … with 1,552 more variables: X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;,
+## #   X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;,
+## #   X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;,
+## #   X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;,
+## #   X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;,
+## #   X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;,
+## #   X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, …
+```
+
+
+---
+
+## Remoção de colunas
+
+### Múltiplas colunas
+
+
+```r
+multiplas_colunas_removidas &lt;- select(dados, -one_of(c("especimenid", "SP1", "face")))
+head(multiplas_colunas_removidas)
+```
+
+```
+## # A tibble: 6 × 1,559
+##   coletor    number X10001.03 X3999.64 X4003.497 X4007.354 X4011.211 X4015.068
+##   &lt;chr&gt;       &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Perdiz, R…   2856     0.278    0.596     0.596     0.596     0.596     0.596
+## 2 Perdiz, R…   2856     0.254    0.567     0.567     0.567     0.567     0.567
+## 3 Perdiz, R…   2856     0.273    0.581     0.582     0.582     0.582     0.581
+## 4 Perdiz, R…   2856     0.258    0.576     0.577     0.577     0.577     0.576
+## 5 Perdiz, R…   2856     0.278    0.596     0.596     0.596     0.596     0.596
+## 6 Perdiz, R…   2856     0.254    0.567     0.567     0.567     0.567     0.567
+## # … with 1,551 more variables: X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
+## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
+## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;,
+## #   X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;,
+## #   X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;,
+## #   X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;,
+## #   X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, X4115.348 &lt;dbl&gt;, …
+```
+
+---
+
+## Reordenar colunas
+
+
+```r
+select(dados, SP1, number, coletor)
+```
+
+```
+## # A tibble: 48 × 3
+##    SP1            number coletor     
+##    &lt;chr&gt;           &lt;int&gt; &lt;chr&gt;       
+##  1 P. aracouchini   2856 Perdiz, R.O.
+##  2 P. aracouchini   2856 Perdiz, R.O.
+##  3 P. aracouchini   2856 Perdiz, R.O.
+##  4 P. aracouchini   2856 Perdiz, R.O.
+##  5 P. aracouchini   2856 Perdiz, R.O.
+##  6 P. aracouchini   2856 Perdiz, R.O.
+##  7 P. aracouchini   2856 Perdiz, R.O.
+##  8 P. aracouchini   2856 Perdiz, R.O.
+##  9 P. aracouchini   2858 Perdiz, R.O.
+## 10 P. aracouchini   2858 Perdiz, R.O.
+## # … with 38 more rows
+```
+
+---
+
+## Reordenar colunas com `everything()`
+
+
+```r
+select(dados, coletor, number, everything())
+```
+
+```
+## # A tibble: 48 × 1,562
+##    coletor      number especimenid SP1      face  X10001.03 X3999.64 X4003.497
+##    &lt;chr&gt;         &lt;int&gt;       &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Perdiz, R.O.   2856       10194 P. arac… abax…     0.278    0.596     0.596
+##  2 Perdiz, R.O.   2856       10194 P. arac… adax…     0.254    0.567     0.567
+##  3 Perdiz, R.O.   2856       10194 P. arac… abax…     0.273    0.581     0.582
+##  4 Perdiz, R.O.   2856       10194 P. arac… adax…     0.258    0.576     0.577
+##  5 Perdiz, R.O.   2856       10194 P. arac… abax…     0.278    0.596     0.596
+##  6 Perdiz, R.O.   2856       10194 P. arac… adax…     0.254    0.567     0.567
+##  7 Perdiz, R.O.   2856       10194 P. arac… abax…     0.273    0.581     0.582
+##  8 Perdiz, R.O.   2856       10194 P. arac… adax…     0.258    0.576     0.577
+##  9 Perdiz, R.O.   2858       10196 P. arac… abax…     0.274    0.681     0.681
+## 10 Perdiz, R.O.   2858       10196 P. arac… adax…     0.278    0.673     0.672
+## # … with 38 more rows, and 1,554 more variables: X4007.354 &lt;dbl&gt;,
+## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
+## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
+## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;,
+## #   X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;,
+## #   X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;,
+## #   X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, …
+```
+
+---
+
+## Funções auxiliares de `select()`
+
+Há verbos que auxiliam a busca das colunas desejadas.
+São eles:  
+
+--
+
+* `starts_with()`: Coluna começa com um prefixo X;
+* `ends_with()`: Termina com um sufixo X;
+* `contains()`: Contem uma determinada palavra;
+* `matches()`: Busca uma expressão regular (veja `?regex`);
+* `num_range()`: Busca uma amplitude numérica.
+
+---
+
+## `starts_with()`
+
+
+```r
+select(dados, starts_with("col"))
+```
+
+```
+## # A tibble: 48 × 1
+##    coletor     
+##    &lt;chr&gt;       
+##  1 Perdiz, R.O.
+##  2 Perdiz, R.O.
+##  3 Perdiz, R.O.
+##  4 Perdiz, R.O.
+##  5 Perdiz, R.O.
+##  6 Perdiz, R.O.
+##  7 Perdiz, R.O.
+##  8 Perdiz, R.O.
+##  9 Perdiz, R.O.
+## 10 Perdiz, R.O.
+## # … with 38 more rows
+```
+
+---
+
+## `ends_with()`
+
+
+```r
+select(dados, ends_with("r"))
+```
+
+```
+## # A tibble: 48 × 2
+##    coletor      number
+##    &lt;chr&gt;         &lt;int&gt;
+##  1 Perdiz, R.O.   2856
+##  2 Perdiz, R.O.   2856
+##  3 Perdiz, R.O.   2856
+##  4 Perdiz, R.O.   2856
+##  5 Perdiz, R.O.   2856
+##  6 Perdiz, R.O.   2856
+##  7 Perdiz, R.O.   2856
+##  8 Perdiz, R.O.   2856
+##  9 Perdiz, R.O.   2858
+## 10 Perdiz, R.O.   2858
+## # … with 38 more rows
+```
+
+---
+
+## `contains()`
+
+
+```r
+select(dados, contains("ol"))
+```
+
+```
+## # A tibble: 48 × 1
+##    coletor     
+##    &lt;chr&gt;       
+##  1 Perdiz, R.O.
+##  2 Perdiz, R.O.
+##  3 Perdiz, R.O.
+##  4 Perdiz, R.O.
+##  5 Perdiz, R.O.
+##  6 Perdiz, R.O.
+##  7 Perdiz, R.O.
+##  8 Perdiz, R.O.
+##  9 Perdiz, R.O.
+## 10 Perdiz, R.O.
+## # … with 38 more rows
+```
+
+---
+
+## `matches()`
+
+
+```r
+select(dados, matches("^X[0-9]+\\.97$"))
+```
+
+```
+## # A tibble: 48 × 1
+##    X8438.97
+##       &lt;dbl&gt;
+##  1    0.294
+##  2    0.271
+##  3    0.290
+##  4    0.275
+##  5    0.294
+##  6    0.271
+##  7    0.290
+##  8    0.275
+##  9    0.285
+## 10    0.290
+## # … with 38 more rows
+```
+
+---
+
+## `num_range()`
+
+
+```r
+select(dados, num_range("X", seq(from = 3999.64, to = 4007.354, by = 3.857)))
+```
+
+```
+## # A tibble: 48 × 3
+##    X3999.64 X4003.497 X4007.354
+##       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1    0.596     0.596     0.596
+##  2    0.567     0.567     0.567
+##  3    0.581     0.582     0.582
+##  4    0.576     0.577     0.577
+##  5    0.596     0.596     0.596
+##  6    0.567     0.567     0.567
+##  7    0.581     0.582     0.582
+##  8    0.576     0.577     0.577
+##  9    0.681     0.681     0.681
+## 10    0.673     0.672     0.672
+## # … with 38 more rows
+```
+
+---
+
+## Combinações de linhas distintas - `distinct()`
+
+Ao selecionar diversas colunas, podemos querer ver combinações distintas de linhas.  
+
+--
+
+Usamos então a função `distinct()` para obter essas combinações:
+
+
+```r
+distinct(dados, coletor, number, SP1)
+```
+
+```
+## # A tibble: 6 × 3
+##   SP1            coletor      number
+##   &lt;chr&gt;          &lt;chr&gt;         &lt;int&gt;
+## 1 P. aracouchini Perdiz, R.O.   2856
+## 2 P. aracouchini Perdiz, R.O.   2858
+## 3 P. aracouchini Perdiz, R.O.   2859
+## 4 P. calanense   Perdiz, R.O.   3236
+## 5 P. calanense   Perdiz, R.O.   3237
+## 6 P. calanense   Perdiz, R.O.   3239
+```
+
+---
+
+## Ordenar linhas - `arrange()`
+
+
+```r
+arrange(dados, number)
+```
+
+```
+## # A tibble: 48 × 1,562
+##    especimenid SP1        face   coletor   number X10001.03 X3999.64 X4003.497
+##          &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+##  1       10194 P. aracou… abaxi… Perdiz, …   2856     0.278    0.596     0.596
+##  2       10194 P. aracou… adaxi… Perdiz, …   2856     0.254    0.567     0.567
+##  3       10194 P. aracou… abaxi… Perdiz, …   2856     0.273    0.581     0.582
+##  4       10194 P. aracou… adaxi… Perdiz, …   2856     0.258    0.576     0.577
+##  5       10194 P. aracou… abaxi… Perdiz, …   2856     0.278    0.596     0.596
+##  6       10194 P. aracou… adaxi… Perdiz, …   2856     0.254    0.567     0.567
+##  7       10194 P. aracou… abaxi… Perdiz, …   2856     0.273    0.581     0.582
+##  8       10194 P. aracou… adaxi… Perdiz, …   2856     0.258    0.576     0.577
+##  9       10196 P. aracou… abaxi… Perdiz, …   2858     0.274    0.681     0.681
+## 10       10196 P. aracou… adaxi… Perdiz, …   2858     0.278    0.673     0.672
+## # … with 38 more rows, and 1,554 more variables: X4007.354 &lt;dbl&gt;,
+## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
+## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
+## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;,
+## #   X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;,
+## #   X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;,
+## #   X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, …
+```
+
+---
+
+## Ordenar linhas - `arrange()`
+
+
+```r
+arrange(dados, desc(number))
+```
+
+```
+## # A tibble: 48 × 1,562
+##    especimenid SP1          face   coletor number X10001.03 X3999.64 X4003.497
+##          &lt;int&gt; &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+##  1       12650 P. calanense abaxi… Perdiz…   3239     0.349    0.733     0.733
+##  2       12650 P. calanense adaxi… Perdiz…   3239     0.342    0.744     0.744
+##  3       12650 P. calanense abaxi… Perdiz…   3239     0.342    0.713     0.714
+##  4       12650 P. calanense adaxi… Perdiz…   3239     0.355    0.773     0.773
+##  5       12650 P. calanense abaxi… Perdiz…   3239     0.349    0.733     0.733
+##  6       12650 P. calanense adaxi… Perdiz…   3239     0.342    0.744     0.744
+##  7       12650 P. calanense abaxi… Perdiz…   3239     0.342    0.713     0.714
+##  8       12650 P. calanense adaxi… Perdiz…   3239     0.355    0.773     0.773
+##  9       12648 P. calanense abaxi… Perdiz…   3237     0.402    0.745     0.746
+## 10       12648 P. calanense adaxi… Perdiz…   3237     0.389    0.757     0.757
+## # … with 38 more rows, and 1,554 more variables: X4007.354 &lt;dbl&gt;,
+## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
+## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
+## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;,
+## #   X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;,
+## #   X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;,
+## #   X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, …
+```
+
+---
+
+## Filtragem de linhas - `filter()`
+
+
+```r
+filter(dados, SP1 == "P. calanense")
+```
+
+```
+## # A tibble: 24 × 1,562
+##    especimenid SP1          face   coletor number X10001.03 X3999.64 X4003.497
+##          &lt;int&gt; &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+##  1       12647 P. calanense abaxi… Perdiz…   3236     0.322    0.717     0.717
+##  2       12647 P. calanense adaxi… Perdiz…   3236     0.329    0.714     0.715
+##  3       12647 P. calanense abaxi… Perdiz…   3236     0.340    0.724     0.724
+##  4       12647 P. calanense adaxi… Perdiz…   3236     0.320    0.735     0.736
+##  5       12647 P. calanense abaxi… Perdiz…   3236     0.322    0.717     0.717
+##  6       12647 P. calanense adaxi… Perdiz…   3236     0.329    0.714     0.715
+##  7       12647 P. calanense abaxi… Perdiz…   3236     0.340    0.724     0.724
+##  8       12647 P. calanense adaxi… Perdiz…   3236     0.320    0.735     0.736
+##  9       12648 P. calanense abaxi… Perdiz…   3237     0.402    0.745     0.746
+## 10       12648 P. calanense adaxi… Perdiz…   3237     0.389    0.757     0.757
+## # … with 14 more rows, and 1,554 more variables: X4007.354 &lt;dbl&gt;,
+## #   X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
+## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
+## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;,
+## #   X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;,
+## #   X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;,
+## #   X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, …
+```
+
+---
+
+## Filtragem composta
+
+
+```r
+filter(dados, SP1 == "P. calanense", number == 3237)
+```
+
+```
+## # A tibble: 8 × 1,562
+##   especimenid SP1          face    coletor number X10001.03 X3999.64 X4003.497
+##         &lt;int&gt; &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1       12648 P. calanense abaxial Perdiz…   3237     0.402    0.745     0.746
+## 2       12648 P. calanense adaxial Perdiz…   3237     0.389    0.757     0.757
+## 3       12648 P. calanense abaxial Perdiz…   3237     0.418    0.748     0.749
+## 4       12648 P. calanense adaxial Perdiz…   3237     0.363    0.725     0.725
+## 5       12648 P. calanense abaxial Perdiz…   3237     0.402    0.745     0.746
+## 6       12648 P. calanense adaxial Perdiz…   3237     0.389    0.757     0.757
+## 7       12648 P. calanense abaxial Perdiz…   3237     0.418    0.748     0.749
+## 8       12648 P. calanense adaxial Perdiz…   3237     0.363    0.725     0.725
+## # … with 1,554 more variables: X4007.354 &lt;dbl&gt;, X4011.211 &lt;dbl&gt;,
+## #   X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
+## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
+## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;,
+## #   X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;,
+## #   X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;,
+## #   X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, …
+```
+
+---
+class: inverse, center
+
+## Filtragem composta
+
+### &gt; filter(dados, SP1 == "P. calanense", number == 3237)
+
+--
+
+## É o mesmo que
+
+--
+
+### &gt; filter(dados, SP1 == "P. calanense" &amp; number == 3237)
+
+--
+
+## .bg-green[Vírgula `,` em `filter()` equivale a `&amp;`]
+
+---
+
+## Criar novas colunas - `mutate()`
+
+
+```r
+nova_coluna &lt;- mutate(dados, calanense = ifelse(SP1 == "P. calanense", 1, 0))
+select(nova_coluna, SP1, calanense)
+```
+
+```
+## # A tibble: 48 × 2
+##    SP1            calanense
+##    &lt;chr&gt;              &lt;dbl&gt;
+##  1 P. aracouchini         0
+##  2 P. aracouchini         0
+##  3 P. aracouchini         0
+##  4 P. aracouchini         0
+##  5 P. aracouchini         0
+##  6 P. aracouchini         0
+##  7 P. aracouchini         0
+##  8 P. aracouchini         0
+##  9 P. aracouchini         0
+## 10 P. aracouchini         0
+## # … with 38 more rows
+```
+
+---
+
+## Sumarizar resultados - `summarise()`
+
+
+```r
+summarise(dados, media_X8438.97 = mean(X8438.97))
+```
+
+```
+## # A tibble: 1 × 1
+##   media_X8438.97
+##            &lt;dbl&gt;
+## 1          0.327
+```
+
+???
+
+A função `summarise()` colapsa um `data.frame` em uma única linha.
+No entanto, a verdadeira utilidade dessa função se manifesta ao utilizarmos a função `group_by` para destacar os agrupamentos que desejamos fazer dentro dos dados.
+
+---
+
+## Agrupamentos - `group_by`
+
+
+```r
+dados_agrupados &lt;- group_by(dados, SP1)
+dados_agrupados[1:5, 1:10]
+```
+
+```
+## # A tibble: 5 × 10
+## # Groups:   SP1 [1]
+##   especimenid SP1            face  coletor number X10001.03 X3999.64 X4003.497
+##         &lt;int&gt; &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1       10194 P. aracouchini abax… Perdiz…   2856     0.278    0.596     0.596
+## 2       10194 P. aracouchini adax… Perdiz…   2856     0.254    0.567     0.567
+## 3       10194 P. aracouchini abax… Perdiz…   2856     0.273    0.581     0.582
+## 4       10194 P. aracouchini adax… Perdiz…   2856     0.258    0.576     0.577
+## 5       10194 P. aracouchini abax… Perdiz…   2856     0.278    0.596     0.596
+## # … with 2 more variables: X4007.354 &lt;dbl&gt;, X4011.211 &lt;dbl&gt;
+```
+
+--
+
+Os dados estão agrupados?
+
+
+```r
+is_grouped_df(dados_agrupados)
+```
+
+```
+## [1] TRUE
+```
+
+???
+
+Suponhemos que eu queira ver médias de determinada variável para as espécies de meu conjunto de dados.
+Usamos a função `group_by` para agrupar os dados em torno da variável `SP1`.
+À primeira vista, não há resultado aparente.  
+
+
+Porém, ao usarmos essa função `is_grouped_df()`, temos a certeza de que os dados estão agrupados.
+Não se preocupem em aprender essa função.
+Foquem na lição a seguir.  
+
+---
+
+## Agrupa e sumariza!
+
+
+```r
+summarise(dados_agrupados, media_X8438.97 = mean(X8438.97))
+```
+
+```
+## # A tibble: 2 × 2
+##   SP1            media_X8438.97
+##   &lt;chr&gt;                   &lt;dbl&gt;
+## 1 P. aracouchini          0.285
+## 2 P. calanense            0.369
+```
+
+???
+
+Vamos sumarizar os dados para a variável `X8438.97`.
+
+---
+
+## Sumarizar várias colunas
+
+
+```r
+dados_agrupados2 &lt;- 
+  group_by(
+  select(dados, SP1, ends_with("7")),
+  SP1
+  )
+summarise_all(dados_agrupados2, .funs = mean)
+```
+
+```
+## # A tibble: 2 × 172
+##   SP1     X4003.497 X4053.637 X4103.777 X4153.917 X4204.057 X4238.77 X4254.197
+##   &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 P. ara…     0.651     0.626     0.576     0.547     0.544    0.546     0.551
+## 2 P. cal…     0.736     0.709     0.653     0.622     0.620    0.625     0.629
+## # … with 164 more variables: X4292.767 &lt;dbl&gt;, X4304.337 &lt;dbl&gt;,
+## #   X4342.907 &lt;dbl&gt;, X4393.047 &lt;dbl&gt;, X4443.187 &lt;dbl&gt;, X4489.47 &lt;dbl&gt;,
+## #   X4493.327 &lt;dbl&gt;, X4543.467 &lt;dbl&gt;, X4582.037 &lt;dbl&gt;, X4593.607 &lt;dbl&gt;,
+## #   X4632.177 &lt;dbl&gt;, X4682.317 &lt;dbl&gt;, X4732.457 &lt;dbl&gt;, X4782.597 &lt;dbl&gt;,
+## #   X4821.167 &lt;dbl&gt;, X4832.737 &lt;dbl&gt;, X4871.307 &lt;dbl&gt;, X4882.877 &lt;dbl&gt;,
+## #   X4921.447 &lt;dbl&gt;, X4971.587 &lt;dbl&gt;, X5017.87 &lt;dbl&gt;, X5021.727 &lt;dbl&gt;,
+## #   X5071.867 &lt;dbl&gt;, X5110.437 &lt;dbl&gt;, X5122.007 &lt;dbl&gt;, X5160.577 &lt;dbl&gt;, …
+```
+
+---
+
+## Combinando operações com o *pipe* (cano!)
+
+--
+
+### Ferramenta existente em outras linguagens (*bash*, *F#*).  
+
+--
+
+### Simplifica códigos.  
+
+--
+
+### Facilita a leitura.  
+
+--
+
+### Reduz a quantidade de objetos na área de trabalho `ls()`.  
+
+--
+
+### Duas opções:
+
+* `%&gt;%` (pacote *magrittr*)
+* `|&gt;` (a partir do R 4.1).
+
+---
+
+## Código sem encadeamento
+
+
+
+```r
+summarise_all(group_by(filter(select(dados, SP1, ends_with("7")), SP1 == "P. calanense"), SP1), .funs = mean)
+```
+
+```
+## # A tibble: 1 × 172
+##   SP1     X4003.497 X4053.637 X4103.777 X4153.917 X4204.057 X4238.77 X4254.197
+##   &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 P. cal…     0.736     0.709     0.653     0.622     0.620    0.625     0.629
+## # … with 164 more variables: X4292.767 &lt;dbl&gt;, X4304.337 &lt;dbl&gt;,
+## #   X4342.907 &lt;dbl&gt;, X4393.047 &lt;dbl&gt;, X4443.187 &lt;dbl&gt;, X4489.47 &lt;dbl&gt;,
+## #   X4493.327 &lt;dbl&gt;, X4543.467 &lt;dbl&gt;, X4582.037 &lt;dbl&gt;, X4593.607 &lt;dbl&gt;,
+## #   X4632.177 &lt;dbl&gt;, X4682.317 &lt;dbl&gt;, X4732.457 &lt;dbl&gt;, X4782.597 &lt;dbl&gt;,
+## #   X4821.167 &lt;dbl&gt;, X4832.737 &lt;dbl&gt;, X4871.307 &lt;dbl&gt;, X4882.877 &lt;dbl&gt;,
+## #   X4921.447 &lt;dbl&gt;, X4971.587 &lt;dbl&gt;, X5017.87 &lt;dbl&gt;, X5021.727 &lt;dbl&gt;,
+## #   X5071.867 &lt;dbl&gt;, X5110.437 &lt;dbl&gt;, X5122.007 &lt;dbl&gt;, X5160.577 &lt;dbl&gt;, …
+```
+
+---
+
+## Possível solução - criação de objetos intermediários
+
+
+
+```r
+dados_selecionados &lt;- select(dados, SP1, ends_with("7"))
+dados_filtrados &lt;- filter(dados_selecionados, SP1 == "P. calanense")
+dados_agrupados3 &lt;- group_by(dados_filtrados, SP1)
+summarise_all(dados_agrupados3, .funs = mean)
+```
+
+```
+## # A tibble: 1 × 172
+##   SP1     X4003.497 X4053.637 X4103.777 X4153.917 X4204.057 X4238.77 X4254.197
+##   &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 P. cal…     0.736     0.709     0.653     0.622     0.620    0.625     0.629
+## # … with 164 more variables: X4292.767 &lt;dbl&gt;, X4304.337 &lt;dbl&gt;,
+## #   X4342.907 &lt;dbl&gt;, X4393.047 &lt;dbl&gt;, X4443.187 &lt;dbl&gt;, X4489.47 &lt;dbl&gt;,
+## #   X4493.327 &lt;dbl&gt;, X4543.467 &lt;dbl&gt;, X4582.037 &lt;dbl&gt;, X4593.607 &lt;dbl&gt;,
+## #   X4632.177 &lt;dbl&gt;, X4682.317 &lt;dbl&gt;, X4732.457 &lt;dbl&gt;, X4782.597 &lt;dbl&gt;,
+## #   X4821.167 &lt;dbl&gt;, X4832.737 &lt;dbl&gt;, X4871.307 &lt;dbl&gt;, X4882.877 &lt;dbl&gt;,
+## #   X4921.447 &lt;dbl&gt;, X4971.587 &lt;dbl&gt;, X5017.87 &lt;dbl&gt;, X5021.727 &lt;dbl&gt;,
+## #   X5071.867 &lt;dbl&gt;, X5110.437 &lt;dbl&gt;, X5122.007 &lt;dbl&gt;, X5160.577 &lt;dbl&gt;, …
+```
+
+???
+
+Porém, a criação de objetos intermediários "suja" a área de trabalho com objetos que, muitas vezes, não chegarão a serem utilizados novamente
+
+---
+
+## Vamos encadear com `%&gt;%`
+
+
+```r
+select(dados, SP1, ends_with("7")) %&gt;% 
+  filter(., SP1 == "P. calanense") %&gt;% 
+  group_by(., SP1) %&gt;% 
+  summarise_all(., .funs = mean)
+```
+
+```
+## # A tibble: 1 × 172
+##   SP1     X4003.497 X4053.637 X4103.777 X4153.917 X4204.057 X4238.77 X4254.197
+##   &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 P. cal…     0.736     0.709     0.653     0.622     0.620    0.625     0.629
+## # … with 164 more variables: X4292.767 &lt;dbl&gt;, X4304.337 &lt;dbl&gt;,
+## #   X4342.907 &lt;dbl&gt;, X4393.047 &lt;dbl&gt;, X4443.187 &lt;dbl&gt;, X4489.47 &lt;dbl&gt;,
+## #   X4493.327 &lt;dbl&gt;, X4543.467 &lt;dbl&gt;, X4582.037 &lt;dbl&gt;, X4593.607 &lt;dbl&gt;,
+## #   X4632.177 &lt;dbl&gt;, X4682.317 &lt;dbl&gt;, X4732.457 &lt;dbl&gt;, X4782.597 &lt;dbl&gt;,
+## #   X4821.167 &lt;dbl&gt;, X4832.737 &lt;dbl&gt;, X4871.307 &lt;dbl&gt;, X4882.877 &lt;dbl&gt;,
+## #   X4921.447 &lt;dbl&gt;, X4971.587 &lt;dbl&gt;, X5017.87 &lt;dbl&gt;, X5021.727 &lt;dbl&gt;,
+## #   X5071.867 &lt;dbl&gt;, X5110.437 &lt;dbl&gt;, X5122.007 &lt;dbl&gt;, X5160.577 &lt;dbl&gt;, …
+```
+
+---
+
+## Aplicações de agrupamentos em dados NIR
+
+--
+
+Suponha que você deseja obter valores de média de cada variável NIR por indivíduo.
+
+--
+
+No [conjunto de dados exemplo desta oficina](#dados), `dados`, indivíduos são reconhecidos pela variável `especimenid`.  
+
+--
+
+Logo, esta variável, `especimenid`, será nosso agrupamento.  
+
+---
+name: media-individuo
+### Média por indivíduo
+
+#### Sem encadeamento (sem uso do operador `%&gt;%`)
+
+
+```r
+summarise_all(
+    group_by(select(dados, especimenid, SP1, starts_with("X")), especimenid, SP1),
+    .funs = mean)
+```
+
+```
+## # A tibble: 6 × 1,559
+## # Groups:   especimenid [6]
+##   especimenid SP1   X10001.03 X3999.64 X4003.497 X4007.354 X4011.211 X4015.068
+##         &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1       10194 P. a…     0.266    0.580     0.581     0.580     0.580     0.580
+## 2       10196 P. a…     0.274    0.692     0.692     0.692     0.691     0.690
+## 3       10197 P. a…     0.274    0.680     0.680     0.680     0.680     0.679
+## 4       12647 P. c…     0.328    0.723     0.723     0.723     0.723     0.722
+## 5       12648 P. c…     0.393    0.744     0.744     0.744     0.744     0.744
+## 6       12650 P. c…     0.347    0.741     0.741     0.741     0.741     0.741
+## # … with 1,551 more variables: X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
+## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
+## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;,
+## #   X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;,
+## #   X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;,
+## #   X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;,
+## #   X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, X4115.348 &lt;dbl&gt;, …
+```
+
+---
+
+### Média por indivíduo
+
+#### Com encadeamento, utilizando o operador `%&gt;%`
+
+Mesmo cálculo do [slide anterior](#media-individuo)
+
+
+```r
+dados %&gt;% 
+  select(., especimenid, SP1, starts_with("X")) %&gt;% 
+  group_by(., especimenid, SP1) %&gt;% 
+  summarise_all(., .funs = mean)
+```
+
+```
+## # A tibble: 6 × 1,559
+## # Groups:   especimenid [6]
+##   especimenid SP1   X10001.03 X3999.64 X4003.497 X4007.354 X4011.211 X4015.068
+##         &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1       10194 P. a…     0.266    0.580     0.581     0.580     0.580     0.580
+## 2       10196 P. a…     0.274    0.692     0.692     0.692     0.691     0.690
+## 3       10197 P. a…     0.274    0.680     0.680     0.680     0.680     0.679
+## 4       12647 P. c…     0.328    0.723     0.723     0.723     0.723     0.722
+## 5       12648 P. c…     0.393    0.744     0.744     0.744     0.744     0.744
+## 6       12650 P. c…     0.347    0.741     0.741     0.741     0.741     0.741
+## # … with 1,551 more variables: X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;,
+## #   X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;,
+## #   X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;,
+## #   X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;,
+## #   X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;,
+## #   X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;,
+## #   X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, X4115.348 &lt;dbl&gt;, …
+```
+
+---
+name: media-individuo-face
+### Média por indíviduo + face do folíolo
+
+#### Sem encadeamento (sem uso do operador `%&gt;%`)
+
+
+```r
+summarise_all(
+    group_by(select(dados, especimenid, SP1, face, starts_with("X")), especimenid, SP1, face),
+    .funs = mean)
+```
+
+```
+## # A tibble: 12 × 1,560
+## # Groups:   especimenid, SP1 [6]
+##    especimenid SP1      face  X10001.03 X3999.64 X4003.497 X4007.354 X4011.211
+##          &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1       10194 P. arac… abax…     0.275    0.589     0.589     0.589     0.589
+##  2       10194 P. arac… adax…     0.256    0.572     0.572     0.572     0.572
+##  3       10196 P. arac… abax…     0.275    0.692     0.692     0.692     0.691
+##  4       10196 P. arac… adax…     0.272    0.692     0.692     0.692     0.691
+##  5       10197 P. arac… abax…     0.273    0.675     0.675     0.675     0.674
+##  6       10197 P. arac… adax…     0.274    0.686     0.686     0.685     0.685
+##  7       12647 P. cala… abax…     0.331    0.720     0.721     0.720     0.720
+##  8       12647 P. cala… adax…     0.324    0.725     0.725     0.725     0.725
+##  9       12648 P. cala… abax…     0.410    0.747     0.747     0.747     0.747
+## 10       12648 P. cala… adax…     0.376    0.741     0.741     0.741     0.741
+## 11       12650 P. cala… abax…     0.346    0.723     0.723     0.724     0.723
+## 12       12650 P. cala… adax…     0.349    0.758     0.759     0.759     0.759
+## # … with 1,552 more variables: X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;,
+## #   X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;,
+## #   X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;,
+## #   X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;,
+## #   X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;,
+## #   X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;,
+## #   X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, …
+```
+
+---
+
+### Média por indíviduo + face do folíolo
+
+#### Com encadeamento, utilizando o operador `%&gt;%`
+
+Mesmo cálculo do [slide anterior](#media-individuo-face)
+
+
+```r
+dados %&gt;% 
+  select(., especimenid, SP1, face, starts_with("X")) %&gt;% 
+  group_by(., especimenid, SP1, face) %&gt;% 
+  summarise_all(., .funs = mean)
+```
+
+```
+## # A tibble: 12 × 1,560
+## # Groups:   especimenid, SP1 [6]
+##    especimenid SP1      face  X10001.03 X3999.64 X4003.497 X4007.354 X4011.211
+##          &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1       10194 P. arac… abax…     0.275    0.589     0.589     0.589     0.589
+##  2       10194 P. arac… adax…     0.256    0.572     0.572     0.572     0.572
+##  3       10196 P. arac… abax…     0.275    0.692     0.692     0.692     0.691
+##  4       10196 P. arac… adax…     0.272    0.692     0.692     0.692     0.691
+##  5       10197 P. arac… abax…     0.273    0.675     0.675     0.675     0.674
+##  6       10197 P. arac… adax…     0.274    0.686     0.686     0.685     0.685
+##  7       12647 P. cala… abax…     0.331    0.720     0.721     0.720     0.720
+##  8       12647 P. cala… adax…     0.324    0.725     0.725     0.725     0.725
+##  9       12648 P. cala… abax…     0.410    0.747     0.747     0.747     0.747
+## 10       12648 P. cala… adax…     0.376    0.741     0.741     0.741     0.741
+## 11       12650 P. cala… abax…     0.346    0.723     0.723     0.724     0.723
+## 12       12650 P. cala… adax…     0.349    0.758     0.759     0.759     0.759
+## # … with 1,552 more variables: X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;,
+## #   X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;,
+## #   X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;,
+## #   X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;,
+## #   X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;,
+## #   X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;,
+## #   X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, X4111.491 &lt;dbl&gt;, …
+```
+
+---
+class: inverse, center, middle
+
+# Pausa para o café e PERGUNTAS
+
+&lt;iframe src="https://giphy.com/embed/M4ecx9P2jI4tq" width="480" height="359" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;&lt;p&gt;&lt;a href="https://giphy.com/gifs/coffee-winks-M4ecx9P2jI4tq"&gt;GIPHY&lt;/a&gt;&lt;/p&gt;
+
+
+---
+name: prep-dados
+class: inverse, center, middle
+
+# Preparação dos dados para análise
+
+---
+
+
+
+## Pré-análise
+
+--
+
+#### Divisão de dados em conjuntos `treino` e `teste`
+
+--
+
+#### Criação de *receitas* de dados para pré-processamento dos dados
+
+---
+class: inverse, center, middle
+
+## Divisão de dados em conjuntos _treino_ e _teste_
+
+
+???
+
+Vamos utilizar aqui as funcionalidades dos pacotes dentro da interface `tidymodels` (Kuhn et al. 2020).
+
+---
+
+### `rsample::initial_split()` (Silge et al. 2021) 
+--
+
+
+```r
+library("rsample") # initial_split
+```
+
+
+```r
+dados_split &lt;- initial_split(dados, prop = 3/4)
+dados_split
+```
+
+```
+## &lt;Analysis/Assess/Total&gt;
+## &lt;36/12/48&gt;
+```
+
+???
+
+rsample::initial_split(), que é carregado automaticamente ao se chamar o pacote `tidymodels` - esta função cria índices para separar o conjunto de dados em `treino` e `teste`. Por padrão, a função divide o conjunto de dados em 75% para `treino` e 25% para `teste`. Caso você queira outra proporção, altere o argumento `prop`. Em caso de dúvida, veja o `?` desta função executando o comando `?initial_split`.
+
+---
+
+#### Divisão de dados proporcionalmente em relação a uma variável
+
+--
+
+
+```r
+dados_split &lt;- initial_split(dados, prop = 3/4, strata = "SP1")
+```
+
+
+---
+
+#### Conjunto _treino `rsample::training()`_ vs. _teste `rsample::testing()`_
+
+--
+
+##### Conjunto *treino*
+
+
+```r
+treino &lt;- training(dados_split)
+table(treino$SP1)
+```
+
+```
+## 
+## P. aracouchini   P. calanense 
+##             18             18
+```
+
+???
+
+ambas do mesmo pacote `rsample` - ambas recebem o objeto criado com a função `initial_split()`, `dados_split`, e dividem o treino em conjuntos `treino` e `teste`, respectivamente:
+
+---
+
+
+#### Conjunto _treino `rsample::training()`_ vs. _teste `rsample::testing()`_
+
+##### Conjunto *teste*
+
+
+```r
+teste &lt;- testing(dados_split)
+table(teste$SP1)
+```
+
+```
+## 
+## P. aracouchini   P. calanense 
+##              6              6
+```
+
+---
+
+#### Reprodutibilidade na aleatorização
+
+`set.seed()`
+
+--
+
+
+```r
+set.seed(221015)
+iris_split &lt;- initial_split(iris, prop = 3/4, strata = "Species")
+iris_split
+```
+
+```
+## &lt;Analysis/Assess/Total&gt;
+## &lt;111/39/150&gt;
+```
+
+
+???
+
+Vamos estabelecer uma `seed` para que vocês cheguem ao mesmo resultado, caso utilizem estas "receitas" durante o aprendizado do tutorial.  
+
+Recomendo que vocês executem esses comandos juntamente comigo para que vocês tenham ciência de que a quebra dos dados será igual para todos.  
+
+---
+
+#### Reprodutibilidade na aleatorização
+
+
+```r
+head(training(iris_split), 20)
+```
+
+```
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1           5.1         3.5          1.4         0.2  setosa
+## 2           4.9         3.0          1.4         0.2  setosa
+## 3           4.7         3.2          1.3         0.2  setosa
+## 5           5.0         3.6          1.4         0.2  setosa
+## 8           5.0         3.4          1.5         0.2  setosa
+## 9           4.4         2.9          1.4         0.2  setosa
+## 10          4.9         3.1          1.5         0.1  setosa
+## 12          4.8         3.4          1.6         0.2  setosa
+## 13          4.8         3.0          1.4         0.1  setosa
+## 14          4.3         3.0          1.1         0.1  setosa
+## 15          5.8         4.0          1.2         0.2  setosa
+## 16          5.7         4.4          1.5         0.4  setosa
+## 18          5.1         3.5          1.4         0.3  setosa
+## 19          5.7         3.8          1.7         0.3  setosa
+## 20          5.1         3.8          1.5         0.3  setosa
+## 23          4.6         3.6          1.0         0.2  setosa
+## 25          4.8         3.4          1.9         0.2  setosa
+## 26          5.0         3.0          1.6         0.2  setosa
+## 27          5.0         3.4          1.6         0.4  setosa
+## 28          5.2         3.5          1.5         0.2  setosa
+```
+
+---
+class: inverse, center, middle
+
+## Criação de *receitas* de dados para pré-processamento dos dados
+
+---
+
+### Ambiente de pré-processamento do pacote `recipes` (Kuhn e Wickham 2021).
+
+--
+
+* Seleção de variáveis
+
+--
+
+* Remoção de valores ausentes
+
+--
+
+* Transformar valores
+
+--
+
+* etc (ver &lt;https://www.tmwr.org/recipes.html#skip-equals-true&gt;)
+
+---
+
+### Como funciona?
+
+```
+recipes::recipe(FORMULA, data = NomeDoDataFrame)
+```
+
+???
+
+Ele facilita a criação de "receitas" que permitem a criação e documentação de conjuntos de dados para serem utilizados posteriormente em análises do `tidymodels`, permitindo ao usuário um fluxo contínuo de análise de dados e a facilidade na reutilização do mesmo conjunto de dados para diversas análises.
+Recomendo o aprendizado destas novas (algumas não tão novas, como é o caso do pacote `caret` ferramentas de pré-processamento e análise de dados em R.  
+
+
+A primeira função desta abordagem é a função `recipe()`, em que usamos uma fórmula `SP1 ~ .` para dizer que `SP1` é nossa variável resposta e as demais são as variáveis preditoras, representadas pelo `.` na fórmula.
+Porém, sabemos que nosso conjunto de dados `dados` possui outras variáveis que não são preditoras, como `face` e `coletor`.  
+
+---
+
+### Uso básico
+
+
+```r
+library("recipes")
+```
+
+--
+
+
+```r
+recipes::recipe(SP1 ~ ., data = dados)
+```
+
+```
+## Data Recipe
+## 
+## Inputs:
+## 
+##       role #variables
+##    outcome          1
+##  predictor       1561
+```
+
+???
+
+Aí entra o papel da função `update_role()` em que informamos o papel de cada variável extra em nosso conjunto de dados.
+Por exemplo, as variáveis `coletor`e `number` são identificadores da coleta.
+Então, iniciamos a função com o objeto contendo a receita, `dados_receita`, e colocamos estas duas variáveis, sem aspas, em seguida, seguido do argumento `new_role`, em que colocamos um texto informando que papel é esse.
+Ao utilizarmos esta receita nos passos de análises, essas variáveis não serão analisadas pois terão a informação desses `papéis` que elas têm no conjunto de dados.
+
+---
+
+#### Atualizando o papel de variáveis extras
+
+--
+
+#### Dados do espécime
+
+
+```r
+recipes::recipe(SP1 ~ ., data = dados) %&gt;% 
+* update_role(., coletor, number, new_role = "dados do espécime")
+```
+
+```
+## Data Recipe
+## 
+## Inputs:
+## 
+##               role #variables
+##  dados do espécime          2
+##            outcome          1
+##          predictor       1559
+```
+
+---
+
+#### Face do folíolo
+
+
+```r
+recipes::recipe(SP1 ~ ., data = dados) %&gt;% 
+  update_role(., coletor, number, new_role = "dados do espécime") %&gt;% 
+* update_role(., face, new_role = "identificador da face do foliolo")
+```
+
+```
+## Data Recipe
+## 
+## Inputs:
+## 
+##                              role #variables
+##                 dados do espécime          2
+##  identificador da face do foliolo          1
+##                           outcome          1
+##                         predictor       1558
+```
+
+---
+
+#### Identificador do espécime
+
+
+```r
+recipes::recipe(SP1 ~ ., data = treino) %&gt;% 
+  update_role(., coletor, number, new_role = "dados do espécime") %&gt;% 
+  update_role(., face, new_role = "identificador da face do foliolo") %&gt;% 
+* update_role(., especimenid, new_role = "id")
+```
+
+```
+## Data Recipe
+## 
+## Inputs:
+## 
+##                              role #variables
+##                 dados do espécime          2
+##                                id          1
+##  identificador da face do foliolo          1
+##                           outcome          1
+##                         predictor       1557
+```
+
+
+---
+
+#### Receita completa
+
+
+```r
+dados_receita &lt;- 
+  recipes::recipe(SP1 ~ ., data = treino) %&gt;% 
+  update_role(., especimenid, new_role = "id") %&gt;% 
+  update_role(., coletor, number, new_role = "dados do espécime") %&gt;% 
+  update_role(., face, new_role = "identificador da face do foliolo")
+dados_receita
+```
+
+```
+## Data Recipe
+## 
+## Inputs:
+## 
+##                              role #variables
+##                 dados do espécime          2
+##                                id          1
+##  identificador da face do foliolo          1
+##                           outcome          1
+##                         predictor       1557
+```
+
+---
+
+#### Preparo da receita com `prep()`
+
+
+```r
+*dados_receita_prep &lt;- prep(dados_receita)
+dados_receita_prep
+```
+
+```
+## Data Recipe
+## 
+## Inputs:
+## 
+##                              role #variables
+##                 dados do espécime          2
+##                                id          1
+##  identificador da face do foliolo          1
+##                           outcome          1
+##                         predictor       1557
+## 
+## Training data contained 36 data points and no missing data.
+```
+
+---
+
+#### *Assando* o conjunto `teste` pós-receita
+
+&gt; `bake()`
+
+--
+
+
+```r
+*teste_processado &lt;- bake(dados_receita_prep, new_data = teste)
+teste_processado
+```
+
+```
+## # A tibble: 12 × 1,562
+##    especimenid face    coletor   number X10001.03 X3999.64 X4003.497 X4007.354
+##          &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;      &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1       10194 adaxial Perdiz, …   2856     0.254    0.567     0.567     0.567
+##  2       10194 abaxial Perdiz, …   2856     0.273    0.581     0.582     0.582
+##  3       10194 abaxial Perdiz, …   2856     0.278    0.596     0.596     0.596
+##  4       10194 adaxial Perdiz, …   2856     0.258    0.576     0.577     0.577
+##  5       10196 adaxial Perdiz, …   2858     0.278    0.673     0.672     0.672
+##  6       10196 adaxial Perdiz, …   2858     0.267    0.712     0.712     0.711
+##  7       12647 adaxial Perdiz, …   3236     0.329    0.714     0.715     0.715
+##  8       12647 adaxial Perdiz, …   3236     0.329    0.714     0.715     0.715
+##  9       12647 adaxial Perdiz, …   3236     0.320    0.735     0.736     0.736
+## 10       12650 abaxial Perdiz, …   3239     0.349    0.733     0.733     0.733
+## 11       12650 adaxial Perdiz, …   3239     0.355    0.773     0.773     0.773
+## 12       12650 adaxial Perdiz, …   3239     0.342    0.744     0.744     0.744
+## # … with 1,554 more variables: X4011.211 &lt;dbl&gt;, X4015.068 &lt;dbl&gt;,
+## #   X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;, X4030.495 &lt;dbl&gt;,
+## #   X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;, X4045.923 &lt;dbl&gt;,
+## #   X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;, X4061.351 &lt;dbl&gt;,
+## #   X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;, X4076.779 &lt;dbl&gt;,
+## #   X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;, X4092.206 &lt;dbl&gt;,
+## #   X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, X4107.634 &lt;dbl&gt;, …
+```
+
+---
+
+#### *Espremendo* os dados `treino`
+
+&gt; `juice()`
+
+--
+
+
+```r
+*juice(dados_receita_prep)
+```
+
+```
+## # A tibble: 36 × 1,562
+##    especimenid face    coletor   number X10001.03 X3999.64 X4003.497 X4007.354
+##          &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;      &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1       10194 abaxial Perdiz, …   2856     0.278    0.596     0.596     0.596
+##  2       10194 adaxial Perdiz, …   2856     0.258    0.576     0.577     0.577
+##  3       10194 adaxial Perdiz, …   2856     0.254    0.567     0.567     0.567
+##  4       10194 abaxial Perdiz, …   2856     0.273    0.581     0.582     0.582
+##  5       10196 abaxial Perdiz, …   2858     0.274    0.681     0.681     0.681
+##  6       10196 abaxial Perdiz, …   2858     0.276    0.703     0.703     0.703
+##  7       10196 adaxial Perdiz, …   2858     0.267    0.712     0.712     0.711
+##  8       10196 abaxial Perdiz, …   2858     0.274    0.681     0.681     0.681
+##  9       10196 adaxial Perdiz, …   2858     0.278    0.673     0.672     0.672
+## 10       10196 abaxial Perdiz, …   2858     0.276    0.703     0.703     0.703
+## # … with 26 more rows, and 1,554 more variables: X4011.211 &lt;dbl&gt;,
+## #   X4015.068 &lt;dbl&gt;, X4018.925 &lt;dbl&gt;, X4022.781 &lt;dbl&gt;, X4026.638 &lt;dbl&gt;,
+## #   X4030.495 &lt;dbl&gt;, X4034.352 &lt;dbl&gt;, X4038.209 &lt;dbl&gt;, X4042.066 &lt;dbl&gt;,
+## #   X4045.923 &lt;dbl&gt;, X4049.78 &lt;dbl&gt;, X4053.637 &lt;dbl&gt;, X4057.494 &lt;dbl&gt;,
+## #   X4061.351 &lt;dbl&gt;, X4065.208 &lt;dbl&gt;, X4069.065 &lt;dbl&gt;, X4072.922 &lt;dbl&gt;,
+## #   X4076.779 &lt;dbl&gt;, X4080.635 &lt;dbl&gt;, X4084.492 &lt;dbl&gt;, X4088.349 &lt;dbl&gt;,
+## #   X4092.206 &lt;dbl&gt;, X4096.063 &lt;dbl&gt;, X4099.92 &lt;dbl&gt;, X4103.777 &lt;dbl&gt;, …
+```
+
+---
+
+#### Receitas em etapas? Também pode!
+
+
+```r
+# receita para analise
+dados_receita &lt;- recipes::recipe(SP1 ~ ., data = treino)
+dados_receita &lt;- update_role(dados_receita, especimenid, new_role = "id")
+dados_receita &lt;- update_role(dados_receita, coletor, number, new_role = "dados do espécime")
+dados_receita &lt;- update_role(dados_receita, face, new_role = "identificador da face do foliolo")
+dados_receita_prep &lt;- prep(dados_receita)
+dados_receita_prep
+```
+
+--
+
+#### [Base R vs. Tidyverse](https://intror.netlify.app/base-tidyverse.html#o-operador-e-o-encadeamento-de-a%C3%A7%C3%B5es) de nosso [Curso básico de Introdução ao R](https://intror.netlify.app/) para entender o encadeamento (*pipeline*) do `%&gt;%`
+
+???
+
+Vejam que os comandos acima ficaram muito repetitivos, pois a receita `dados_receita` aparece múltiplas vezes.
+Caso utilizássemos o encadeamento de ações proporcionado pelo operador `%&gt;%` do pacote `magrittr` (Bache e Wickham 2020), o texto ficaria mais limpo.
+Porém, devo admitir que isto é uma questão de preferência.  
+
+---
+
+#### Pré-processamento em `recipes`
+
+Funções `step_*()`
+
+---
+
+##### Normalizar variáveis numéricas
+
+
+```r
+dados_receita_normal &lt;- 
+  dados_receita %&gt;% 
+* step_normalize(all_predictors())
+dados_receita_normal
+```
+
+```
+## Data Recipe
+## 
+## Inputs:
+## 
+##                              role #variables
+##                 dados do espécime          2
+##                                id          1
+##  identificador da face do foliolo          1
+##                           outcome          1
+##                         predictor       1557
+## 
+## Operations:
+## 
+## Centering and scaling for all_predictors()
+```
+
+---
+class: center, middle
+
+#### Há várias possibilidades de transformação de dados com as funções `step_*()`
+
+--
+
+#### &lt;https://recipes.tidymodels.org/reference/index.html&gt;
+
+
+---
+class: inverse, center, middle
+
+# Pausa para o café e PERGUNTAS
+
+&lt;iframe src="https://giphy.com/embed/M4ecx9P2jI4tq" width="480" height="359" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;&lt;p&gt;&lt;a href="https://giphy.com/gifs/coffee-winks-M4ecx9P2jI4tq"&gt;GIPHY&lt;/a&gt;&lt;/p&gt;
+
+---
+name: pca
+class: inverse, center, middle
+
+# Análise de componentes principais (PCA)
+
+---
+
+class: center, middle
+
+&gt; PCA é um algoritmo matemático que reduz as dimensões dos dados ao mesmo tempo em que mantem a maior parte da variação do conjunto de dados. Ele cumpre essa redução ao identificar direções, chamadas de componentes principais, ao longo das quais a variação dos dados é máxima. Ao utilizar menos componentes, cada amostra pode ser representada por poucas variáveis em oposição à enormidade de variáveis presentes no conjunto de dados brutos. Amostras podem então ser plotadas, permitindo a inferência visual de similaridades e diferenças entre as amostras, e também determinar se as amostras podem ou não ser agrupadas&lt;sup&gt;1&lt;/sup&gt;.
+
+.footnote2[
+1. Ringnér (2008). &lt;https://doi.org/10.1038/nbt0308-303&gt;.  
+]
+
+---
+
+## PCA dentro da **receita**
+
+
+```r
+dados_receita_pca &lt;- 
+  dados_receita %&gt;% 
+  step_pca(all_predictors())
+dados_receita_pca
+```
+
+```
+## Data Recipe
+## 
+## Inputs:
+## 
+##                              role #variables
+##                 dados do espécime          2
+##                                id          1
+##  identificador da face do foliolo          1
+##                           outcome          1
+##                         predictor       1557
+## 
+## Operations:
+## 
+## No PCA components were extracted.
+```
+
+---
+
+## Preparando a PCA
+
+
+```r
+dados_receita_pca_prep &lt;- 
+  dados_receita_pca %&gt;% 
+  prep()
+dados_receita_pca_prep
+```
+
+```
+## Data Recipe
+## 
+## Inputs:
+## 
+##                              role #variables
+##                 dados do espécime          2
+##                                id          1
+##  identificador da face do foliolo          1
+##                           outcome          1
+##                         predictor       1557
+## 
+## Training data contained 36 data points and no missing data.
+## 
+## Operations:
+## 
+## PCA extraction with X10001.03, X3999.64, X4003.497, ... [trained]
+```
+
+---
+
+### Explorando o resultado com `tidy()`
+
+
+```r
+pca_tabela &lt;- tidy(dados_receita_pca_prep, 1)
+pca_tabela
+```
+
+```
+## # A tibble: 56,052 × 4
+##    terms       value component id       
+##    &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    
+##  1 X10001.03 -0.0202 PC1       pca_OTwyZ
+##  2 X3999.64  -0.0440 PC1       pca_OTwyZ
+##  3 X4003.497 -0.0440 PC1       pca_OTwyZ
+##  4 X4007.354 -0.0440 PC1       pca_OTwyZ
+##  5 X4011.211 -0.0440 PC1       pca_OTwyZ
+##  6 X4015.068 -0.0439 PC1       pca_OTwyZ
+##  7 X4018.925 -0.0439 PC1       pca_OTwyZ
+##  8 X4022.781 -0.0438 PC1       pca_OTwyZ
+##  9 X4026.638 -0.0436 PC1       pca_OTwyZ
+## 10 X4030.495 -0.0435 PC1       pca_OTwyZ
+## # … with 56,042 more rows
+```
+
+---
+
+### Calculando a variação das PC's
+
+.pull-left[
+
+```
+##     pcs variacao_porcentagem variacao_cumulativa
+## 1   PC1         9.982759e+01            99.82759
+## 2   PC2         1.691209e-01            99.99671
+## 3   PC3         1.828844e-03            99.99854
+## 4   PC4         7.562666e-04            99.99929
+## 5   PC5         3.785989e-04            99.99967
+## 6   PC6         1.649059e-04            99.99984
+## 7   PC7         1.185518e-04            99.99996
+## 8   PC8         1.810303e-05            99.99997
+## 9   PC9         1.032631e-05            99.99998
+## 10 PC10         4.615173e-06            99.99999
+## 11 PC11         3.146628e-06            99.99999
+## 12 PC12         1.941074e-06            99.99999
+## 13 PC13         1.440759e-06           100.00000
+## 14 PC14         1.273571e-06           100.00000
+## 15 PC15         7.716838e-07           100.00000
+## 16 PC16         6.194058e-07           100.00000
+## 17 PC17         4.809990e-07           100.00000
+## 18 PC18         4.024043e-07           100.00000
+## 19 PC19         3.054648e-07           100.00000
+## 20 PC20         2.618565e-07           100.00000
+## 21 PC21         2.345445e-07           100.00000
+## 22 PC22         1.968339e-07           100.00000
+## 23 PC23         1.715763e-07           100.00000
+## 24 PC24         9.964549e-31           100.00000
+## 25 PC25         9.964549e-31           100.00000
+## 26 PC26         9.964549e-31           100.00000
+## 27 PC27         9.964549e-31           100.00000
+## 28 PC28         9.964549e-31           100.00000
+## 29 PC29         9.964549e-31           100.00000
+## 30 PC30         9.964549e-31           100.00000
+## 31 PC31         9.964549e-31           100.00000
+## 32 PC32         9.964549e-31           100.00000
+## 33 PC33         9.964549e-31           100.00000
+## 34 PC34         9.964549e-31           100.00000
+## 35 PC35         9.964549e-31           100.00000
+## 36 PC36         9.964549e-31           100.00000
+```
+]
+
+.pull-right[
+
+
+```r
+sdev &lt;- dados_receita_pca_prep$steps[[1]]$res$sdev
+percent_variation &lt;- sdev^2 / sum(sdev^2)
+pca_variacao &lt;- 
+  data.frame(
+    pcs = unique(pca_tabela$component),
+    variacao_porcentagem = percent_variation*100,
+    variacao_cumulativa = cumsum(percent_variation*100)
+  )
+pca_variacao
+```
+
+]
+
+---
+
+### Visualizando a PCA com `ggplot2`
+
+.pull-left[
+![](index_files/figure-html/unnamed-chunk-74-1.png)&lt;!-- --&gt;
+]
+
+
+.pull-right[
+
+```r
+pc1 &lt;- filter(pca_variacao, pcs == "PC1")
+pc2 &lt;- filter(pca_variacao, pcs == "PC2")
+juice(dados_receita_pca_prep) %&gt;%
+  ggplot(aes(PC1, PC2)) +
+  geom_point(aes(color = SP1), alpha = 0.7, size = 2) +
+  xlab(paste0("PC1 (", round(pc1$variacao_porcentagem, 2), "%)")) +
+  ylab(paste0("PC2 (", round(pc2$variacao_porcentagem, 2), "%)"))
+```
+]
+
+---
+
+## Combinando etapas para a PCA
+
+
+```r
+dados_receita_normal_pca &lt;- 
+  dados_receita_normal %&gt;% 
+  step_pca(all_predictors()) %&gt;% 
+  prep()
+dados_receita_normal_pca
+```
+
+```
+## Data Recipe
+## 
+## Inputs:
+## 
+##                              role #variables
+##                 dados do espécime          2
+##                                id          1
+##  identificador da face do foliolo          1
+##                           outcome          1
+##                         predictor       1557
+## 
+## Training data contained 36 data points and no missing data.
+## 
+## Operations:
+## 
+## Centering and scaling for X10001.03, X3999.64, X4003.497, ... [trained]
+## PCA extraction with X10001.03, X3999.64, X4003.497, ... [trained]
+```
+
+---
+
+### Checando as etapas da PCA com dados normalizados
+
+#### Dados normalizados
+
+
+```r
+tidy(dados_receita_normal_pca, 1)
+```
+
+```
+## # A tibble: 3,114 × 4
+##    terms     statistic value id             
+##    &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;          
+##  1 X10001.03 mean      0.317 normalize_0VXeM
+##  2 X3999.64  mean      0.699 normalize_0VXeM
+##  3 X4003.497 mean      0.699 normalize_0VXeM
+##  4 X4007.354 mean      0.699 normalize_0VXeM
+##  5 X4011.211 mean      0.699 normalize_0VXeM
+##  6 X4015.068 mean      0.698 normalize_0VXeM
+##  7 X4018.925 mean      0.697 normalize_0VXeM
+##  8 X4022.781 mean      0.696 normalize_0VXeM
+##  9 X4026.638 mean      0.694 normalize_0VXeM
+## 10 X4030.495 mean      0.691 normalize_0VXeM
+## # … with 3,104 more rows
+```
+
+---
+
+#### Checando médias das variáveis
+
+
+```r
+tidy(dados_receita_normal_pca, 1) %&gt;%
+  filter(statistic == "mean")
+```
+
+```
+## # A tibble: 1,557 × 4
+##    terms     statistic value id             
+##    &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;          
+##  1 X10001.03 mean      0.317 normalize_0VXeM
+##  2 X3999.64  mean      0.699 normalize_0VXeM
+##  3 X4003.497 mean      0.699 normalize_0VXeM
+##  4 X4007.354 mean      0.699 normalize_0VXeM
+##  5 X4011.211 mean      0.699 normalize_0VXeM
+##  6 X4015.068 mean      0.698 normalize_0VXeM
+##  7 X4018.925 mean      0.697 normalize_0VXeM
+##  8 X4022.781 mean      0.696 normalize_0VXeM
+##  9 X4026.638 mean      0.694 normalize_0VXeM
+## 10 X4030.495 mean      0.691 normalize_0VXeM
+## # … with 1,547 more rows
+```
+
+---
+
+#### Checando desvio padrão das variáveis
+
+
+```r
+tidy(dados_receita_normal_pca, 1) %&gt;%
+  filter(statistic == "sd")
+```
+
+```
+## # A tibble: 1,557 × 4
+##    terms     statistic  value id             
+##    &lt;chr&gt;     &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;          
+##  1 X10001.03 sd        0.0512 normalize_0VXeM
+##  2 X3999.64  sd        0.0516 normalize_0VXeM
+##  3 X4003.497 sd        0.0517 normalize_0VXeM
+##  4 X4007.354 sd        0.0517 normalize_0VXeM
+##  5 X4011.211 sd        0.0518 normalize_0VXeM
+##  6 X4015.068 sd        0.0518 normalize_0VXeM
+##  7 X4018.925 sd        0.0518 normalize_0VXeM
+##  8 X4022.781 sd        0.0517 normalize_0VXeM
+##  9 X4026.638 sd        0.0517 normalize_0VXeM
+## 10 X4030.495 sd        0.0515 normalize_0VXeM
+## # … with 1,547 more rows
+```
+
+---
+
+#### Checando a PCA normalizada
+
+
+```r
+pca_tabela_normalizada &lt;- tidy(dados_receita_normal_pca, 2)
+pca_tabela_normalizada
+```
+
+```
+## # A tibble: 56,052 × 4
+##    terms      value component id       
+##    &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    
+##  1 X10001.03 0.0257 PC1       pca_lZPx9
+##  2 X3999.64  0.0214 PC1       pca_lZPx9
+##  3 X4003.497 0.0214 PC1       pca_lZPx9
+##  4 X4007.354 0.0215 PC1       pca_lZPx9
+##  5 X4011.211 0.0215 PC1       pca_lZPx9
+##  6 X4015.068 0.0216 PC1       pca_lZPx9
+##  7 X4018.925 0.0216 PC1       pca_lZPx9
+##  8 X4022.781 0.0216 PC1       pca_lZPx9
+##  9 X4026.638 0.0217 PC1       pca_lZPx9
+## 10 X4030.495 0.0217 PC1       pca_lZPx9
+## # … with 56,042 more rows
+```
+
+
+---
+
+### Calculando a variação das PC's
+
+.pull-left[
+
+```
+##     pcs variacao_porcentagem variacao_cumulativa
+## 1   PC1         9.508952e+01            95.08952
+## 2   PC2         4.666683e+00            99.75621
+## 3   PC3         1.509489e-01            99.90716
+## 4   PC4         5.345715e-02            99.96061
+## 5   PC5         1.837684e-02            99.97899
+## 6   PC6         1.325063e-02            99.99224
+## 7   PC7         4.851599e-03            99.99709
+## 8   PC8         1.243345e-03            99.99834
+## 9   PC9         5.286828e-04            99.99886
+## 10 PC10         3.979277e-04            99.99926
+## 11 PC11         2.506385e-04            99.99951
+## 12 PC12         1.173493e-04            99.99963
+## 13 PC13         1.054001e-04            99.99974
+## 14 PC14         6.231878e-05            99.99980
+## 15 PC15         4.796445e-05            99.99985
+## 16 PC16         3.399282e-05            99.99988
+## 17 PC17         3.152791e-05            99.99991
+## 18 PC18         2.315667e-05            99.99993
+## 19 PC19         1.952355e-05            99.99995
+## 20 PC20         1.815224e-05            99.99997
+## 21 PC21         1.546764e-05            99.99999
+## 22 PC22         1.189231e-05           100.00000
+## 23 PC23         1.812227e-29           100.00000
+## 24 PC24         8.117101e-31           100.00000
+## 25 PC25         8.117101e-31           100.00000
+## 26 PC26         8.117101e-31           100.00000
+## 27 PC27         8.117101e-31           100.00000
+## 28 PC28         8.117101e-31           100.00000
+## 29 PC29         8.117101e-31           100.00000
+## 30 PC30         8.117101e-31           100.00000
+## 31 PC31         8.117101e-31           100.00000
+## 32 PC32         8.117101e-31           100.00000
+## 33 PC33         8.117101e-31           100.00000
+## 34 PC34         8.117101e-31           100.00000
+## 35 PC35         8.117101e-31           100.00000
+## 36 PC36         8.117101e-31           100.00000
+```
+]
+
+.pull-right[
+
+
+```r
+sdev_pca_normalizada &lt;- dados_receita_normal_pca$steps[[2]]$res$sdev
+porcent_variacao_normalizada &lt;- sdev_pca_normalizada^2 / sum(sdev_pca_normalizada^2)
+pca_normalizada_variacao &lt;- 
+  data.frame(
+    pcs = unique(pca_tabela_normalizada$component),
+    variacao_porcentagem = porcent_variacao_normalizada*100,
+    variacao_cumulativa = cumsum(porcent_variacao_normalizada*100)
+  )
+pca_normalizada_variacao
+```
+
+]
+
+---
+
+### Visualizando a PCA com dados normalizados
+
+.pull-left[
+![](index_files/figure-html/unnamed-chunk-83-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+pc1_normal &lt;- filter(pca_normalizada_variacao, pcs == "PC1")
+pc2_normal &lt;- filter(pca_normalizada_variacao, pcs == "PC2")
+juice(dados_receita_normal_pca) %&gt;%
+  ggplot(aes(PC1, PC2)) +
+  geom_point(aes(color = SP1), alpha = 0.7, size = 2) +
+  xlab(paste0("PC1 (", round(pc1_normal$variacao_porcentagem, 2), "%)")) +
+  ylab(paste0("PC2 (", round(pc2_normal$variacao_porcentagem, 2), "%)"))
+```
+]
+
+---
+class: inverse, center, middle
+
+# PERGUNTAS?
+
+&lt;iframe src="https://giphy.com/embed/M4ecx9P2jI4tq" width="480" height="359" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;&lt;p&gt;&lt;a href="https://giphy.com/gifs/coffee-winks-M4ecx9P2jI4tq"&gt;GIPHY&lt;/a&gt;&lt;/p&gt;
+
+---
+
+# Referências importantes
+
+Kuhn, M. e Johnson, K. 2019. Feature Engineering and Selection: A Practical Approach for Predictive Models. CRC Press.  
+
+Kuhn, M. 2019. The *caret* package. Disponível em &lt;https://topepo.github.io/caret/index.html&gt;.  
+
+Kuhn, M. 2019. A Short Introduction to the caret Package. Disponível em &lt;https://cran.r-project.org/web/packages/caret/vignettes/caret.html&gt;.  
+
+Kuhn, Max e Silge, J. 2021. Tidy Modeling with R. Disponível em &lt;https://www.tmwr.org/base-r.html&gt;.    
+
+Perdiz, R. O que é o tidyverse? Disponível em &lt;https://ricardoperdiz.netlify.app/post/2020-04-08-basertidyverse/tidyverse/&gt;  
+
+Silge, Julia. Todas suas postagens são úteis. *#tidytuesday* *#tidymodels*.  
+
+Wickham, H. e Grolemund, J. 2017. R for Data Science. Disponível em &lt;https://r4ds.had.co.nz&gt;.  
+
+
+
+---
+class: top
+background-image: url("figuras/agradecimento.jpeg")
+background-size: cover
+
+### Grato! Retornaremos na parte 2, dia 02-07-2021
+
+
+.pull-right[
+
+![](figuras/Meu-agradecimento.gif)
+
+[&lt;svg viewBox="0 0 496 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"&gt;&lt;/path&gt;&lt;/svg&gt; @ricoperdiz](https://github.com/ricoperdiz)  
+[&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"&gt;&lt;/path&gt;&lt;/svg&gt; @ricoperdiz](https://twitter.com/ricoperdiz)  
+[&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"&gt;&lt;/path&gt;&lt;/svg&gt; ricardoperdiz.com](https://ricardoperdiz.com)  
+[&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z"&gt;&lt;/path&gt;&lt;/svg&gt; ricoperdiz@gmail.com](mailto:ricoperdiz@gmail.com)
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9",
+"navigation": {
+"scroll": false,
+"click": true
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

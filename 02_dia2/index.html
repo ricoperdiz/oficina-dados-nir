@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Oficina de análise de dados NIR em ambiente R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ricardo Perdiz (Luz da Floresta)" />
+    <script src="libs/header-attrs-2.10/header-attrs.js"></script>
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <script src="libs/fabric-4.3.1/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
+    <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset-0.2.6/panelset.js"></script>
+    <meta name="description" content="Oficina para aprendizagem prática em ambiente R de ferramentas para manipular, pré-processar e analisar dados de espectroscopia no infravermelho próximo (NIR)."/>
+    <meta name="generator" content="xaringan e remark.js"/>
+    <meta name="github-repo" content="ricoperdiz/oficina-dados-nir"/>
+    <meta name="twitter:title" content="Oficina de análise de dados NIR em ambiente R - Partes 4—5 - LDA e PLS"/>
+    <meta name="twitter:description" content="Oficina para aprendizagem prática em ambiente R de ferramentas para manipular, pré-processar e analisar dados de espectroscopia no infravermelho próximo (NIR)."/>
+    <meta name="twitter:url" content="https://oficina-dados-nir-dia02.netlify.app"/>
+    <meta name="twitter:image:src" content="https://github.com/ricoperdiz/oficina-dados-nir/-/blob/main/02_dia2/share-card.png"/>
+    <meta name="twitter:image:alt" content="Slide título da oficina Análise de dados NIR em ambiente R: LDA e PLS, apresentado de forma privada a um grupo de estudantes no dia 2 de julho de 2021."/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:creator" content="@ricoperdiz"/>
+    <meta name="twitter:site" content="@ricoperdiz"/>
+    <meta property="og:title" content="Oficina de análise de dados NIR em ambiente R - Partes 4—5 - LDA e PLS"/>
+    <meta property="og:description" content="Oficina para aprendizagem prática em ambiente R de ferramentas para manipular, pré-processar e analisar dados de espectroscopia no infravermelho próximo (NIR)."/>
+    <meta property="og:url" content="https://oficina-dados-nir-dia02.netlify.app"/>
+    <meta property="og:image" content="https://github.com/ricoperdiz/oficina-dados-nir/-/blob/main/02_dia2/share-card.png"/>
+    <meta property="og:image:alt" content="Slide título da oficina Análise de dados NIR em ambiente R: LDA e PLS, apresentado de forma privada a um grupo de estudantes no dia 2 de julho de 2021."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="article:author" content="Ricardo de Oliveira Perdiz"/>
+    <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+    <script src="libs/viz-1.8.2/viz.js"></script>
+    <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+    <script src="libs/grViz-binding-1.0.6.9000/grViz.js"></script>
+    <link rel="stylesheet" href="css/xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="css/footer-header.css" type="text/css" />
+    <link rel="stylesheet" href="css/ribbon.css" type="text/css" />
+    <link rel="stylesheet" href="css/custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+layout: false
+
+name: title
+class: left, bottom
+background-image: url("figuras/title-slide.001.jpeg")
+background-size: contain
+
+.pull-left[
+
+# .midlarge[.black[Oficina de análise de dados NIR em ambiente R]]
+
+## .mid[.black[Partes 4—5 - LDA e PLS]]
+
+#### .large[.black[Ricardo Perdiz (Luz da Floresta) | 2021/07/02]]
+
+]
+
+&lt;div class="cr cr-top cr-left cr-sticky cr-black"&gt;COVID19&lt;/div&gt;
+
+---
+
+layout: true
+
+&lt;div class="cr cr-top cr-left cr-sticky cr-black"&gt;COVID19&lt;/div&gt;
+
+&lt;a class="footer-link" href="https://github.com/ricoperdiz/oficina-dados-nir"&gt;Análise de dados NIR em R&lt;/a&gt;
+
+---
+
+
+
+# Sumário
+
+
+### [Recapitulação](#recapitulacao) do primeiro dia
+
+--
+
+### Interface para análise de dados do [*caret*](#caret)
+
+--
+
+### Análise discriminante linear ([LDA](#lda))
+
+--
+
+### Análise de mínimos quadrados parciais ([PLS](#pls))
+
+---
+name: recapitulacao
+# Recapitulação
+
+
+.pull-left[
+
+![](figuras/data-science-process.png)
+
+]
+
+.pull-right[
+
+#### Manipulação de dados utilizando o *dplyr*  
+
+#### Preparação de dados pré-análise  
+
+#### PCA  
+
+]
+
+.footnote2[
+
+Figura de Wickham, H. e Grolemund, G. (2016) &lt;http://r4ds.had.co.nz&gt;.  
+
+]
+
+
+---
+name: dados
+# Importando dados para a oficina
+
+.pull-left[
+## Opção 1 - Dados `iris`
+
+
+```r
+dados &lt;- iris
+```
+
+
+## Opção 2 - Importação de dados próprios
+
+
+```r
+library("data.table")
+dados &lt;- fread("MEUSDADOS.csv")
+```
+]
+
+
+.pull-right[
+## Opção 3 - Conjunto de dados `nir_data`&lt;sup&gt;1&lt;/sup&gt;, que acompanha o pacote `NIRtools`&lt;sup&gt;2&lt;/sup&gt;.  
+
+
+```r
+dados &lt;-
+  fread("https://raw.githubusercontent.com/ricoperdiz/NIRtools/master/inst/extdata/nir_data.csv")
+```
+]
+
+
+---
+
+## Transformação do `data.frame` em um `tibble`&lt;sup&gt;1&lt;/sup&gt;
+
+
+```r
+library("tibble")
+dados &lt;- as_tibble(dados)
+dados
+```
+
+```
+## # A tibble: 150 × 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          4.9         3            1.4         0.2 setosa 
+##  3          4.7         3.2          1.3         0.2 setosa 
+##  4          4.6         3.1          1.5         0.2 setosa 
+##  5          5           3.6          1.4         0.2 setosa 
+##  6          5.4         3.9          1.7         0.4 setosa 
+##  7          4.6         3.4          1.4         0.3 setosa 
+##  8          5           3.4          1.5         0.2 setosa 
+##  9          4.4         2.9          1.4         0.2 setosa 
+## 10          4.9         3.1          1.5         0.1 setosa 
+## # … with 140 more rows
+```
+
+.footnote2[
+
+1. Este passo **NÃO É NECESSÁRIO**. Ele facilita apenas a visualização dos dados no console, e indica o tipo de cada variável em seu conjunto de dados. Saiba mais sobre um `tibble` em [https://r4ds.had.co.nz/tibbles.html](https://r4ds.had.co.nz/tibbles.html).  
+
+
+]
+
+---
+
+## Atenção!!!
+
+### Nova variável de nome de espécies
+
+Em casos em que a variável contendo o nome da espécie apresente espaços, pontos `.` e/ou sinais diferentes, é necessário limparmos essa variável caso desejemos reter os valores de probabilidade atribuídos a cada espécie ao utilizarmos o *caret*.
+Em casos assim, podemos tomar o procedimento abaixo:
+
+
+```r
+library("dplyr")
+```
+
+
+
+```r
+dados$SP1 &lt;- 
+  case_when(
+  dados$SP1 == "P. aracouchini" ~ "arac",
+  dados$SP1 == "P. calanense" ~ "cala"
+) %&gt;% 
+  as.factor(.)
+```
+
+---
+
+# Pré-processamento dos dados
+
+--
+
+## Divisão dos dados em `treino` e `teste`
+
+
+```r
+library("rsample") # initial_split
+dados_split &lt;- initial_split(dados, strata = "Species")
+treino &lt;- training(dados_split)
+teste &lt;- testing(dados_split)
+```
+
+---
+name: receita
+
+## Criação e preparo da receita
+
+
+```r
+library("recipes")
+treino_receita &lt;- 
+  recipes::recipe(Species ~ ., data = treino) %&gt;% 
+  prep()
+treino_receita
+```
+
+```
+## Data Recipe
+## 
+## Inputs:
+## 
+##       role #variables
+##    outcome          1
+##  predictor          4
+## 
+## Training data contained 111 data points and no missing data.
+```
+
+---
+
+# PCA
+
+## I - PCA com todos os dados?
+
+Primeiro, criamos uma receita indicando no argumento `data` o nome de nosso conjunto de dados.
+Depois fazemos as devidas atualizações dos papéis das variáveis que não são nem preditoras nem resposta com a função `update_role()`.
+Em seguida, executamos a PCA com a função `step_pca()` para todas as variáveis NIR, utilizando a função auxiliar `all_predictors()` para, por fim, prepararmos a receita com a função `prep()`.  
+
+Depois, é só plotar os dados *espremendo* a receita, o que vai gerar uma PCA com os dados completos.  
+
+---
+
+## I - PCA com todos os dados?
+
+
+```r
+dados_completos_receita_pca_pre &lt;- 
+  recipes::recipe(Species ~ ., data = dados) %&gt;% 
+  step_normalize(all_predictors()) %&gt;% 
+  step_pca(all_predictors()) %&gt;% 
+  prep()
+dados_completos_receita_pca_pre
+```
+
+```
+## Data Recipe
+## 
+## Inputs:
+## 
+##       role #variables
+##    outcome          1
+##  predictor          4
+## 
+## Training data contained 150 data points and no missing data.
+## 
+## Operations:
+## 
+## Centering and scaling for Sepal.Length, Sepal.Width, Petal.Length, Petal.Width [trained]
+## PCA extraction with Sepal.Length, Sepal.Width, Petal.Length, Petal.Width [trained]
+```
+
+
+---
+
+## II - PCA com todos os dados?
+
+
+```r
+pca_tabela &lt;- tidy(dados_completos_receita_pca_pre, 2)
+pca_tabela
+```
+
+```
+## # A tibble: 16 × 4
+##    terms          value component id       
+##    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    
+##  1 Sepal.Length  0.521  PC1       pca_FDoGp
+##  2 Sepal.Width  -0.269  PC1       pca_FDoGp
+##  3 Petal.Length  0.580  PC1       pca_FDoGp
+##  4 Petal.Width   0.565  PC1       pca_FDoGp
+##  5 Sepal.Length -0.377  PC2       pca_FDoGp
+##  6 Sepal.Width  -0.923  PC2       pca_FDoGp
+##  7 Petal.Length -0.0245 PC2       pca_FDoGp
+##  8 Petal.Width  -0.0669 PC2       pca_FDoGp
+##  9 Sepal.Length  0.720  PC3       pca_FDoGp
+## 10 Sepal.Width  -0.244  PC3       pca_FDoGp
+## 11 Petal.Length -0.142  PC3       pca_FDoGp
+## 12 Petal.Width  -0.634  PC3       pca_FDoGp
+## 13 Sepal.Length  0.261  PC4       pca_FDoGp
+## 14 Sepal.Width  -0.124  PC4       pca_FDoGp
+## 15 Petal.Length -0.801  PC4       pca_FDoGp
+## 16 Petal.Width   0.524  PC4       pca_FDoGp
+```
+
+---
+
+## III - PCA com todos os dados?
+
+### Variação das PC's
+
+
+```r
+sdev_pca_normalizada &lt;- dados_completos_receita_pca_pre$steps[[2]]$res$sdev
+porcent_variacao_normalizada &lt;- sdev_pca_normalizada^2 / sum(sdev_pca_normalizada^2)
+pca_normalizada_variacao &lt;- 
+  data.frame(
+    pcs = unique(pca_tabela$component),
+    variacao_porcentagem = porcent_variacao_normalizada*100,
+    variacao_cumulativa = cumsum(porcent_variacao_normalizada*100)
+  )
+pca_normalizada_variacao
+```
+
+```
+##   pcs variacao_porcentagem variacao_cumulativa
+## 1 PC1           72.9624454            72.96245
+## 2 PC2           22.8507618            95.81321
+## 3 PC3            3.6689219            99.48213
+## 4 PC4            0.5178709           100.00000
+```
+
+---
+
+## IV - PCA com todos os dados?
+
+.pull-left[
+
+### Plotando PCA com dados completos
+
+
+```r
+library("ggplot2")
+pc1 &lt;- filter(pca_normalizada_variacao, pcs == "PC1")
+pc2 &lt;- filter(pca_normalizada_variacao, pcs == "PC2")
+juice(dados_completos_receita_pca_pre) %&gt;%
+  ggplot(aes(PC1, PC2)) +
+  geom_point(aes(color = Species), alpha = 0.7, size = 2) +
+  xlab(paste0("PC1 (", round(pc1$variacao_porcentagem, 2), "%)")) +
+  ylab(paste0("PC2 (", round(pc2$variacao_porcentagem, 2), "%)"))
+```
+]
+
+.pull-right[
+
+![](index_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+]
+
+
+---
+
+class: center, middle
+
+# Pacote __caret__ - **C**lassification **A**nd **RE**gression **T**raining (Kuhn 2021)
+
+
+---
+name: caret
+
+## Interface para análise de dados do *caret*
+
+#### O pacote contem funções para simplificar tanto o treinamento de modelos para regressões e análises de classificação como a avaliação da efetividade dos modelos gerados.  
+
+--
+
+#### **Fluxo de processamento e análise de dados**  
+
+--
+
+Duas funções básicas:
+
+```
+caret::train()
+caret::trainControl()
+```
+
+---
+
+## Fluxograma de um perfil básico de análise
+
+.center2[
+<div id="htmlwidget-ea93935ff263b657f13e" style="width:504px;height:504px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ea93935ff263b657f13e">{"x":{"diagram":"\ndigraph fluxograma_modelagem {\n\n# a \"graph\" statement\n  graph [overlap = true, fontname = Helvetica, fontsize = 150]\n\n# node definitions\nnode [shape = box]\n\na [label = \"Dados\"]\nb [label = \"Quebra dos dados \n rsample::initial_split()\"]\ne [label = \"Receita  \n recipes::recipe()\"]\nf [label = \"Interface caret \n train()\"]\nj [label = \"Predições\"]\nk [label = \"Avaliação \n performance\"]\n\nnode [shape = circle]\n\nc [label = \"Treino\"]\nd [label = \"Teste\"]\ng [label = \"PCA\"]\nh [label = \"LDA\"]\ni [label = \"PLS-DA\"]\n\n# edge definitions with the node IDs\na -> b\nb -> c\nb -> d\na -> e\nc -> e\ne -> f\ne -> g\nf -> h\nf -> i\n{a c} -> f\ng -> h\n{h i} -> j\nj -> k\nd -> j\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+
+]
+
+
+
+---
+name: lda
+
+# Análise discriminante linear (LDA)
+
+Método de redução de dimensões ao mesmo tempo em que se retem o máximo de informação possível.
+O método ajuda a achar a combinação linear das variáveis originais que providenciam a melhor separação entre os grupos.&lt;sup&gt;1&lt;/sup&gt;  
+
+--
+
+&gt; Maximiza a medida inter-classes e minimiza a medida intra-classes.  
+
+--
+
+__Utilizada quando a variável *dependente* é *categórica*, e as variáveis *independentes* são *quantitativas*.__  
+
+--
+
+Em R, utilizamos a função `lda()` do pacote `MASS` (Venables e Ripley 2002)&lt;sup&gt;2&lt;/sup&gt;.
+
+--
+
+Usando o `caret`, a função é a mesma, porém dentro de uma interface comum a vários métodos diferentes&lt;sup&gt;3&lt;/sup&gt;.  
+
+
+```r
+library("MASS")
+```
+
+```
+## 
+## Attaching package: 'MASS'
+```
+
+```
+## The following object is masked from 'package:dplyr':
+## 
+##     select
+```
+
+
+
+.footnote2[
+
+1. Fávero, L. P., Belfiore, P., Silva, F. L. e Chan, B.L. (2009) Análise de dados: Modelagem multivariada para tomada de decisões. Rio de Janeiro: Elsevier.  
+
+2. Venables, W. N. e Ripley, B. D. (2002) Modern Applied Statistics with S. Fourth Edition.  
+
+3. Lista completa de modelos aceitos no caret: &lt;https://topepo.github.io/caret/available-models.html&gt;.  
+
+]
+
+---
+
+## Premissas&lt;sup&gt;1&lt;/sup&gt;
+
+* *Normalidade multivariada*  
+* *Homogeneidade de variância/covariância*  
+* *Independência entre as observações*  
+
+
+--
+
+*Multicolinearidade* pode diminuir o poder preditivo da classificação pois viola a independência das observações. 
+
+.footnote[
+
+1. Fávero, L. P., Belfiore, P., Silva, F. L. e Chan, B.L. (2009) Análise de dados: Modelagem multivariada para tomada de decisões. Rio de Janeiro: Elsevier.  
+
+]
+
+---
+
+
+## Um exemplo - I - Execução
+
+Receita criada no slide [Criação da receita](#receita).  
+
+.pull-left[
+
+
+```r
+library("caret")
+```
+
+
+]
+
+.pull-right[
+
+
+```r
+ldafit_cvsimples &lt;-
+  train(
+    treino_receita, treino,
+    method = "lda",
+    metric = "Accuracy"
+  )
+```
+
+]
+
+---
+
+### Checagem de resultados
+
+
+
+
+```r
+ldafit_cvsimples
+```
+
+```
+## Linear Discriminant Analysis 
+## 
+## 111 samples
+##   4 predictor
+##   3 classes: 'setosa', 'versicolor', 'virginica' 
+## 
+## Recipe steps:  
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 111, 111, 111, 111, 111, 111, ... 
+## Resampling results:
+## 
+##   Accuracy   Kappa    
+##   0.9754789  0.9627761
+```
+
+---
+
+### Um exemplo - II - Medindo performance do `treino`
+
+
+```r
+getTrainPerf(ldafit_cvsimples)
+```
+
+```
+##   TrainAccuracy TrainKappa method
+## 1     0.9754789  0.9627761    lda
+```
+
+---
+
+### Um exemplo - III - Predições e performance em `teste`
+
+.pull-left[
+
+```r
+predicao_lda_basico &lt;- 
+  ldafit_cvsimples %&gt;%
+  predict(., newdata = teste)
+predicao_lda_basico
+```
+
+```
+##  [1] setosa     setosa     setosa     setosa     setosa     setosa     setosa     setosa    
+##  [9] setosa     setosa     setosa     setosa     setosa     versicolor versicolor versicolor
+## [17] versicolor versicolor versicolor versicolor versicolor versicolor versicolor versicolor
+## [25] versicolor versicolor virginica  virginica  virginica  virginica  virginica  virginica 
+## [33] virginica  virginica  virginica  virginica  virginica  virginica  virginica 
+## Levels: setosa versicolor virginica
+```
+]
+
+---
+
+### Um exemplo - III - Predições e performance em `teste`
+
+.panelset.sideways[
+.panel[.panel-name[Código]
+
+
+```r
+confusionMatrix(data = predicao_lda_basico, reference = teste$Species)
+```
+]
+.panel[.panel-name[Resultado]
+
+&lt;img src="./figuras/output_cfmatrix.png" style="width:750px;height:450px;"&gt;
+
+]
+
+]
+
+.footnote2[
+
+Para entender métricas de performance: &lt;https://topepo.github.io/caret/measuring-performance.html#class&gt;.  
+
+]
+
+---
+
+### Um exemplo - IV - Matriz de confusão
+
+.pull-left[
+Função `confusao_lab()` do pacote `NIRtools`&lt;sup&gt;1&lt;/sup&gt;.
+Caso não consigam ou não desejem instalar o pacote, basta fazer um `source()`:
+
+
+```r
+source("https://raw.githubusercontent.com/ricoperdiz/NIRtools/master/R/confusion_matrix.R")
+```
+
+
+
+```r
+par(mar = c(1, 5, 5, 1))
+table(teste$Species, predicao_lda_basico) %&gt;% 
+  confusao_lab(.)
+```
+]
+
+.pull-right[
+![](index_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+]
+
+.footnote2[
+
+1. Perdiz (2021) &lt;https://github.com/ricoperdiz/NIRtools&gt; 
+
+]
+
+---
+
+## Argumentos&lt;sup&gt;1&lt;/sup&gt; para criação de modelos com a função `trainControl()`
+
+* `method`: _boot_, _cv_, _LOOCV_, _LGOCV_, _repeatedcv_ e _none_ (há mais opções!)
+* `number` e `repeats`: primeiro controla o número de divisões em _cv/repeatedcv_ OU número de iterações para _bootstrap_ e _LOOCV_; segundo se aplica somente ao k-fold. 
+* `verboseIter`: Mostra um log
+* `returnData`: Retorna os dados que servem de entrada?
+* `p`: Porcentagem em _LGOCV_
+* `classProbs`: valor lógico para determinar se as probabilidades de atribuição a cada classe devem ser calculadas
+* `returnResamp`: _all_, _final_ or _none_
+* `allowParallel`: Paraleliza?
+
+
+.footnote2[
+
+1. Para uma lista completa, acesse a ajuda da função: `?trainControl`
+
+]
+
+---
+name: ctrl-cv
+
+## Prática com `trainControl()`
+
+### Validação cruzada *simples* - `cv`
+
+
+```r
+ctrl_cv &lt;- 
+  trainControl(method = "cv",
+               number = 10, # faz uma validacao 10-fold
+               verboseIter = FALSE,
+               returnData = TRUE, # Nao importante! Pode ser falso
+               classProbs = TRUE,
+               savePredictions = "all")
+```
+
+
+```r
+ldafit_cv_10fold &lt;- 
+  train(
+    treino_receita, treino,
+    method = "lda",
+    trControl = ctrl_cv,
+    metric = "Accuracy" # em classificacoes, dois valores sao possiveis: Accuracy ou Kappa
+  )
+```
+
+---
+
+#### Acessando o resultado de `train()` - I
+
+
+
+
+```r
+names(ldafit_cv_10fold)
+```
+
+```
+##  [1] "method"       "modelInfo"    "modelType"    "recipe"       "results"     
+##  [6] "pred"         "bestTune"     "call"         "dots"         "metric"      
+## [11] "control"      "finalModel"   "trainingData" "resample"     "resampledCM" 
+## [16] "perfNames"    "maximize"     "yLimits"      "times"        "levels"      
+## [21] "rs_seed"
+```
+
+Para acessar as informações, basta executar um dos comandos abaixo:
+
+.pull-left[
+
+```r
+ldafit_cv_10fold$method # metodo utilizado 
+ldafit_cv_10fold$modelInfo # info do modelo
+ldafit_cv_10fold$modelType # tipo de modelo
+ldafit_cv_10fold$bestTune
+ldafit_cv_10fold$call # formula utilizada em train()
+ldafit_cv_10fold$dots # se verbose == TRUE ou FALSE
+ldafit_cv_10fold$resample # estatisticas em cada reamostragem
+ldafit_cv_10fold$metric # qual metrica utilizada em train()
+ldafit_cv_10fold$control # especificacoes de trainControl()
+```
+]
+
+---
+
+#### Acessando o resultado de `train()` - II - Predições
+
+
+```r
+ldafit_cv_10fold$pred %&gt;% 
+  filter(obs != pred)
+```
+
+```
+##          obs rowIndex       pred       setosa versicolor virginica parameter Resample
+## 1 versicolor       64  virginica 7.082366e-31  0.1304324 0.8695676      none   Fold07
+## 2  virginica       99 versicolor 6.506261e-27  0.8282785 0.1717215      none   Fold10
+```
+
+---
+
+#### Acessando o resultado de `train()` - IV - resultados
+
+.center[
+
+```r
+ldafit_cv_10fold$results
+```
+
+```
+##   parameter  Accuracy     Kappa AccuracySD    KappaSD
+## 1      none 0.9818182 0.9723259 0.03833064 0.05834346
+```
+]
+
+---
+
+#### Acessando o resultado de `train()` - V - Modelo final
+
+
+Resultado da LDA, caso fizéssemos uso da função `lda()`, referente ao modelo final: 
+
+
+```r
+ldafit_cv_10fold$finalModel
+```
+
+```
+## Call:
+## lda(x, y)
+## 
+## Prior probabilities of groups:
+##     setosa versicolor  virginica 
+##  0.3333333  0.3333333  0.3333333 
+## 
+## Group means:
+##            Sepal.Length Sepal.Width Petal.Length Petal.Width
+## setosa         5.029730    3.440541     1.481081   0.2459459
+## versicolor     5.972973    2.751351     4.254054   1.3162162
+## virginica      6.610811    2.989189     5.616216   2.0405405
+## 
+## Coefficients of linear discriminants:
+##                     LD1        LD2
+## Sepal.Length  0.9107941 -0.6076288
+## Sepal.Width   1.3721594  2.7462192
+## Petal.Length -2.1944206 -0.2260993
+## Petal.Width  -2.8023531  1.9159240
+## 
+## Proportion of trace:
+##    LD1    LD2 
+## 0.9893 0.0107
+```
+
+---
+
+#### Medindo performance do `treino`
+
+
+```r
+getTrainPerf(ldafit_cv_10fold)
+```
+
+```
+##   TrainAccuracy TrainKappa method
+## 1     0.9818182  0.9723259    lda
+```
+
+---
+
+#### Predições e performance em `teste`
+
+.panelset.sideways[
+.panel[.panel-name[Código]
+
+
+```r
+predicao_lda_cv_10fold &lt;- 
+  ldafit_cv_10fold %&gt;%
+  predict(., newdata = teste)
+confusionMatrix(data = predicao_lda_cv_10fold, reference = teste$Species)
+```
+
+]
+
+.panel[.panel-name[Resultado]
+
+&lt;img src="./figuras/predicao_lda_cv_10fold.png" style="width:750px;height:450px;"&gt;
+
+]
+
+]
+
+---
+
+#### Matriz de confusão
+
+
+.pull-left[
+Função `confusao_lab()` do pacote `NIRtools`&lt;sup&gt;1&lt;/sup&gt;.  
+
+
+```r
+par(mar = c(1, 5, 5, 1))
+table(teste$Species, predicao_lda_basico) %&gt;% 
+  NIRtools::confusao_lab(., add_CP = TRUE)
+```
+]
+
+.pull-right[
+
+![](index_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+]
+
+.footnote2[
+
+1. Perdiz (2021) &lt;https://github.com/ricoperdiz/NIRtools&gt; 
+
+]
+
+
+---
+
+### Validação cruzada *repetida* - `repeatedcv`
+
+.pull-left[
+
+
+```r
+ctrl_lda_repeatedcv &lt;-
+  trainControl(
+    method = "repeatedcv",
+    number = 10, # faz uma validacao 10-fold
+    repeats = 10,
+    verboseIter = FALSE,
+    returnData = FALSE, # Nao importante! Pode ser falso
+    classProbs = TRUE,
+    savePredictions = "all"
+  )
+```
+
+]
+
+.pull-right[
+
+
+```r
+ldafit_repeatedcv_10fold_10vezes &lt;- 
+  train(
+    treino_receita, treino,
+    method = "lda",
+    trControl = ctrl_lda_repeatedcv,
+    metric = "Accuracy" # em classificacoes, dois valores sao possiveis: Accuracy ou Kappa
+  )
+```
+
+]
+
+
+
+
+---
+
+## Receitas de pré-processamento e o *caret*
+
+### Por que aprender isso?
+
+--
+
+#### Mais possibilidades no pré-processamento dos dados  
+
+#### Manter variáveis adicionais para medir performance  
+
+
+---
+
+## E o caret sem receita, pode?
+
+--
+
+### **Pode!**
+
+
+
+.pull-left[
+
+#### Execução
+
+
+```r
+resultado_lda_sem_receita_basico &lt;-
+  train(
+    Species ~ .,
+    data = treino,
+    method = "lda",
+    metric = "Accuracy"
+  )
+```
+
+]
+
+.pull-right[
+
+#### Checagem de resultado
+
+
+```r
+print(resultado_lda_sem_receita_basico)
+```
+
+```
+## Linear Discriminant Analysis 
+## 
+## 111 samples
+##   4 predictor
+##   3 classes: 'setosa', 'versicolor', 'virginica' 
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 111, 111, 111, 111, 111, 111, ... 
+## Resampling results:
+## 
+##   Accuracy   Kappa    
+##   0.9667379  0.9495212
+```
+
+]
+
+---
+
+#### Medindo performance do `treino`
+
+
+```r
+getTrainPerf(resultado_lda_sem_receita_basico)
+```
+
+```
+##   TrainAccuracy TrainKappa method
+## 1     0.9667379  0.9495212    lda
+```
+
+---
+
+#### Predições e performance em `teste`
+
+.center[
+
+```r
+predicao_lda_sem_receita_basico &lt;- 
+  resultado_lda_sem_receita_basico %&gt;%
+  predict(., newdata = teste)
+
+confusionMatrix(data = predicao_lda_sem_receita_basico, reference = teste$Species)
+```
+
+```
+## Confusion Matrix and Statistics
+## 
+##             Reference
+## Prediction   setosa versicolor virginica
+##   setosa         13          0         0
+##   versicolor      0         13         0
+##   virginica       0          0        13
+## 
+## Overall Statistics
+##                                      
+##                Accuracy : 1          
+##                  95% CI : (0.9097, 1)
+##     No Information Rate : 0.3333     
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16  
+##                                      
+##                   Kappa : 1          
+##                                      
+##  Mcnemar's Test P-Value : NA         
+## 
+## Statistics by Class:
+## 
+##                      Class: setosa Class: versicolor Class: virginica
+## Sensitivity                 1.0000            1.0000           1.0000
+## Specificity                 1.0000            1.0000           1.0000
+## Pos Pred Value              1.0000            1.0000           1.0000
+## Neg Pred Value              1.0000            1.0000           1.0000
+## Prevalence                  0.3333            0.3333           0.3333
+## Detection Rate              0.3333            0.3333           0.3333
+## Detection Prevalence        0.3333            0.3333           0.3333
+## Balanced Accuracy           1.0000            1.0000           1.0000
+```
+
+]
+
+---
+
+#### Matriz de confusão
+
+.pull-left[
+Função `confusao_lab()` do pacote `NIRtools`&lt;sup&gt;1&lt;/sup&gt;.  
+
+
+```r
+par(mar = c(1, 5, 5, 1))
+table(teste$Species, predicao_lda_sem_receita_basico) %&gt;% 
+  NIRtools::confusao_lab(.)
+```
+]
+
+.pull-right[
+![](index_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
+]
+
+
+.footnote2[
+
+1. Perdiz (2021) &lt;https://github.com/ricoperdiz/NIRtools&gt; 
+
+]
+
+---
+name: pls
+
+# Análise de mínimos quadrados parciais (PLS)
+
+Método muito utilizado na quimiometria, especialmente quando o número de variáveis preditoras é significantemente maior que o número de observações.  
+
+--
+
+Baseia-se em variáveis latentes, em que cada fator é definido como uma combinação linear das variáveis originais das variáveis preditoras ou variável resposta.  
+
+--
+
+&gt; Essencialmente, trata-se de uma versão *supervisionada* da PCA&lt;sup&gt;1&lt;/sup&gt;
+
+
+```r
+library("pls")
+```
+
+```
+## 
+## Attaching package: 'pls'
+```
+
+```
+## The following object is masked from 'package:caret':
+## 
+##     R2
+```
+
+```
+## The following object is masked from 'package:stats':
+## 
+##     loadings
+```
+
+
+.footnote2[
+
+1. Kuhn (2021) &lt;https://topepo.github.io/caret/using-your-own-model-in-train.html#illustrative-example-4-pls-feature-extraction-pre-processing&gt;.  
+]
+
+---
+name: pls-cv
+
+## **PLS** com o pacote `caret`
+
+--
+
+### Dados
+
+Mesmo conjunto de dados utilizado anteriormente.
+Coloco aqui para facilitar a preparação dos dados para a PLS.  
+
+
+```r
+dados &lt;- iris
+dados &lt;- as_tibble(dados)
+dados_split &lt;- initial_split(dados, strata = "Species")
+treino &lt;- training(dados_split)
+teste &lt;- testing(dados_split)
+treino_receita &lt;- 
+  recipes::recipe(Species ~ ., data = treino) %&gt;% 
+  prep()
+```
+
+---
+
+### Execução
+
+.pull-left[
+
+```r
+ctrl_exemplo_pls &lt;-
+  trainControl(
+    method = "repeatedcv",
+    number = 10,
+    repeats = 10,
+    verboseIter = FALSE,
+    savePredictions = "final")
+```
+]
+
+.pull-right[
+
+
+```r
+plsfit_exemplo &lt;-
+  train(
+    treino_receita, treino,
+    method = "pls",
+    metric = "Accuracy",
+    trControl = ctrl_exemplo_pls,
+    tuneLength = 3
+  )
+```
+]
+
+
+
+
+???
+
+É importante comentar sobre a utilidade do argumento `tuneGrid` da função `train()` quando executamos uma PLS.  
+
+Também comentar sobre a possibilidade de paralelização da análise por meio do pacote `paralell` e a função `registerDoParallel`.  
+
+---
+
+### Checando o resultado
+
+
+
+
+```r
+plsfit_exemplo
+```
+
+```
+## Partial Least Squares 
+## 
+## 111 samples
+##   4 predictor
+##   3 classes: 'setosa', 'versicolor', 'virginica' 
+## 
+## Recipe steps:  
+## Resampling: Cross-Validated (10 fold, repeated 10 times) 
+## Summary of sample sizes: 99, 99, 99, 101, 100, 99, ... 
+## Resampling results across tuning parameters:
+## 
+##   ncomp  Accuracy   Kappa    
+##   1      0.6704242  0.5055691
+##   2      0.7864798  0.6787244
+##   3      0.7934949  0.6889434
+## 
+## Accuracy was used to select the optimal model using the largest value.
+## The final value used for the model was ncomp = 3.
+```
+
+---
+
+### Acurácia por número de componentes
+
+
+```r
+plot(plsfit_exemplo)
+```
+
+![](index_files/figure-html/unnamed-chunk-55-1.png)&lt;!-- --&gt;
+
+---
+
+### Predições e performance
+
+
+```r
+plsfit_exemplo %&gt;%
+  predict(newdata = teste) %&gt;% 
+  confusionMatrix(data = ., reference = teste$Species)
+```
+
+```
+## Confusion Matrix and Statistics
+## 
+##             Reference
+## Prediction   setosa versicolor virginica
+##   setosa         13          0         0
+##   versicolor      0         10         1
+##   virginica       0          3        12
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.8974          
+##                  95% CI : (0.7578, 0.9713)
+##     No Information Rate : 0.3333          
+##     P-Value [Acc &gt; NIR] : 3.435e-13       
+##                                           
+##                   Kappa : 0.8462          
+##                                           
+##  Mcnemar's Test P-Value : NA              
+## 
+## Statistics by Class:
+## 
+##                      Class: setosa Class: versicolor Class: virginica
+## Sensitivity                 1.0000            0.7692           0.9231
+## Specificity                 1.0000            0.9615           0.8846
+## Pos Pred Value              1.0000            0.9091           0.8000
+## Neg Pred Value              1.0000            0.8929           0.9583
+## Prevalence                  0.3333            0.3333           0.3333
+## Detection Rate              0.3333            0.2564           0.3077
+## Detection Prevalence        0.3333            0.2821           0.3846
+## Balanced Accuracy           1.0000            0.8654           0.9038
+```
+
+---
+
+## Validação cruzada *Leave-one-out* - `LOOCV`
+
+.pull-left[
+
+```r
+ctrl_loocv &lt;-
+  trainControl(
+    method = "LOOCV",
+    verboseIter = FALSE,
+    savePredictions = "final")
+```
+]
+
+.pull-right[
+
+```r
+plsfit_exemplo_loocv &lt;-
+  train(
+    treino_receita, treino,
+    method = "pls",
+    metric = "Accuracy",
+    trControl = ctrl_loocv,
+    tuneGrid = expand.grid(ncomp = 2)
+  )
+```
+]
+
+
+
+
+---
+
+### Checagem de resultado
+
+
+```r
+plsfit_exemplo_loocv
+```
+
+```
+## Partial Least Squares 
+## 
+## 111 samples
+##   4 predictor
+##   3 classes: 'setosa', 'versicolor', 'virginica' 
+## 
+## Recipe steps:  
+## Resampling: Leave-One-Out Cross-Validation 
+## Summary of sample sizes: 110, 110, 110, 110, 110, 110, ... 
+## Resampling results:
+## 
+##   Accuracy   Kappa    
+##   0.7747748  0.6621622
+## 
+## Tuning parameter 'ncomp' was held constant at a value of 2
+```
+
+
+---
+
+### Medindo performance do `treino`
+
+
+```r
+getTrainPerf(plsfit_exemplo_loocv)
+```
+
+```
+##   TrainAccuracy TrainKappa method
+## 1     0.7747748  0.6621622    pls
+```
+
+---
+
+### Predições e performance em `teste`
+
+.panelset.sideways[
+.panel[.panel-name[Código]
+
+
+```r
+predicao_plsfit_exemplo_loocv &lt;- 
+  plsfit_exemplo_loocv %&gt;%
+  predict(., newdata = teste)
+confusionMatrix(data = predicao_plsfit_exemplo_loocv, reference = teste$Species)
+```
+
+```
+## Confusion Matrix and Statistics
+## 
+##             Reference
+## Prediction   setosa versicolor virginica
+##   setosa         13          0         0
+##   versicolor      0         11         3
+##   virginica       0          2        10
+## 
+## Overall Statistics
+##                                          
+##                Accuracy : 0.8718         
+##                  95% CI : (0.7257, 0.957)
+##     No Information Rate : 0.3333         
+##     P-Value [Acc &gt; NIR] : 4.89e-12       
+##                                          
+##                   Kappa : 0.8077         
+##                                          
+##  Mcnemar's Test P-Value : NA             
+## 
+## Statistics by Class:
+## 
+##                      Class: setosa Class: versicolor Class: virginica
+## Sensitivity                 1.0000            0.8462           0.7692
+## Specificity                 1.0000            0.8846           0.9231
+## Pos Pred Value              1.0000            0.7857           0.8333
+## Neg Pred Value              1.0000            0.9200           0.8889
+## Prevalence                  0.3333            0.3333           0.3333
+## Detection Rate              0.3333            0.2821           0.2564
+## Detection Prevalence        0.3333            0.3590           0.3077
+## Balanced Accuracy           1.0000            0.8654           0.8462
+```
+]
+
+.panel[.panel-name[Resultado]
+
+&lt;img src="./figuras/plsfit_exemplo_loocv.png" style="width:750px;height:450px;"&gt;
+
+]
+]
+
+---
+
+### Matriz de confusão
+
+.pull-left[
+Função `confusao_lab()` do pacote `NIRtools`&lt;sup&gt;1&lt;/sup&gt;.  
+
+
+```r
+par(mar = c(1, 5, 5, 1))
+table(teste$Species, predicao_plsfit_exemplo_loocv) %&gt;% 
+  NIRtools::confusao_lab(.)
+```
+]
+
+.pull-right[
+![](index_files/figure-html/unnamed-chunk-64-1.png)&lt;!-- --&gt;
+]
+
+.footnote2[
+
+1. Perdiz (2021) &lt;https://github.com/ricoperdiz/NIRtools&gt; 
+
+]
+
+---
+
+# Resumo de construção e avaliação de modelos com a interface *caret*
+
+* `trainControl()` e `train()` - controla argumentos e treina modelos
+* `getTrainPerf()` avalia o modelo com dados `treino`
+* `predict()` para predizer categoria das amostras em `teste`
+* `confusionMatrix()` para obter métricas de performance e matriz de confusão
+* `confusao_lab` para plotar uma matriz de confusão no estilo LABOTAM.  
+
+---
+class: top
+background-image: url("figuras/agradecimento.jpeg")
+background-size: cover
+
+### Grato!
+
+
+.pull-right[
+
+![](figuras/Meu-agradecimento.gif)
+
+[&lt;svg viewBox="0 0 496 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"&gt;&lt;/path&gt;&lt;/svg&gt; @ricoperdiz](https://github.com/ricoperdiz)  
+[&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"&gt;&lt;/path&gt;&lt;/svg&gt; @ricoperdiz](https://twitter.com/ricoperdiz)  
+[&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"&gt;&lt;/path&gt;&lt;/svg&gt; ricardoperdiz.com](https://ricardoperdiz.com)  
+[&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z"&gt;&lt;/path&gt;&lt;/svg&gt; ricoperdiz@gmail.com](mailto:ricoperdiz@gmail.com)
+]
+
+---
+
+# Info do sistema
+
+
+```
+## R version 4.1.1 (2021-08-10)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Catalina 10.15.7
+## 
+## Matrix products: default
+## BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] pls_2.7-3             MASS_7.3-54           DiagrammeR_1.0.6.9000 metathis_1.0.3       
+##  [5] data.table_1.14.0     magrittr_2.0.1        caret_6.0-88          lattice_0.20-44      
+##  [9] yardstick_0.0.8       workflowsets_0.0.2    workflows_0.2.2       tune_0.1.5           
+## [13] tidyr_1.1.4           tibble_3.1.5          rsample_0.1.0         recipes_0.1.16       
+## [17] purrr_0.3.4           parsnip_0.1.6         modeldata_0.1.0       infer_0.5.4          
+## [21] dplyr_1.0.7           dials_0.0.9           scales_1.1.1          broom_0.7.7          
+## [25] tidymodels_0.1.3      ggplot2_3.3.5         xaringanthemer_0.3.4 
+## 
+## loaded via a namespace (and not attached):
+##  [1] colorspace_2.0-2     ellipsis_0.3.2       class_7.3-19         showtext_0.9-4      
+##  [5] proxy_0.4-26         xaringanExtra_0.5.2  rstudioapi_0.13      showtextdb_3.0      
+##  [9] listenv_0.8.0        furrr_0.2.2          farver_2.1.0         xaringan_0.21       
+## [13] prodlim_2019.11.13   fansi_0.5.0          lubridate_1.7.10     xml2_1.3.2          
+## [17] codetools_0.2-18     splines_4.1.1        knitr_1.34           jsonlite_1.7.2      
+## [21] pROC_1.17.0.1        icons_0.2.0          compiler_4.1.1       backports_1.2.1     
+## [25] assertthat_0.2.1     Matrix_1.3-4         fastmap_1.1.0        cli_3.0.1           
+## [29] NIRtools_0.0.0.9006  visNetwork_2.0.9     htmltools_0.5.2      tools_4.1.1         
+## [33] gtable_0.3.0         glue_1.4.2           reshape2_1.4.4       rappdirs_0.3.3      
+## [37] Rcpp_1.0.7           jquerylib_0.1.4      DiceDesign_1.9       vctrs_0.3.8         
+## [41] nlme_3.1-152         iterators_1.0.13     timeDate_3043.102    gower_0.2.2         
+## [45] xfun_0.25            stringr_1.4.0        globals_0.14.0       lifecycle_1.0.1     
+## [49] future_1.21.0        ipred_0.9-11         parallel_4.1.1       RColorBrewer_1.1-2  
+## [53] yaml_2.2.1           sass_0.4.0           rpart_4.1-15         stringi_1.7.5       
+## [57] highr_0.9            foreach_1.5.1        e1071_1.7-7          lhs_1.1.1           
+## [61] lava_1.6.9           rlang_0.4.12         pkgconfig_2.0.3      evaluate_0.14       
+## [65] htmlwidgets_1.5.3    labeling_0.4.2       tidyselect_1.1.1     parallelly_1.26.0   
+## [69] plyr_1.8.6           R6_2.5.1             generics_0.1.0       DBI_1.1.1           
+## [73] pillar_1.6.4         whisker_0.4          withr_2.4.2          survival_3.2-11     
+## [77] nnet_7.3-16          crayon_1.4.1         utf8_1.2.2           rmarkdown_2.10      
+## [81] sysfonts_0.8.3       grid_4.1.1           ModelMetrics_1.2.2.2 digest_0.6.28       
+## [85] stats4_4.1.1         GPfit_1.0-8          munsell_0.5.0        bslib_0.2.5.1
+```
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9",
+"navigation": {
+"scroll": false,
+"click": true
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
