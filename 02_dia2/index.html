@@ -4,7 +4,7 @@
     <title>Oficina de análise de dados NIR em ambiente R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Ricardo Perdiz (Luz da Floresta)" />
-    <script src="libs/header-attrs-2.10/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.11.22/header-attrs.js"></script>
     <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
     <script src="libs/tile-view-0.2.6/tile-view.js"></script>
     <script src="libs/fabric-4.3.1/fabric.min.js"></script>
@@ -26,7 +26,7 @@
     <meta name="twitter:title" content="Oficina de análise de dados NIR em ambiente R - Partes 4—5 - LDA e PLS"/>
     <meta name="twitter:description" content="Oficina para aprendizagem prática em ambiente R de ferramentas para manipular, pré-processar e analisar dados de espectroscopia no infravermelho próximo (NIR)."/>
     <meta name="twitter:url" content="https://oficina-dados-nir-dia02.netlify.app"/>
-    <meta name="twitter:image:src" content="https://raw.githubusercontent.com/ricoperdiz/oficina-dados-nir/main/02_dia2/share-card.png"/>
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/ricoperdiz/oficina-dados-nir/main/02_dia2/share-card.png"/>
     <meta name="twitter:image:alt" content="Slide título da oficina Análise de dados NIR em ambiente R: LDA e PLS, apresentado de forma privada a um grupo de estudantes no dia 2 de julho de 2021."/>
     <meta name="twitter:card" content="summary_large_image"/>
     <meta name="twitter:creator" content="@ricoperdiz"/>
@@ -39,10 +39,10 @@
     <meta property="og:type" content="website"/>
     <meta property="og:locale" content="en_US"/>
     <meta property="article:author" content="Ricardo de Oliveira Perdiz"/>
-    <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+    <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
     <script src="libs/viz-1.8.2/viz.js"></script>
     <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-    <script src="libs/grViz-binding-1.0.6.9000/grViz.js"></script>
+    <script src="libs/grViz-binding-1.0.8/grViz.js"></script>
     <link rel="stylesheet" href="css/xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="css/footer-header.css" type="text/css" />
     <link rel="stylesheet" href="css/ribbon.css" type="text/css" />
@@ -259,7 +259,7 @@ treino_receita
 ```
 
 ```
-## Data Recipe
+## Recipe
 ## 
 ## Inputs:
 ## 
@@ -297,7 +297,7 @@ dados_completos_receita_pca_pre
 ```
 
 ```
-## Data Recipe
+## Recipe
 ## 
 ## Inputs:
 ## 
@@ -309,8 +309,8 @@ dados_completos_receita_pca_pre
 ## 
 ## Operations:
 ## 
-## Centering and scaling for Sepal.Length, Sepal.Width, ... [trained]
-## PCA extraction with Sepal.Length, Sepal.Width, ... [trained]
+## Centering and scaling for Sepal.Length, Sepal.Width, Petal.Length, ... [trained]
+## PCA extraction with Sepal.Length, Sepal.Width, Petal.Length, P... [trained]
 ```
 
 
@@ -328,22 +328,22 @@ pca_tabela
 ## # A tibble: 16 × 4
 ##    terms          value component id       
 ##    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    
-##  1 Sepal.Length  0.521  PC1       pca_3EQcj
-##  2 Sepal.Width  -0.269  PC1       pca_3EQcj
-##  3 Petal.Length  0.580  PC1       pca_3EQcj
-##  4 Petal.Width   0.565  PC1       pca_3EQcj
-##  5 Sepal.Length -0.377  PC2       pca_3EQcj
-##  6 Sepal.Width  -0.923  PC2       pca_3EQcj
-##  7 Petal.Length -0.0245 PC2       pca_3EQcj
-##  8 Petal.Width  -0.0669 PC2       pca_3EQcj
-##  9 Sepal.Length  0.720  PC3       pca_3EQcj
-## 10 Sepal.Width  -0.244  PC3       pca_3EQcj
-## 11 Petal.Length -0.142  PC3       pca_3EQcj
-## 12 Petal.Width  -0.634  PC3       pca_3EQcj
-## 13 Sepal.Length  0.261  PC4       pca_3EQcj
-## 14 Sepal.Width  -0.124  PC4       pca_3EQcj
-## 15 Petal.Length -0.801  PC4       pca_3EQcj
-## 16 Petal.Width   0.524  PC4       pca_3EQcj
+##  1 Sepal.Length  0.521  PC1       pca_EX7FS
+##  2 Sepal.Width  -0.269  PC1       pca_EX7FS
+##  3 Petal.Length  0.580  PC1       pca_EX7FS
+##  4 Petal.Width   0.565  PC1       pca_EX7FS
+##  5 Sepal.Length -0.377  PC2       pca_EX7FS
+##  6 Sepal.Width  -0.923  PC2       pca_EX7FS
+##  7 Petal.Length -0.0245 PC2       pca_EX7FS
+##  8 Petal.Width  -0.0669 PC2       pca_EX7FS
+##  9 Sepal.Length  0.720  PC3       pca_EX7FS
+## 10 Sepal.Width  -0.244  PC3       pca_EX7FS
+## 11 Petal.Length -0.142  PC3       pca_EX7FS
+## 12 Petal.Width  -0.634  PC3       pca_EX7FS
+## 13 Sepal.Length  0.261  PC4       pca_EX7FS
+## 14 Sepal.Width  -0.124  PC4       pca_EX7FS
+## 15 Petal.Length -0.801  PC4       pca_EX7FS
+## 16 Petal.Width   0.524  PC4       pca_EX7FS
 ```
 
 ---
@@ -433,8 +433,8 @@ caret::trainControl()
 ## Fluxograma de um perfil básico de análise
 
 .center2[
-<div id="htmlwidget-3b5aa6e29cc8430ddeb8" style="width:504px;height:504px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3b5aa6e29cc8430ddeb8">{"x":{"diagram":"\ndigraph fluxograma_modelagem {\n\n# a \"graph\" statement\n  graph [overlap = true, fontname = Helvetica, fontsize = 150]\n\n# node definitions\nnode [shape = box]\n\na [label = \"Dados\"]\nb [label = \"Quebra dos dados \n rsample::initial_split()\"]\ne [label = \"Receita  \n recipes::recipe()\"]\nf [label = \"Interface caret \n train()\"]\nj [label = \"Predições\"]\nk [label = \"Avaliação \n performance\"]\n\nnode [shape = circle]\n\nc [label = \"Treino\"]\nd [label = \"Teste\"]\ng [label = \"PCA\"]\nh [label = \"LDA\"]\ni [label = \"PLS-DA\"]\n\n# edge definitions with the node IDs\na -> b\nb -> c\nb -> d\na -> e\nc -> e\ne -> f\ne -> g\nf -> h\nf -> i\n{a c} -> f\ng -> h\n{h i} -> j\nj -> k\nd -> j\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-bb6b69223ca9cd5300eb" style="width:504px;height:504px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bb6b69223ca9cd5300eb">{"x":{"diagram":"\ndigraph fluxograma_modelagem {\n\n# a \"graph\" statement\n  graph [overlap = true, fontname = Helvetica, fontsize = 150]\n\n# node definitions\nnode [shape = box]\n\na [label = \"Dados\"]\nb [label = \"Quebra dos dados \n rsample::initial_split()\"]\ne [label = \"Receita  \n recipes::recipe()\"]\nf [label = \"Interface caret \n train()\"]\nj [label = \"Predições\"]\nk [label = \"Avaliação \n performance\"]\n\nnode [shape = circle]\n\nc [label = \"Treino\"]\nd [label = \"Teste\"]\ng [label = \"PCA\"]\nh [label = \"LDA\"]\ni [label = \"PLS-DA\"]\n\n# edge definitions with the node IDs\na -> b\nb -> c\nb -> d\na -> e\nc -> e\ne -> f\ne -> g\nf -> h\nf -> i\n{a c} -> f\ng -> h\n{h i} -> j\nj -> k\nd -> j\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
 ]
 
@@ -599,10 +599,10 @@ predicao_lda_basico
 ```
 ##  [1] setosa     setosa     setosa     setosa     setosa     setosa    
 ##  [7] setosa     setosa     setosa     setosa     setosa     setosa    
-## [13] setosa     versicolor versicolor versicolor versicolor versicolor
+## [13] setosa     versicolor versicolor versicolor virginica  versicolor
 ## [19] versicolor versicolor versicolor versicolor versicolor versicolor
 ## [25] versicolor versicolor virginica  virginica  virginica  virginica 
-## [31] virginica  virginica  virginica  virginica  virginica  virginica 
+## [31] virginica  virginica  virginica  virginica  versicolor virginica 
 ## [37] virginica  virginica  virginica 
 ## Levels: setosa versicolor virginica
 ```
@@ -1033,31 +1033,31 @@ confusionMatrix(data = predicao_lda_sem_receita_basico, reference = teste$Specie
 ##             Reference
 ## Prediction   setosa versicolor virginica
 ##   setosa         13          0         0
-##   versicolor      0         13         0
-##   virginica       0          0        13
+##   versicolor      0         12         1
+##   virginica       0          1        12
 ## 
 ## Overall Statistics
-##                                      
-##                Accuracy : 1          
-##                  95% CI : (0.9097, 1)
-##     No Information Rate : 0.3333     
-##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16  
-##                                      
-##                   Kappa : 1          
-##                                      
-##  Mcnemar's Test P-Value : NA         
+##                                           
+##                Accuracy : 0.9487          
+##                  95% CI : (0.8268, 0.9937)
+##     No Information Rate : 0.3333          
+##     P-Value [Acc &gt; NIR] : 7.509e-16       
+##                                           
+##                   Kappa : 0.9231          
+##                                           
+##  Mcnemar's Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: setosa Class: versicolor Class: virginica
-## Sensitivity                 1.0000            1.0000           1.0000
-## Specificity                 1.0000            1.0000           1.0000
-## Pos Pred Value              1.0000            1.0000           1.0000
-## Neg Pred Value              1.0000            1.0000           1.0000
+## Sensitivity                 1.0000            0.9231           0.9231
+## Specificity                 1.0000            0.9615           0.9615
+## Pos Pred Value              1.0000            0.9231           0.9231
+## Neg Pred Value              1.0000            0.9615           0.9615
 ## Prevalence                  0.3333            0.3333           0.3333
-## Detection Rate              0.3333            0.3333           0.3333
+## Detection Rate              0.3333            0.3077           0.3077
 ## Detection Prevalence        0.3333            0.3333           0.3333
-## Balanced Accuracy           1.0000            1.0000           1.0000
+## Balanced Accuracy           1.0000            0.9423           0.9423
 ```
 
 ]
@@ -1106,23 +1106,6 @@ Baseia-se em variáveis latentes, em que cada fator é definido como uma combi
 
 ```r
 library("pls")
-```
-
-```
-## 
-## Attaching package: 'pls'
-```
-
-```
-## The following object is masked from 'package:caret':
-## 
-##     R2
-```
-
-```
-## The following object is masked from 'package:stats':
-## 
-##     loadings
 ```
 
 
@@ -1256,31 +1239,31 @@ plsfit_exemplo %&gt;%
 ##             Reference
 ## Prediction   setosa versicolor virginica
 ##   setosa         13          0         0
-##   versicolor      0         10         1
-##   virginica       0          3        12
+##   versicolor      0          6         1
+##   virginica       0          7        12
 ## 
 ## Overall Statistics
-##                                           
-##                Accuracy : 0.8974          
-##                  95% CI : (0.7578, 0.9713)
-##     No Information Rate : 0.3333          
-##     P-Value [Acc &gt; NIR] : 3.435e-13       
-##                                           
-##                   Kappa : 0.8462          
-##                                           
-##  Mcnemar's Test P-Value : NA              
+##                                          
+##                Accuracy : 0.7949         
+##                  95% CI : (0.6354, 0.907)
+##     No Information Rate : 0.3333         
+##     P-Value [Acc &gt; NIR] : 4.429e-09      
+##                                          
+##                   Kappa : 0.6923         
+##                                          
+##  Mcnemar's Test P-Value : NA             
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: setosa Class: versicolor Class: virginica
-## Sensitivity                 1.0000            0.7692           0.9231
-## Specificity                 1.0000            0.9615           0.8846
-## Pos Pred Value              1.0000            0.9091           0.8000
-## Neg Pred Value              1.0000            0.8929           0.9583
+## Sensitivity                 1.0000            0.4615           0.9231
+## Specificity                 1.0000            0.9615           0.7308
+## Pos Pred Value              1.0000            0.8571           0.6316
+## Neg Pred Value              1.0000            0.7813           0.9500
 ## Prevalence                  0.3333            0.3333           0.3333
-## Detection Rate              0.3333            0.2564           0.3077
-## Detection Prevalence        0.3333            0.2821           0.3846
-## Balanced Accuracy           1.0000            0.8654           0.9038
+## Detection Rate              0.3333            0.1538           0.3077
+## Detection Prevalence        0.3333            0.1795           0.4872
+## Balanced Accuracy           1.0000            0.7115           0.8269
 ```
 
 ---
@@ -1378,31 +1361,31 @@ confusionMatrix(data = predicao_plsfit_exemplo_loocv, reference = teste$Species)
 ##             Reference
 ## Prediction   setosa versicolor virginica
 ##   setosa         13          0         0
-##   versicolor      0          5         3
-##   virginica       0          8        10
+##   versicolor      0          6         2
+##   virginica       0          7        11
 ## 
 ## Overall Statistics
-##                                         
-##                Accuracy : 0.7179        
-##                  95% CI : (0.5513, 0.85)
-##     No Information Rate : 0.3333        
-##     P-Value [Acc &gt; NIR] : 1.039e-06     
-##                                         
-##                   Kappa : 0.5769        
-##                                         
-##  Mcnemar's Test P-Value : NA            
+##                                           
+##                Accuracy : 0.7692          
+##                  95% CI : (0.6067, 0.8887)
+##     No Information Rate : 0.3333          
+##     P-Value [Acc &gt; NIR] : 3.12e-08        
+##                                           
+##                   Kappa : 0.6538          
+##                                           
+##  Mcnemar's Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: setosa Class: versicolor Class: virginica
-## Sensitivity                 1.0000            0.3846           0.7692
-## Specificity                 1.0000            0.8846           0.6923
-## Pos Pred Value              1.0000            0.6250           0.5556
-## Neg Pred Value              1.0000            0.7419           0.8571
+## Sensitivity                 1.0000            0.4615           0.8462
+## Specificity                 1.0000            0.9231           0.7308
+## Pos Pred Value              1.0000            0.7500           0.6111
+## Neg Pred Value              1.0000            0.7742           0.9048
 ## Prevalence                  0.3333            0.3333           0.3333
-## Detection Rate              0.3333            0.1282           0.2564
+## Detection Rate              0.3333            0.1538           0.2821
 ## Detection Prevalence        0.3333            0.2051           0.4615
-## Balanced Accuracy           1.0000            0.6346           0.7308
+## Balanced Accuracy           1.0000            0.6923           0.7885
 ```
 ]
 
@@ -1472,7 +1455,7 @@ background-size: cover
 
 
 ```
-## R version 4.1.1 (2021-08-10)
+## R version 4.1.2 (2021-11-01)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
 ## Running under: macOS Catalina 10.15.7
 ## 
@@ -1487,47 +1470,48 @@ background-size: cover
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] pls_2.7-3             MASS_7.3-54           DiagrammeR_1.0.6.9000
-##  [4] metathis_1.0.3        data.table_1.14.0     magrittr_2.0.1       
-##  [7] caret_6.0-88          lattice_0.20-44       yardstick_0.0.8      
-## [10] workflowsets_0.0.2    workflows_0.2.2       tune_0.1.5           
-## [13] tidyr_1.1.4           tibble_3.1.5          rsample_0.1.0        
-## [16] recipes_0.1.16        purrr_0.3.4           parsnip_0.1.6        
-## [19] modeldata_0.1.0       infer_0.5.4           dplyr_1.0.7          
-## [22] dials_0.0.9           scales_1.1.1          broom_0.7.7          
-## [25] tidymodels_0.1.3      ggplot2_3.3.5         xaringanthemer_0.3.4 
+##  [1] pls_2.8-0            MASS_7.3-54          DiagrammeR_1.0.8    
+##  [4] metathis_1.1.1       data.table_1.14.2    magrittr_2.0.2      
+##  [7] caret_6.0-90         lattice_0.20-45      yardstick_0.0.9     
+## [10] workflowsets_0.1.0   workflows_0.2.4      tune_0.1.6          
+## [13] tidyr_1.2.0          tibble_3.1.6         rsample_0.1.1       
+## [16] recipes_0.1.17       purrr_0.3.4          parsnip_0.1.7       
+## [19] modeldata_0.1.1      infer_1.0.0          dplyr_1.0.7         
+## [22] dials_0.1.0          scales_1.1.1         broom_0.7.12        
+## [25] tidymodels_0.1.4     ggplot2_3.3.5        xaringanthemer_0.4.1
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] colorspace_2.0-2     ellipsis_0.3.2       class_7.3-19        
 ##  [4] showtext_0.9-4       proxy_0.4-26         xaringanExtra_0.5.2 
 ##  [7] rstudioapi_0.13      showtextdb_3.0       listenv_0.8.0       
-## [10] furrr_0.2.2          farver_2.1.0         xaringan_0.21       
-## [13] prodlim_2019.11.13   fansi_0.5.0          lubridate_1.7.10    
-## [16] xml2_1.3.2           codetools_0.2-18     splines_4.1.1       
-## [19] knitr_1.34           jsonlite_1.7.2       pROC_1.17.0.1       
-## [22] icons_0.2.0          compiler_4.1.1       backports_1.2.1     
+## [10] furrr_0.2.3          farver_2.1.0         xaringan_0.22       
+## [13] prodlim_2019.11.13   fansi_1.0.2          lubridate_1.8.0     
+## [16] xml2_1.3.3           codetools_0.2-18     splines_4.1.2       
+## [19] knitr_1.37           jsonlite_1.7.3       pROC_1.18.0         
+## [22] icons_0.2.0          compiler_4.1.2       backports_1.4.1     
 ## [25] assertthat_0.2.1     Matrix_1.3-4         fastmap_1.1.0       
-## [28] cli_3.0.1            NIRtools_0.0.0.9006  visNetwork_2.0.9    
-## [31] htmltools_0.5.2      tools_4.1.1          gtable_0.3.0        
-## [34] glue_1.4.2           reshape2_1.4.4       rappdirs_0.3.3      
-## [37] Rcpp_1.0.7           jquerylib_0.1.4      DiceDesign_1.9      
-## [40] vctrs_0.3.8          nlme_3.1-152         iterators_1.0.13    
-## [43] timeDate_3043.102    gower_0.2.2          xfun_0.25           
-## [46] stringr_1.4.0        globals_0.14.0       lifecycle_1.0.1     
-## [49] future_1.21.0        ipred_0.9-11         parallel_4.1.1      
-## [52] RColorBrewer_1.1-2   yaml_2.2.1           sass_0.4.0          
-## [55] rpart_4.1-15         stringi_1.7.5        highr_0.9           
-## [58] foreach_1.5.1        e1071_1.7-7          lhs_1.1.1           
-## [61] lava_1.6.9           rlang_0.4.12         pkgconfig_2.0.3     
-## [64] evaluate_0.14        htmlwidgets_1.5.3    labeling_0.4.2      
-## [67] tidyselect_1.1.1     parallelly_1.26.0    plyr_1.8.6          
-## [70] R6_2.5.1             generics_0.1.0       DBI_1.1.1           
-## [73] pillar_1.6.4         whisker_0.4          withr_2.4.2         
-## [76] survival_3.2-11      nnet_7.3-16          crayon_1.4.1        
-## [79] utf8_1.2.2           rmarkdown_2.10       sysfonts_0.8.3      
-## [82] grid_4.1.1           ModelMetrics_1.2.2.2 digest_0.6.28       
-## [85] stats4_4.1.1         GPfit_1.0-8          munsell_0.5.0       
-## [88] bslib_0.2.5.1
+## [28] cli_3.1.1            visNetwork_2.1.0     NIRtools_0.0.0.9006 
+## [31] htmltools_0.5.2      tools_4.1.2          gtable_0.3.0        
+## [34] glue_1.6.1           reshape2_1.4.4       rappdirs_0.3.3      
+## [37] Rcpp_1.0.8           jquerylib_0.1.4      DiceDesign_1.9      
+## [40] vctrs_0.3.8          nlme_3.1-153         blogdown_1.7        
+## [43] iterators_1.0.14     timeDate_3043.102    gower_1.0.0         
+## [46] xfun_0.29            stringr_1.4.0        globals_0.14.0      
+## [49] lifecycle_1.0.1      future_1.23.0        ipred_0.9-12        
+## [52] parallel_4.1.2       RColorBrewer_1.1-2   yaml_2.2.2          
+## [55] sass_0.4.0           rpart_4.1-15         stringi_1.7.6       
+## [58] highr_0.9            foreach_1.5.2        e1071_1.7-9         
+## [61] lhs_1.1.3            hardhat_0.2.0        lava_1.6.10         
+## [64] rlang_1.0.1          pkgconfig_2.0.3      evaluate_0.14       
+## [67] htmlwidgets_1.5.4    labeling_0.4.2       tidyselect_1.1.1    
+## [70] parallelly_1.30.0    plyr_1.8.6           bookdown_0.24.9     
+## [73] R6_2.5.1             generics_0.1.2       DBI_1.1.2           
+## [76] pillar_1.7.0         whisker_0.4          withr_2.4.3         
+## [79] survival_3.2-13      nnet_7.3-16          future.apply_1.8.1  
+## [82] crayon_1.4.2         utf8_1.2.2           rmarkdown_2.11.22   
+## [85] sysfonts_0.8.5       grid_4.1.2           ModelMetrics_1.2.2.2
+## [88] digest_0.6.29        stats4_4.1.2         GPfit_1.0-8         
+## [91] munsell_0.5.0        bslib_0.3.1
 ```
 
     </textarea>

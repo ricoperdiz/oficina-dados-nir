@@ -1509,7 +1509,7 @@ Kuhn, M. 2019. A Short Introduction to the caret Package. Disponível em <https:
 
 Kuhn, Max e Silge, J. 2021. Tidy Modeling with R. Disponível em <https://www.tmwr.org/base-r.html>.    
 
-Perdiz, R. O que é o tidyverse? Disponível em <https://ricardoperdiz.com/2020/04/08/tidyverse/>  
+Perdiz, R. O que é o tidyverse? Disponível em <https://www.ricardoperdiz.com/blog/2020-04-tidyverse/>  
 
 Silge, Julia. Todas suas postagens são úteis. *#tidytuesday* *#tidymodels*.  
 
