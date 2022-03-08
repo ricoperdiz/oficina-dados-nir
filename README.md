@@ -61,9 +61,9 @@ Sugiro que instalem o
 
 Duas opções:
 
-1.  Próprios dados, já formatados para análise OU;
+1)  Próprios dados, já formatados para análise OU;
 
-2.  utilizem um conjunto de dados NIR de minha tese disponibilizado no
+2)  utilizem um conjunto de dados NIR de minha tese disponibilizado no
     pacote `NIRtools` (ver em <https://github.com/ricoperdiz/NIRtools>;
     instruções sobre como utilizar este conjunto serão dadas amanhã). O
     conjunto é muito pequeno e servirá apenas para demonstração dos
@@ -82,5 +82,5 @@ Duas opções:
 
 GitHub: <https://github.com/ricoperdiz>  
 Twitter: <https://twitter.com/ricoperdiz>  
-Sítio pessoal: <https://ricardoperdiz.com>  
-Correio eletrônico: <ricoperdiz@gmail.com>
+Sítio pessoal: <https://www.ricardoperdiz.com>  
+Correio eletrônico: <ricardoperdiz@yahoo.com>
