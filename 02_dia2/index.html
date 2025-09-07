@@ -4,16 +4,13 @@
     <title>Oficina de análise de dados NIR em ambiente R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Ricardo Perdiz (Luz da Floresta)" />
-    <script src="libs/header-attrs-2.11.22/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
     <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
     <script src="libs/tile-view-0.2.6/tile-view.js"></script>
     <script src="libs/fabric-4.3.1/fabric.min.js"></script>
     <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
     <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
     <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
-    <script src="libs/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
-    <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
-    <script src="libs/panelset-0.2.6/panelset.js"></script>
     <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
     <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
     <link href="libs/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
@@ -39,10 +36,11 @@
     <meta property="og:type" content="website"/>
     <meta property="og:locale" content="en_US"/>
     <meta property="article:author" content="Ricardo de Oliveira Perdiz"/>
-    <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+    <link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
     <script src="libs/viz-1.8.2/viz.js"></script>
     <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-    <script src="libs/grViz-binding-1.0.8/grViz.js"></script>
+    <script src="libs/grViz-binding-1.0.11.9000/grViz.js"></script>
     <link rel="stylesheet" href="css/xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="css/footer-header.css" type="text/css" />
     <link rel="stylesheet" href="css/ribbon.css" type="text/css" />
@@ -142,7 +140,7 @@ name: dados
 ## Opção 1 - Dados `iris`
 
 
-```r
+``` r
 dados &lt;- iris
 ```
 
@@ -150,7 +148,7 @@ dados &lt;- iris
 ## Opção 2 - Importação de dados próprios
 
 
-```r
+``` r
 library("data.table")
 dados &lt;- fread("MEUSDADOS.csv")
 ```
@@ -161,7 +159,7 @@ dados &lt;- fread("MEUSDADOS.csv")
 ## Opção 3 - Conjunto de dados `nir_data`&lt;sup&gt;1&lt;/sup&gt;, que acompanha o pacote `NIRtools`&lt;sup&gt;2&lt;/sup&gt;.  
 
 
-```r
+``` r
 dados &lt;-
   fread("https://raw.githubusercontent.com/ricoperdiz/NIRtools/master/inst/extdata/nir_data.csv")
 ```
@@ -173,7 +171,7 @@ dados &lt;-
 ## Transformação do `data.frame` em um `tibble`&lt;sup&gt;1&lt;/sup&gt;
 
 
-```r
+``` r
 library("tibble")
 dados &lt;- as_tibble(dados)
 dados
@@ -193,7 +191,7 @@ dados
 ##  8          5           3.4          1.5         0.2 setosa 
 ##  9          4.4         2.9          1.4         0.2 setosa 
 ## 10          4.9         3.1          1.5         0.1 setosa 
-## # … with 140 more rows
+## # ℹ 140 more rows
 ```
 
 .footnote2[
@@ -213,13 +211,13 @@ Em casos em que a variável contendo o nome da espécie apresente espaços, pont
 Em casos assim, podemos tomar o procedimento abaixo:
 
 
-```r
+``` r
 library("dplyr")
 ```
 
 
 
-```r
+``` r
 dados$SP1 &lt;- 
   case_when(
   dados$SP1 == "P. aracouchini" ~ "arac",
@@ -237,7 +235,7 @@ dados$SP1 &lt;-
 ## Divisão dos dados em `treino` e `teste`
 
 
-```r
+``` r
 library("rsample") # initial_split
 dados_split &lt;- initial_split(dados, strata = "Species")
 treino &lt;- training(dados_split)
@@ -250,7 +248,7 @@ name: receita
 ## Criação e preparo da receita
 
 
-```r
+``` r
 library("recipes")
 treino_receita &lt;- 
   recipes::recipe(Species ~ ., data = treino) %&gt;% 
@@ -259,15 +257,40 @@ treino_receita
 ```
 
 ```
-## Recipe
 ## 
-## Inputs:
+```
+
+```
+## ── Recipe ─────────────────────────────────────────────────────────────────────────
+```
+
+```
 ## 
-##       role #variables
-##    outcome          1
-##  predictor          4
+```
+
+```
+## ── Inputs
+```
+
+```
+## Number of variables by role
+```
+
+```
+## outcome:   1
+## predictor: 4
+```
+
+```
 ## 
-## Training data contained 111 data points and no missing data.
+```
+
+```
+## ── Training information
+```
+
+```
+## Training data contained 111 data points and no incomplete rows.
 ```
 
 ---
@@ -287,7 +310,7 @@ Depois, é só plotar os dados *espremendo* a receita, o que vai gerar uma PCA c
 ## I - PCA com todos os dados?
 
 
-```r
+``` r
 dados_completos_receita_pca_pre &lt;- 
   recipes::recipe(Species ~ ., data = dados) %&gt;% 
   step_normalize(all_predictors()) %&gt;% 
@@ -297,20 +320,56 @@ dados_completos_receita_pca_pre
 ```
 
 ```
-## Recipe
 ## 
-## Inputs:
+```
+
+```
+## ── Recipe ─────────────────────────────────────────────────────────────────────────
+```
+
+```
 ## 
-##       role #variables
-##    outcome          1
-##  predictor          4
+```
+
+```
+## ── Inputs
+```
+
+```
+## Number of variables by role
+```
+
+```
+## outcome:   1
+## predictor: 4
+```
+
+```
 ## 
-## Training data contained 150 data points and no missing data.
+```
+
+```
+## ── Training information
+```
+
+```
+## Training data contained 150 data points and no incomplete rows.
+```
+
+```
 ## 
-## Operations:
-## 
-## Centering and scaling for Sepal.Length, Sepal.Width, Petal.Length, ... [trained]
-## PCA extraction with Sepal.Length, Sepal.Width, Petal.Length, P... [trained]
+```
+
+```
+## ── Operations
+```
+
+```
+## • Centering and scaling for: Sepal.Length Sepal.Width, ... | Trained
+```
+
+```
+## • PCA extraction with: Sepal.Length, Sepal.Width, Petal.Length, ... | Trained
 ```
 
 
@@ -319,7 +378,7 @@ dados_completos_receita_pca_pre
 ## II - PCA com todos os dados?
 
 
-```r
+``` r
 pca_tabela &lt;- tidy(dados_completos_receita_pca_pre, 2)
 pca_tabela
 ```
@@ -328,22 +387,22 @@ pca_tabela
 ## # A tibble: 16 × 4
 ##    terms          value component id       
 ##    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    
-##  1 Sepal.Length  0.521  PC1       pca_EX7FS
-##  2 Sepal.Width  -0.269  PC1       pca_EX7FS
-##  3 Petal.Length  0.580  PC1       pca_EX7FS
-##  4 Petal.Width   0.565  PC1       pca_EX7FS
-##  5 Sepal.Length -0.377  PC2       pca_EX7FS
-##  6 Sepal.Width  -0.923  PC2       pca_EX7FS
-##  7 Petal.Length -0.0245 PC2       pca_EX7FS
-##  8 Petal.Width  -0.0669 PC2       pca_EX7FS
-##  9 Sepal.Length  0.720  PC3       pca_EX7FS
-## 10 Sepal.Width  -0.244  PC3       pca_EX7FS
-## 11 Petal.Length -0.142  PC3       pca_EX7FS
-## 12 Petal.Width  -0.634  PC3       pca_EX7FS
-## 13 Sepal.Length  0.261  PC4       pca_EX7FS
-## 14 Sepal.Width  -0.124  PC4       pca_EX7FS
-## 15 Petal.Length -0.801  PC4       pca_EX7FS
-## 16 Petal.Width   0.524  PC4       pca_EX7FS
+##  1 Sepal.Length  0.521  PC1       pca_rVG5f
+##  2 Sepal.Width  -0.269  PC1       pca_rVG5f
+##  3 Petal.Length  0.580  PC1       pca_rVG5f
+##  4 Petal.Width   0.565  PC1       pca_rVG5f
+##  5 Sepal.Length -0.377  PC2       pca_rVG5f
+##  6 Sepal.Width  -0.923  PC2       pca_rVG5f
+##  7 Petal.Length -0.0245 PC2       pca_rVG5f
+##  8 Petal.Width  -0.0669 PC2       pca_rVG5f
+##  9 Sepal.Length  0.720  PC3       pca_rVG5f
+## 10 Sepal.Width  -0.244  PC3       pca_rVG5f
+## 11 Petal.Length -0.142  PC3       pca_rVG5f
+## 12 Petal.Width  -0.634  PC3       pca_rVG5f
+## 13 Sepal.Length  0.261  PC4       pca_rVG5f
+## 14 Sepal.Width  -0.124  PC4       pca_rVG5f
+## 15 Petal.Length -0.801  PC4       pca_rVG5f
+## 16 Petal.Width   0.524  PC4       pca_rVG5f
 ```
 
 ---
@@ -353,7 +412,7 @@ pca_tabela
 ### Variação das PC's
 
 
-```r
+``` r
 sdev_pca_normalizada &lt;- dados_completos_receita_pca_pre$steps[[2]]$res$sdev
 porcent_variacao_normalizada &lt;- sdev_pca_normalizada^2 / sum(sdev_pca_normalizada^2)
 pca_normalizada_variacao &lt;- 
@@ -382,7 +441,7 @@ pca_normalizada_variacao
 ### Plotando PCA com dados completos
 
 
-```r
+``` r
 library("ggplot2")
 pc1 &lt;- filter(pca_normalizada_variacao, pcs == "PC1")
 pc2 &lt;- filter(pca_normalizada_variacao, pcs == "PC2")
@@ -433,8 +492,8 @@ caret::trainControl()
 ## Fluxograma de um perfil básico de análise
 
 .center2[
-<div id="htmlwidget-bb6b69223ca9cd5300eb" style="width:504px;height:504px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-bb6b69223ca9cd5300eb">{"x":{"diagram":"\ndigraph fluxograma_modelagem {\n\n# a \"graph\" statement\n  graph [overlap = true, fontname = Helvetica, fontsize = 150]\n\n# node definitions\nnode [shape = box]\n\na [label = \"Dados\"]\nb [label = \"Quebra dos dados \n rsample::initial_split()\"]\ne [label = \"Receita  \n recipes::recipe()\"]\nf [label = \"Interface caret \n train()\"]\nj [label = \"Predições\"]\nk [label = \"Avaliação \n performance\"]\n\nnode [shape = circle]\n\nc [label = \"Treino\"]\nd [label = \"Teste\"]\ng [label = \"PCA\"]\nh [label = \"LDA\"]\ni [label = \"PLS-DA\"]\n\n# edge definitions with the node IDs\na -> b\nb -> c\nb -> d\na -> e\nc -> e\ne -> f\ne -> g\nf -> h\nf -> i\n{a c} -> f\ng -> h\n{h i} -> j\nj -> k\nd -> j\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-f95eea578212e254a59b" style="width:504px;height:504px;"></div>
+<script type="application/json" data-for="htmlwidget-f95eea578212e254a59b">{"x":{"diagram":"\ndigraph fluxograma_modelagem {\n\n# a \"graph\" statement\n  graph [overlap = true, fontname = Helvetica, fontsize = 150]\n\n# node definitions\nnode [shape = box]\n\na [label = \"Dados\"]\nb [label = \"Quebra dos dados \n rsample::initial_split()\"]\ne [label = \"Receita  \n recipes::recipe()\"]\nf [label = \"Interface caret \n train()\"]\nj [label = \"Predições\"]\nk [label = \"Avaliação \n performance\"]\n\nnode [shape = circle]\n\nc [label = \"Treino\"]\nd [label = \"Teste\"]\ng [label = \"PCA\"]\nh [label = \"LDA\"]\ni [label = \"PLS-DA\"]\n\n# edge definitions with the node IDs\na -> b\nb -> c\nb -> d\na -> e\nc -> e\ne -> f\ne -> g\nf -> h\nf -> i\n{a c} -> f\ng -> h\n{h i} -> j\nj -> k\nd -> j\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
 ]
 
@@ -465,17 +524,17 @@ Em R, utilizamos a função `lda()` do pacote `MASS` (Venables e Ripley 2002)&lt
 Usando o `caret`, a função é a mesma, porém dentro de uma interface comum a vários métodos diferentes&lt;sup&gt;3&lt;/sup&gt;.  
 
 
-```r
+``` r
 library("MASS")
 ```
 
 ```
 ## 
-## Attaching package: 'MASS'
+## Anexando pacote: 'MASS'
 ```
 
 ```
-## The following object is masked from 'package:dplyr':
+## O seguinte objeto é mascarado por 'package:dplyr':
 ## 
 ##     select
 ```
@@ -521,7 +580,7 @@ Receita criada no slide [Criação da receita](#receita).
 .pull-left[
 
 
-```r
+``` r
 library("caret")
 ```
 
@@ -531,7 +590,7 @@ library("caret")
 .pull-right[
 
 
-```r
+``` r
 ldafit_cvsimples &lt;-
   train(
     treino_receita, treino,
@@ -549,7 +608,7 @@ ldafit_cvsimples &lt;-
 
 
 
-```r
+``` r
 ldafit_cvsimples
 ```
 
@@ -574,7 +633,7 @@ ldafit_cvsimples
 ### Um exemplo - II - Medindo performance do `treino`
 
 
-```r
+``` r
 getTrainPerf(ldafit_cvsimples)
 ```
 
@@ -589,7 +648,7 @@ getTrainPerf(ldafit_cvsimples)
 
 .pull-left[
 
-```r
+``` r
 predicao_lda_basico &lt;- 
   ldafit_cvsimples %&gt;%
   predict(., newdata = teste)
@@ -597,13 +656,12 @@ predicao_lda_basico
 ```
 
 ```
-##  [1] setosa     setosa     setosa     setosa     setosa     setosa    
-##  [7] setosa     setosa     setosa     setosa     setosa     setosa    
-## [13] setosa     versicolor versicolor versicolor virginica  versicolor
-## [19] versicolor versicolor versicolor versicolor versicolor versicolor
-## [25] versicolor versicolor virginica  virginica  virginica  virginica 
-## [31] virginica  virginica  virginica  virginica  versicolor virginica 
-## [37] virginica  virginica  virginica 
+##  [1] setosa     setosa     setosa     setosa     setosa     setosa     setosa    
+##  [8] setosa     setosa     setosa     setosa     setosa     setosa     versicolor
+## [15] versicolor versicolor versicolor versicolor versicolor versicolor versicolor
+## [22] versicolor versicolor versicolor versicolor versicolor virginica  virginica 
+## [29] virginica  virginica  virginica  virginica  virginica  virginica  virginica 
+## [36] virginica  virginica  virginica  virginica 
 ## Levels: setosa versicolor virginica
 ```
 ]
@@ -616,7 +674,7 @@ predicao_lda_basico
 .panel[.panel-name[Código]
 
 
-```r
+``` r
 confusionMatrix(data = predicao_lda_basico, reference = teste$Species)
 ```
 ]
@@ -649,7 +707,7 @@ source("https://raw.githubusercontent.com/ricoperdiz/NIRtools/master/R/confusion
 
 
 
-```r
+``` r
 par(mar = c(1, 5, 5, 1))
 table(teste$Species, predicao_lda_basico) %&gt;% 
   confusao_lab(.)
@@ -694,7 +752,7 @@ name: ctrl-cv
 ### Validação cruzada *simples* - `cv`
 
 
-```r
+``` r
 ctrl_cv &lt;- 
   trainControl(method = "cv",
                number = 10, # faz uma validacao 10-fold
@@ -705,7 +763,7 @@ ctrl_cv &lt;-
 ```
 
 
-```r
+``` r
 ldafit_cv_10fold &lt;- 
   train(
     treino_receita, treino,
@@ -722,16 +780,15 @@ ldafit_cv_10fold &lt;-
 
 
 
-```r
+``` r
 names(ldafit_cv_10fold)
 ```
 
 ```
-##  [1] "method"       "modelInfo"    "modelType"    "recipe"      
-##  [5] "results"      "pred"         "bestTune"     "call"        
-##  [9] "dots"         "metric"       "control"      "finalModel"  
-## [13] "trainingData" "resample"     "resampledCM"  "perfNames"   
-## [17] "maximize"     "yLimits"      "times"        "levels"      
+##  [1] "method"       "modelInfo"    "modelType"    "recipe"       "results"     
+##  [6] "pred"         "bestTune"     "call"         "dots"         "metric"      
+## [11] "control"      "finalModel"   "trainingData" "resample"     "resampledCM" 
+## [16] "perfNames"    "maximize"     "yLimits"      "times"        "levels"      
 ## [21] "rs_seed"
 ```
 
@@ -739,7 +796,7 @@ Para acessar as informações, basta executar um dos comandos abaixo:
 
 .pull-left[
 
-```r
+``` r
 ldafit_cv_10fold$method # metodo utilizado 
 ldafit_cv_10fold$modelInfo # info do modelo
 ldafit_cv_10fold$modelType # tipo de modelo
@@ -757,18 +814,18 @@ ldafit_cv_10fold$control # especificacoes de trainControl()
 #### Acessando o resultado de `train()` - II - Predições
 
 
-```r
+``` r
 ldafit_cv_10fold$pred %&gt;% 
   filter(obs != pred)
 ```
 
 ```
-##          obs rowIndex       pred       setosa versicolor virginica
-## 1 versicolor       64  virginica 7.082366e-31  0.1304324 0.8695676
-## 2  virginica       99 versicolor 6.506261e-27  0.8282785 0.1717215
-##   parameter Resample
-## 1      none   Fold07
-## 2      none   Fold10
+##          obs rowIndex       pred       setosa versicolor virginica parameter
+## 1 versicolor       64  virginica 7.082366e-31  0.1304324 0.8695676      none
+## 2  virginica       99 versicolor 6.506261e-27  0.8282785 0.1717215      none
+##   Resample
+## 1   Fold07
+## 2   Fold10
 ```
 
 ---
@@ -777,7 +834,7 @@ ldafit_cv_10fold$pred %&gt;%
 
 .center[
 
-```r
+``` r
 ldafit_cv_10fold$results
 ```
 
@@ -795,7 +852,7 @@ ldafit_cv_10fold$results
 Resultado da LDA, caso fizéssemos uso da função `lda()`, referente ao modelo final: 
 
 
-```r
+``` r
 ldafit_cv_10fold$finalModel
 ```
 
@@ -830,7 +887,7 @@ ldafit_cv_10fold$finalModel
 #### Medindo performance do `treino`
 
 
-```r
+``` r
 getTrainPerf(ldafit_cv_10fold)
 ```
 
@@ -847,7 +904,7 @@ getTrainPerf(ldafit_cv_10fold)
 .panel[.panel-name[Código]
 
 
-```r
+``` r
 predicao_lda_cv_10fold &lt;- 
   ldafit_cv_10fold %&gt;%
   predict(., newdata = teste)
@@ -873,7 +930,7 @@ confusionMatrix(data = predicao_lda_cv_10fold, reference = teste$Species)
 Função `confusao_lab()` do pacote `NIRtools`&lt;sup&gt;1&lt;/sup&gt;.  
 
 
-```r
+``` r
 par(mar = c(1, 5, 5, 1))
 table(teste$Species, predicao_lda_basico) %&gt;% 
   NIRtools::confusao_lab(., add_CP = TRUE)
@@ -899,7 +956,7 @@ table(teste$Species, predicao_lda_basico) %&gt;%
 .pull-left[
 
 
-```r
+``` r
 ctrl_lda_repeatedcv &lt;-
   trainControl(
     method = "repeatedcv",
@@ -917,7 +974,7 @@ ctrl_lda_repeatedcv &lt;-
 .pull-right[
 
 
-```r
+``` r
 ldafit_repeatedcv_10fold_10vezes &lt;- 
   train(
     treino_receita, treino,
@@ -960,7 +1017,7 @@ ldafit_repeatedcv_10fold_10vezes &lt;-
 #### Execução
 
 
-```r
+``` r
 resultado_lda_sem_receita_basico &lt;-
   train(
     Species ~ .,
@@ -977,7 +1034,7 @@ resultado_lda_sem_receita_basico &lt;-
 #### Checagem de resultado
 
 
-```r
+``` r
 print(resultado_lda_sem_receita_basico)
 ```
 
@@ -1004,7 +1061,7 @@ print(resultado_lda_sem_receita_basico)
 #### Medindo performance do `treino`
 
 
-```r
+``` r
 getTrainPerf(resultado_lda_sem_receita_basico)
 ```
 
@@ -1019,7 +1076,7 @@ getTrainPerf(resultado_lda_sem_receita_basico)
 
 .center[
 
-```r
+``` r
 predicao_lda_sem_receita_basico &lt;- 
   resultado_lda_sem_receita_basico %&gt;%
   predict(., newdata = teste)
@@ -1033,31 +1090,31 @@ confusionMatrix(data = predicao_lda_sem_receita_basico, reference = teste$Specie
 ##             Reference
 ## Prediction   setosa versicolor virginica
 ##   setosa         13          0         0
-##   versicolor      0         12         1
-##   virginica       0          1        12
+##   versicolor      0         13         0
+##   virginica       0          0        13
 ## 
 ## Overall Statistics
-##                                           
-##                Accuracy : 0.9487          
-##                  95% CI : (0.8268, 0.9937)
-##     No Information Rate : 0.3333          
-##     P-Value [Acc &gt; NIR] : 7.509e-16       
-##                                           
-##                   Kappa : 0.9231          
-##                                           
-##  Mcnemar's Test P-Value : NA              
+##                                      
+##                Accuracy : 1          
+##                  95% CI : (0.9097, 1)
+##     No Information Rate : 0.3333     
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16  
+##                                      
+##                   Kappa : 1          
+##                                      
+##  Mcnemar's Test P-Value : NA         
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: setosa Class: versicolor Class: virginica
-## Sensitivity                 1.0000            0.9231           0.9231
-## Specificity                 1.0000            0.9615           0.9615
-## Pos Pred Value              1.0000            0.9231           0.9231
-## Neg Pred Value              1.0000            0.9615           0.9615
+## Sensitivity                 1.0000            1.0000           1.0000
+## Specificity                 1.0000            1.0000           1.0000
+## Pos Pred Value              1.0000            1.0000           1.0000
+## Neg Pred Value              1.0000            1.0000           1.0000
 ## Prevalence                  0.3333            0.3333           0.3333
-## Detection Rate              0.3333            0.3077           0.3077
+## Detection Rate              0.3333            0.3333           0.3333
 ## Detection Prevalence        0.3333            0.3333           0.3333
-## Balanced Accuracy           1.0000            0.9423           0.9423
+## Balanced Accuracy           1.0000            1.0000           1.0000
 ```
 
 ]
@@ -1070,7 +1127,7 @@ confusionMatrix(data = predicao_lda_sem_receita_basico, reference = teste$Specie
 Função `confusao_lab()` do pacote `NIRtools`&lt;sup&gt;1&lt;/sup&gt;.  
 
 
-```r
+``` r
 par(mar = c(1, 5, 5, 1))
 table(teste$Species, predicao_lda_sem_receita_basico) %&gt;% 
   NIRtools::confusao_lab(.)
@@ -1104,8 +1161,25 @@ Baseia-se em variáveis latentes, em que cada fator é definido como uma combi
 &gt; Essencialmente, trata-se de uma versão *supervisionada* da PCA&lt;sup&gt;1&lt;/sup&gt;
 
 
-```r
+``` r
 library("pls")
+```
+
+```
+## 
+## Anexando pacote: 'pls'
+```
+
+```
+## O seguinte objeto é mascarado por 'package:caret':
+## 
+##     R2
+```
+
+```
+## O seguinte objeto é mascarado por 'package:stats':
+## 
+##     loadings
 ```
 
 
@@ -1127,7 +1201,7 @@ Mesmo conjunto de dados utilizado anteriormente.
 Coloco aqui para facilitar a preparação dos dados para a PLS.  
 
 
-```r
+``` r
 dados &lt;- iris
 dados &lt;- as_tibble(dados)
 dados_split &lt;- initial_split(dados, strata = "Species")
@@ -1144,7 +1218,7 @@ treino_receita &lt;-
 
 .pull-left[
 
-```r
+``` r
 ctrl_exemplo_pls &lt;-
   trainControl(
     method = "repeatedcv",
@@ -1158,7 +1232,7 @@ ctrl_exemplo_pls &lt;-
 .pull-right[
 
 
-```r
+``` r
 plsfit_exemplo &lt;-
   train(
     treino_receita, treino,
@@ -1186,7 +1260,7 @@ Também comentar sobre a possibilidade de paralelização da análise por meio d
 
 
 
-```r
+``` r
 plsfit_exemplo
 ```
 
@@ -1216,7 +1290,7 @@ plsfit_exemplo
 ### Acurácia por número de componentes
 
 
-```r
+``` r
 plot(plsfit_exemplo)
 ```
 
@@ -1227,7 +1301,7 @@ plot(plsfit_exemplo)
 ### Predições e performance
 
 
-```r
+``` r
 plsfit_exemplo %&gt;%
   predict(newdata = teste) %&gt;% 
   confusionMatrix(data = ., reference = teste$Species)
@@ -1272,7 +1346,7 @@ plsfit_exemplo %&gt;%
 
 .pull-left[
 
-```r
+``` r
 ctrl_loocv &lt;-
   trainControl(
     method = "LOOCV",
@@ -1283,7 +1357,7 @@ ctrl_loocv &lt;-
 
 .pull-right[
 
-```r
+``` r
 plsfit_exemplo_loocv &lt;-
   train(
     treino_receita, treino,
@@ -1303,7 +1377,7 @@ plsfit_exemplo_loocv &lt;-
 ### Checagem de resultado
 
 
-```r
+``` r
 plsfit_exemplo_loocv
 ```
 
@@ -1331,7 +1405,7 @@ plsfit_exemplo_loocv
 ### Medindo performance do `treino`
 
 
-```r
+``` r
 getTrainPerf(plsfit_exemplo_loocv)
 ```
 
@@ -1348,7 +1422,7 @@ getTrainPerf(plsfit_exemplo_loocv)
 .panel[.panel-name[Código]
 
 
-```r
+``` r
 predicao_plsfit_exemplo_loocv &lt;- 
   plsfit_exemplo_loocv %&gt;%
   predict(., newdata = teste)
@@ -1404,7 +1478,7 @@ confusionMatrix(data = predicao_plsfit_exemplo_loocv, reference = teste$Species)
 Função `confusao_lab()` do pacote `NIRtools`&lt;sup&gt;1&lt;/sup&gt;.  
 
 
-```r
+``` r
 par(mar = c(1, 5, 5, 1))
 table(teste$Species, predicao_plsfit_exemplo_loocv) %&gt;% 
   NIRtools::confusao_lab(.)
@@ -1455,77 +1529,79 @@ background-size: cover
 
 
 ```
-## R version 4.1.2 (2021-11-01)
-## Platform: x86_64-apple-darwin17.0 (64-bit)
-## Running under: macOS Catalina 10.15.7
+## R version 4.5.1 (2025-06-13 ucrt)
+## Platform: x86_64-w64-mingw32/x64
+## Running under: Windows 11 x64 (build 26100)
 ## 
 ## Matrix products: default
-## BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+##   LAPACK version 3.12.1
 ## 
 ## locale:
-## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## [1] LC_COLLATE=Portuguese_Brazil.utf8  LC_CTYPE=Portuguese_Brazil.utf8   
+## [3] LC_MONETARY=Portuguese_Brazil.utf8 LC_NUMERIC=C                      
+## [5] LC_TIME=Portuguese_Brazil.utf8    
+## 
+## time zone: America/Manaus
+## tzcode source: internal
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] pls_2.8-0            MASS_7.3-54          DiagrammeR_1.0.8    
-##  [4] metathis_1.1.1       data.table_1.14.2    magrittr_2.0.2      
-##  [7] caret_6.0-90         lattice_0.20-45      yardstick_0.0.9     
-## [10] workflowsets_0.1.0   workflows_0.2.4      tune_0.1.6          
-## [13] tidyr_1.2.0          tibble_3.1.6         rsample_0.1.1       
-## [16] recipes_0.1.17       purrr_0.3.4          parsnip_0.1.7       
-## [19] modeldata_0.1.1      infer_1.0.0          dplyr_1.0.7         
-## [22] dials_0.1.0          scales_1.1.1         broom_0.7.12        
-## [25] tidymodels_0.1.4     ggplot2_3.3.5        xaringanthemer_0.4.1
+##  [1] pls_2.8-5                 MASS_7.3-65               DiagrammeR_1.0.11.9000   
+##  [4] metathis_1.1.4.9000       data.table_1.17.0         magrittr_2.0.3           
+##  [7] caret_7.0-1               lattice_0.22-7            yardstick_1.3.2          
+## [10] workflowsets_1.1.0        workflows_1.2.0           tune_1.3.0               
+## [13] tidyr_1.3.1               tibble_3.2.1              rsample_1.3.0            
+## [16] recipes_1.2.1             purrr_1.0.4               parsnip_1.3.1            
+## [19] modeldata_1.4.0           infer_1.0.8               dplyr_1.1.4              
+## [22] dials_1.4.0               scales_1.3.0              broom_1.0.8              
+## [25] tidymodels_1.3.0          ggplot2_3.5.2             xaringanthemer_0.4.3.9000
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] colorspace_2.0-2     ellipsis_0.3.2       class_7.3-19        
-##  [4] showtext_0.9-4       proxy_0.4-26         xaringanExtra_0.5.2 
-##  [7] rstudioapi_0.13      showtextdb_3.0       listenv_0.8.0       
-## [10] furrr_0.2.3          farver_2.1.0         xaringan_0.22       
-## [13] prodlim_2019.11.13   fansi_1.0.2          lubridate_1.8.0     
-## [16] xml2_1.3.3           codetools_0.2-18     splines_4.1.2       
-## [19] knitr_1.37           jsonlite_1.7.3       pROC_1.18.0         
-## [22] icons_0.2.0          compiler_4.1.2       backports_1.4.1     
-## [25] assertthat_0.2.1     Matrix_1.3-4         fastmap_1.1.0       
-## [28] cli_3.1.1            visNetwork_2.1.0     NIRtools_0.0.0.9006 
-## [31] htmltools_0.5.2      tools_4.1.2          gtable_0.3.0        
-## [34] glue_1.6.1           reshape2_1.4.4       rappdirs_0.3.3      
-## [37] Rcpp_1.0.8           jquerylib_0.1.4      DiceDesign_1.9      
-## [40] vctrs_0.3.8          nlme_3.1-153         blogdown_1.7        
-## [43] iterators_1.0.14     timeDate_3043.102    gower_1.0.0         
-## [46] xfun_0.29            stringr_1.4.0        globals_0.14.0      
-## [49] lifecycle_1.0.1      future_1.23.0        ipred_0.9-12        
-## [52] parallel_4.1.2       RColorBrewer_1.1-2   yaml_2.2.2          
-## [55] sass_0.4.0           rpart_4.1-15         stringi_1.7.6       
-## [58] highr_0.9            foreach_1.5.2        e1071_1.7-9         
-## [61] lhs_1.1.3            hardhat_0.2.0        lava_1.6.10         
-## [64] rlang_1.0.1          pkgconfig_2.0.3      evaluate_0.14       
-## [67] htmlwidgets_1.5.4    labeling_0.4.2       tidyselect_1.1.1    
-## [70] parallelly_1.30.0    plyr_1.8.6           bookdown_0.24.9     
-## [73] R6_2.5.1             generics_0.1.2       DBI_1.1.2           
-## [76] pillar_1.7.0         whisker_0.4          withr_2.4.3         
-## [79] survival_3.2-13      nnet_7.3-16          future.apply_1.8.1  
-## [82] crayon_1.4.2         utf8_1.2.2           rmarkdown_2.11.22   
-## [85] sysfonts_0.8.5       grid_4.1.2           ModelMetrics_1.2.2.2
-## [88] digest_0.6.29        stats4_4.1.2         GPfit_1.0-8         
-## [91] munsell_0.5.0        bslib_0.3.1
+##  [1] pROC_1.18.5              rlang_1.1.6              furrr_0.3.1             
+##  [4] e1071_1.7-16             compiler_4.5.1           vctrs_0.6.5             
+##  [7] reshape2_1.4.4           lhs_1.2.0                stringr_1.5.1           
+## [10] sysfonts_0.8.9           pkgconfig_2.0.3          fastmap_1.2.0           
+## [13] backports_1.5.0          labeling_0.4.3           utf8_1.2.4              
+## [16] rmarkdown_2.29           prodlim_2024.06.25       xfun_0.52.1             
+## [19] showtext_0.9-7           cachem_1.1.0             jsonlite_2.0.0          
+## [22] parallel_4.5.1           R6_2.6.1                 RColorBrewer_1.1-3      
+## [25] bslib_0.9.0              stringi_1.8.7            parallelly_1.43.0       
+## [28] rpart_4.1.24             lubridate_1.9.4          jquerylib_0.1.4         
+## [31] Rcpp_1.0.14              iterators_1.0.14         knitr_1.50              
+## [34] future.apply_1.11.3      NIRtools_0.0.0.9006      Matrix_1.7-3            
+## [37] splines_4.5.1            nnet_7.3-20              timechange_0.3.0        
+## [40] tidyselect_1.2.1         rstudioapi_0.17.1        yaml_2.3.10             
+## [43] timeDate_4041.110        codetools_0.2-20         listenv_0.9.1           
+## [46] plyr_1.8.9               withr_3.0.2              evaluate_1.0.3          
+## [49] xaringan_0.30.1          future_1.40.0            survival_3.8-3          
+## [52] proxy_0.4-27             xml2_1.3.8               pillar_1.10.2           
+## [55] rsconnect_1.3.4          whisker_0.4.1            foreach_1.5.2           
+## [58] stats4_4.5.1             generics_0.1.3           icons_0.2.0             
+## [61] munsell_0.5.1            globals_0.16.3           class_7.3-23            
+## [64] glue_1.8.0               tools_4.5.1              xaringanExtra_0.8.0.9000
+## [67] ModelMetrics_1.2.2.2     gower_1.0.2              visNetwork_2.1.2        
+## [70] grid_4.5.1               ipred_0.9-15             colorspace_2.1-1        
+## [73] nlme_3.1-168             showtextdb_3.0           cli_3.6.4               
+## [76] DiceDesign_1.10          rappdirs_0.3.3           lava_1.8.1              
+## [79] gtable_0.3.6             GPfit_1.0-9              sass_0.4.10             
+## [82] digest_0.6.37            htmlwidgets_1.6.4        farver_2.1.2            
+## [85] htmltools_0.5.8.1        lifecycle_1.0.4          hardhat_1.4.1
 ```
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false,
-"ratio": "16:9",
-"navigation": {
-"scroll": false,
-"click": true
-}
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false,
+  "ratio": "16:9",
+  "navigation": {
+    "scroll": false,
+    "click": true
+  }
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -1566,6 +1642,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
