@@ -36,11 +36,6 @@
     <meta property="og:type" content="website"/>
     <meta property="og:locale" content="en_US"/>
     <meta property="article:author" content="Ricardo de Oliveira Perdiz"/>
-    <link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
-    <script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
-    <script src="libs/viz-1.8.2/viz.js"></script>
-    <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-    <script src="libs/grViz-binding-1.0.11.9000/grViz.js"></script>
     <link rel="stylesheet" href="css/xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="css/footer-header.css" type="text/css" />
     <link rel="stylesheet" href="css/ribbon.css" type="text/css" />
@@ -261,7 +256,7 @@ treino_receita
 ```
 
 ```
-## ── Recipe ─────────────────────────────────────────────────────────────────────────
+## ── Recipe ────────────────────────────────────────────────────
 ```
 
 ```
@@ -290,7 +285,8 @@ treino_receita
 ```
 
 ```
-## Training data contained 111 data points and no incomplete rows.
+## Training data contained 111 data points and no incomplete
+## rows.
 ```
 
 ---
@@ -324,7 +320,7 @@ dados_completos_receita_pca_pre
 ```
 
 ```
-## ── Recipe ─────────────────────────────────────────────────────────────────────────
+## ── Recipe ────────────────────────────────────────────────────
 ```
 
 ```
@@ -353,7 +349,8 @@ dados_completos_receita_pca_pre
 ```
 
 ```
-## Training data contained 150 data points and no incomplete rows.
+## Training data contained 150 data points and no incomplete
+## rows.
 ```
 
 ```
@@ -365,11 +362,11 @@ dados_completos_receita_pca_pre
 ```
 
 ```
-## • Centering and scaling for: Sepal.Length Sepal.Width, ... | Trained
+## • Centering and scaling for: Sepal.Length, ... | Trained
 ```
 
 ```
-## • PCA extraction with: Sepal.Length, Sepal.Width, Petal.Length, ... | Trained
+## • PCA extraction with: Sepal.Length, ... | Trained
 ```
 
 
@@ -387,22 +384,22 @@ pca_tabela
 ## # A tibble: 16 × 4
 ##    terms          value component id       
 ##    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    
-##  1 Sepal.Length  0.521  PC1       pca_rVG5f
-##  2 Sepal.Width  -0.269  PC1       pca_rVG5f
-##  3 Petal.Length  0.580  PC1       pca_rVG5f
-##  4 Petal.Width   0.565  PC1       pca_rVG5f
-##  5 Sepal.Length -0.377  PC2       pca_rVG5f
-##  6 Sepal.Width  -0.923  PC2       pca_rVG5f
-##  7 Petal.Length -0.0245 PC2       pca_rVG5f
-##  8 Petal.Width  -0.0669 PC2       pca_rVG5f
-##  9 Sepal.Length  0.720  PC3       pca_rVG5f
-## 10 Sepal.Width  -0.244  PC3       pca_rVG5f
-## 11 Petal.Length -0.142  PC3       pca_rVG5f
-## 12 Petal.Width  -0.634  PC3       pca_rVG5f
-## 13 Sepal.Length  0.261  PC4       pca_rVG5f
-## 14 Sepal.Width  -0.124  PC4       pca_rVG5f
-## 15 Petal.Length -0.801  PC4       pca_rVG5f
-## 16 Petal.Width   0.524  PC4       pca_rVG5f
+##  1 Sepal.Length  0.521  PC1       pca_f6kUq
+##  2 Sepal.Width  -0.269  PC1       pca_f6kUq
+##  3 Petal.Length  0.580  PC1       pca_f6kUq
+##  4 Petal.Width   0.565  PC1       pca_f6kUq
+##  5 Sepal.Length -0.377  PC2       pca_f6kUq
+##  6 Sepal.Width  -0.923  PC2       pca_f6kUq
+##  7 Petal.Length -0.0245 PC2       pca_f6kUq
+##  8 Petal.Width  -0.0669 PC2       pca_f6kUq
+##  9 Sepal.Length  0.720  PC3       pca_f6kUq
+## 10 Sepal.Width  -0.244  PC3       pca_f6kUq
+## 11 Petal.Length -0.142  PC3       pca_f6kUq
+## 12 Petal.Width  -0.634  PC3       pca_f6kUq
+## 13 Sepal.Length  0.261  PC4       pca_f6kUq
+## 14 Sepal.Width  -0.124  PC4       pca_f6kUq
+## 15 Petal.Length -0.801  PC4       pca_f6kUq
+## 16 Petal.Width   0.524  PC4       pca_f6kUq
 ```
 
 ---
@@ -492,8 +489,7 @@ caret::trainControl()
 ## Fluxograma de um perfil básico de análise
 
 .center2[
-<div class="grViz html-widget html-fill-item" id="htmlwidget-f95eea578212e254a59b" style="width:504px;height:504px;"></div>
-<script type="application/json" data-for="htmlwidget-f95eea578212e254a59b">{"x":{"diagram":"\ndigraph fluxograma_modelagem {\n\n# a \"graph\" statement\n  graph [overlap = true, fontname = Helvetica, fontsize = 150]\n\n# node definitions\nnode [shape = box]\n\na [label = \"Dados\"]\nb [label = \"Quebra dos dados \n rsample::initial_split()\"]\ne [label = \"Receita  \n recipes::recipe()\"]\nf [label = \"Interface caret \n train()\"]\nj [label = \"Predições\"]\nk [label = \"Avaliação \n performance\"]\n\nnode [shape = circle]\n\nc [label = \"Treino\"]\nd [label = \"Teste\"]\ng [label = \"PCA\"]\nh [label = \"LDA\"]\ni [label = \"PLS-DA\"]\n\n# edge definitions with the node IDs\na -> b\nb -> c\nb -> d\na -> e\nc -> e\ne -> f\ne -> g\nf -> h\nf -> i\n{a c} -> f\ng -> h\n{h i} -> j\nj -> k\nd -> j\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+&lt;img src="figuras/viz.png" width="70%" /&gt;
 
 ]
 
@@ -526,17 +522,6 @@ Usando o `caret`, a função é a mesma, porém dentro de uma interface comum a 
 
 ``` r
 library("MASS")
-```
-
-```
-## 
-## Anexando pacote: 'MASS'
-```
-
-```
-## O seguinte objeto é mascarado por 'package:dplyr':
-## 
-##     select
 ```
 
 
@@ -656,11 +641,13 @@ predicao_lda_basico
 ```
 
 ```
-##  [1] setosa     setosa     setosa     setosa     setosa     setosa     setosa    
-##  [8] setosa     setosa     setosa     setosa     setosa     setosa     versicolor
-## [15] versicolor versicolor versicolor versicolor versicolor versicolor versicolor
-## [22] versicolor versicolor versicolor versicolor versicolor virginica  virginica 
-## [29] virginica  virginica  virginica  virginica  virginica  virginica  virginica 
+##  [1] setosa     setosa     setosa     setosa     setosa    
+##  [6] setosa     setosa     setosa     setosa     setosa    
+## [11] setosa     setosa     setosa     versicolor versicolor
+## [16] versicolor versicolor versicolor versicolor versicolor
+## [21] versicolor versicolor versicolor versicolor versicolor
+## [26] versicolor virginica  virginica  virginica  virginica 
+## [31] virginica  virginica  virginica  virginica  virginica 
 ## [36] virginica  virginica  virginica  virginica 
 ## Levels: setosa versicolor virginica
 ```
@@ -701,7 +688,7 @@ Função `confusao_lab()` do pacote `NIRtools`&lt;sup&gt;1&lt;/sup&gt;.
 Caso não consigam ou não desejem instalar o pacote, basta fazer um `source()`:
 
 
-```r
+``` r
 source("https://raw.githubusercontent.com/ricoperdiz/NIRtools/master/R/confusion_matrix.R")
 ```
 
@@ -785,11 +772,13 @@ names(ldafit_cv_10fold)
 ```
 
 ```
-##  [1] "method"       "modelInfo"    "modelType"    "recipe"       "results"     
-##  [6] "pred"         "bestTune"     "call"         "dots"         "metric"      
-## [11] "control"      "finalModel"   "trainingData" "resample"     "resampledCM" 
-## [16] "perfNames"    "maximize"     "yLimits"      "times"        "levels"      
-## [21] "rs_seed"
+##  [1] "method"       "modelInfo"    "modelType"   
+##  [4] "recipe"       "results"      "pred"        
+##  [7] "bestTune"     "call"         "dots"        
+## [10] "metric"       "control"      "finalModel"  
+## [13] "trainingData" "resample"     "resampledCM" 
+## [16] "perfNames"    "maximize"     "yLimits"     
+## [19] "times"        "levels"       "rs_seed"
 ```
 
 Para acessar as informações, basta executar um dos comandos abaixo:
@@ -820,12 +809,12 @@ ldafit_cv_10fold$pred %&gt;%
 ```
 
 ```
-##          obs rowIndex       pred       setosa versicolor virginica parameter
-## 1 versicolor       64  virginica 7.082366e-31  0.1304324 0.8695676      none
-## 2  virginica       99 versicolor 6.506261e-27  0.8282785 0.1717215      none
-##   Resample
-## 1   Fold07
-## 2   Fold10
+##          obs rowIndex       pred       setosa versicolor
+## 1 versicolor       64  virginica 7.082366e-31  0.1304324
+## 2  virginica       99 versicolor 6.506261e-27  0.8282785
+##   virginica parameter Resample
+## 1 0.8695676      none   Fold07
+## 2 0.1717215      none   Fold10
 ```
 
 ---
@@ -1106,15 +1095,24 @@ confusionMatrix(data = predicao_lda_sem_receita_basico, reference = teste$Specie
 ## 
 ## Statistics by Class:
 ## 
-##                      Class: setosa Class: versicolor Class: virginica
-## Sensitivity                 1.0000            1.0000           1.0000
-## Specificity                 1.0000            1.0000           1.0000
-## Pos Pred Value              1.0000            1.0000           1.0000
-## Neg Pred Value              1.0000            1.0000           1.0000
-## Prevalence                  0.3333            0.3333           0.3333
-## Detection Rate              0.3333            0.3333           0.3333
-## Detection Prevalence        0.3333            0.3333           0.3333
-## Balanced Accuracy           1.0000            1.0000           1.0000
+##                      Class: setosa Class: versicolor
+## Sensitivity                 1.0000            1.0000
+## Specificity                 1.0000            1.0000
+## Pos Pred Value              1.0000            1.0000
+## Neg Pred Value              1.0000            1.0000
+## Prevalence                  0.3333            0.3333
+## Detection Rate              0.3333            0.3333
+## Detection Prevalence        0.3333            0.3333
+## Balanced Accuracy           1.0000            1.0000
+##                      Class: virginica
+## Sensitivity                    1.0000
+## Specificity                    1.0000
+## Pos Pred Value                 1.0000
+## Neg Pred Value                 1.0000
+## Prevalence                     0.3333
+## Detection Rate                 0.3333
+## Detection Prevalence           0.3333
+## Balanced Accuracy              1.0000
 ```
 
 ]
@@ -1163,23 +1161,6 @@ Baseia-se em variáveis latentes, em que cada fator é definido como uma combi
 
 ``` r
 library("pls")
-```
-
-```
-## 
-## Anexando pacote: 'pls'
-```
-
-```
-## O seguinte objeto é mascarado por 'package:caret':
-## 
-##     R2
-```
-
-```
-## O seguinte objeto é mascarado por 'package:stats':
-## 
-##     loadings
 ```
 
 
@@ -1281,7 +1262,8 @@ plsfit_exemplo
 ##   2      0.7864798  0.6787244
 ##   3      0.7934949  0.6889434
 ## 
-## Accuracy was used to select the optimal model using the largest value.
+## Accuracy was used to select the optimal model using
+##  the largest value.
 ## The final value used for the model was ncomp = 3.
 ```
 
@@ -1313,8 +1295,8 @@ plsfit_exemplo %&gt;%
 ##             Reference
 ## Prediction   setosa versicolor virginica
 ##   setosa         13          0         0
-##   versicolor      0          6         1
-##   virginica       0          7        12
+##   versicolor      0          8         3
+##   virginica       0          5        10
 ## 
 ## Overall Statistics
 ##                                          
@@ -1329,15 +1311,24 @@ plsfit_exemplo %&gt;%
 ## 
 ## Statistics by Class:
 ## 
-##                      Class: setosa Class: versicolor Class: virginica
-## Sensitivity                 1.0000            0.4615           0.9231
-## Specificity                 1.0000            0.9615           0.7308
-## Pos Pred Value              1.0000            0.8571           0.6316
-## Neg Pred Value              1.0000            0.7813           0.9500
-## Prevalence                  0.3333            0.3333           0.3333
-## Detection Rate              0.3333            0.1538           0.3077
-## Detection Prevalence        0.3333            0.1795           0.4872
-## Balanced Accuracy           1.0000            0.7115           0.8269
+##                      Class: setosa Class: versicolor
+## Sensitivity                 1.0000            0.6154
+## Specificity                 1.0000            0.8846
+## Pos Pred Value              1.0000            0.7273
+## Neg Pred Value              1.0000            0.8214
+## Prevalence                  0.3333            0.3333
+## Detection Rate              0.3333            0.2051
+## Detection Prevalence        0.3333            0.2821
+## Balanced Accuracy           1.0000            0.7500
+##                      Class: virginica
+## Sensitivity                    0.7692
+## Specificity                    0.8077
+## Pos Pred Value                 0.6667
+## Neg Pred Value                 0.8750
+## Prevalence                     0.3333
+## Detection Rate                 0.2564
+## Detection Prevalence           0.3846
+## Balanced Accuracy              0.7885
 ```
 
 ---
@@ -1435,31 +1426,40 @@ confusionMatrix(data = predicao_plsfit_exemplo_loocv, reference = teste$Species)
 ##             Reference
 ## Prediction   setosa versicolor virginica
 ##   setosa         13          0         0
-##   versicolor      0          6         2
-##   virginica       0          7        11
+##   versicolor      0          9         2
+##   virginica       0          4        11
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.7692          
-##                  95% CI : (0.6067, 0.8887)
+##                Accuracy : 0.8462          
+##                  95% CI : (0.6947, 0.9414)
 ##     No Information Rate : 0.3333          
-##     P-Value [Acc &gt; NIR] : 3.12e-08        
+##     P-Value [Acc &gt; NIR] : 5.641e-11       
 ##                                           
-##                   Kappa : 0.6538          
+##                   Kappa : 0.7692          
 ##                                           
 ##  Mcnemar's Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
-##                      Class: setosa Class: versicolor Class: virginica
-## Sensitivity                 1.0000            0.4615           0.8462
-## Specificity                 1.0000            0.9231           0.7308
-## Pos Pred Value              1.0000            0.7500           0.6111
-## Neg Pred Value              1.0000            0.7742           0.9048
-## Prevalence                  0.3333            0.3333           0.3333
-## Detection Rate              0.3333            0.1538           0.2821
-## Detection Prevalence        0.3333            0.2051           0.4615
-## Balanced Accuracy           1.0000            0.6923           0.7885
+##                      Class: setosa Class: versicolor
+## Sensitivity                 1.0000            0.6923
+## Specificity                 1.0000            0.9231
+## Pos Pred Value              1.0000            0.8182
+## Neg Pred Value              1.0000            0.8571
+## Prevalence                  0.3333            0.3333
+## Detection Rate              0.3333            0.2308
+## Detection Prevalence        0.3333            0.2821
+## Balanced Accuracy           1.0000            0.8077
+##                      Class: virginica
+## Sensitivity                    0.8462
+## Specificity                    0.8462
+## Pos Pred Value                 0.7333
+## Neg Pred Value                 0.9167
+## Prevalence                     0.3333
+## Detection Rate                 0.2821
+## Detection Prevalence           0.3846
+## Balanced Accuracy              0.8462
 ```
 ]
 
@@ -1537,57 +1537,85 @@ background-size: cover
 ##   LAPACK version 3.12.1
 ## 
 ## locale:
-## [1] LC_COLLATE=Portuguese_Brazil.utf8  LC_CTYPE=Portuguese_Brazil.utf8   
-## [3] LC_MONETARY=Portuguese_Brazil.utf8 LC_NUMERIC=C                      
+## [1] LC_COLLATE=Portuguese_Brazil.utf8 
+## [2] LC_CTYPE=Portuguese_Brazil.utf8   
+## [3] LC_MONETARY=Portuguese_Brazil.utf8
+## [4] LC_NUMERIC=C                      
 ## [5] LC_TIME=Portuguese_Brazil.utf8    
 ## 
 ## time zone: America/Manaus
 ## tzcode source: internal
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] stats     graphics  grDevices utils     datasets 
+## [6] methods   base     
 ## 
 ## other attached packages:
-##  [1] pls_2.8-5                 MASS_7.3-65               DiagrammeR_1.0.11.9000   
-##  [4] metathis_1.1.4.9000       data.table_1.17.0         magrittr_2.0.3           
-##  [7] caret_7.0-1               lattice_0.22-7            yardstick_1.3.2          
-## [10] workflowsets_1.1.0        workflows_1.2.0           tune_1.3.0               
-## [13] tidyr_1.3.1               tibble_3.2.1              rsample_1.3.0            
-## [16] recipes_1.2.1             purrr_1.0.4               parsnip_1.3.1            
-## [19] modeldata_1.4.0           infer_1.0.8               dplyr_1.1.4              
-## [22] dials_1.4.0               scales_1.3.0              broom_1.0.8              
-## [25] tidymodels_1.3.0          ggplot2_3.5.2             xaringanthemer_0.4.3.9000
+##  [1] pls_2.8-5                 MASS_7.3-65              
+##  [3] metathis_1.1.4.9000       data.table_1.17.0        
+##  [5] magrittr_2.0.3            caret_7.0-1              
+##  [7] lattice_0.22-7            yardstick_1.3.2          
+##  [9] workflowsets_1.1.0        workflows_1.2.0          
+## [11] tune_1.3.0                tidyr_1.3.1              
+## [13] tibble_3.2.1              rsample_1.3.0            
+## [15] recipes_1.2.1             purrr_1.0.4              
+## [17] parsnip_1.3.1             modeldata_1.4.0          
+## [19] infer_1.0.8               dplyr_1.1.4              
+## [21] dials_1.4.0               scales_1.3.0             
+## [23] broom_1.0.8               tidymodels_1.3.0         
+## [25] ggplot2_3.5.2             xaringanthemer_0.4.3.9000
+## [27] rsvg_2.6.2                DiagrammeRsvg_0.1        
+## [29] DiagrammeR_1.0.11.9000   
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] pROC_1.18.5              rlang_1.1.6              furrr_0.3.1             
-##  [4] e1071_1.7-16             compiler_4.5.1           vctrs_0.6.5             
-##  [7] reshape2_1.4.4           lhs_1.2.0                stringr_1.5.1           
-## [10] sysfonts_0.8.9           pkgconfig_2.0.3          fastmap_1.2.0           
-## [13] backports_1.5.0          labeling_0.4.3           utf8_1.2.4              
-## [16] rmarkdown_2.29           prodlim_2024.06.25       xfun_0.52.1             
-## [19] showtext_0.9-7           cachem_1.1.0             jsonlite_2.0.0          
-## [22] parallel_4.5.1           R6_2.6.1                 RColorBrewer_1.1-3      
-## [25] bslib_0.9.0              stringi_1.8.7            parallelly_1.43.0       
-## [28] rpart_4.1.24             lubridate_1.9.4          jquerylib_0.1.4         
-## [31] Rcpp_1.0.14              iterators_1.0.14         knitr_1.50              
-## [34] future.apply_1.11.3      NIRtools_0.0.0.9006      Matrix_1.7-3            
-## [37] splines_4.5.1            nnet_7.3-20              timechange_0.3.0        
-## [40] tidyselect_1.2.1         rstudioapi_0.17.1        yaml_2.3.10             
-## [43] timeDate_4041.110        codetools_0.2-20         listenv_0.9.1           
-## [46] plyr_1.8.9               withr_3.0.2              evaluate_1.0.3          
-## [49] xaringan_0.30.1          future_1.40.0            survival_3.8-3          
-## [52] proxy_0.4-27             xml2_1.3.8               pillar_1.10.2           
-## [55] rsconnect_1.3.4          whisker_0.4.1            foreach_1.5.2           
-## [58] stats4_4.5.1             generics_0.1.3           icons_0.2.0             
-## [61] munsell_0.5.1            globals_0.16.3           class_7.3-23            
-## [64] glue_1.8.0               tools_4.5.1              xaringanExtra_0.8.0.9000
-## [67] ModelMetrics_1.2.2.2     gower_1.0.2              visNetwork_2.1.2        
-## [70] grid_4.5.1               ipred_0.9-15             colorspace_2.1-1        
-## [73] nlme_3.1-168             showtextdb_3.0           cli_3.6.4               
-## [76] DiceDesign_1.10          rappdirs_0.3.3           lava_1.8.1              
-## [79] gtable_0.3.6             GPfit_1.0-9              sass_0.4.10             
-## [82] digest_0.6.37            htmlwidgets_1.6.4        farver_2.1.2            
-## [85] htmltools_0.5.8.1        lifecycle_1.0.4          hardhat_1.4.1
+##  [1] pROC_1.18.5              rlang_1.1.6             
+##  [3] furrr_0.3.1              e1071_1.7-16            
+##  [5] compiler_4.5.1           png_0.1-8               
+##  [7] vctrs_0.6.5              reshape2_1.4.4          
+##  [9] lhs_1.2.0                stringr_1.5.1           
+## [11] sysfonts_0.8.9           pkgconfig_2.0.3         
+## [13] fastmap_1.2.0            backports_1.5.0         
+## [15] labeling_0.4.3           utf8_1.2.4              
+## [17] promises_1.3.2           rmarkdown_2.29          
+## [19] prodlim_2024.06.25       xfun_0.52.1             
+## [21] showtext_0.9-7           cachem_1.1.0            
+## [23] jsonlite_2.0.0           later_1.4.2             
+## [25] parallel_4.5.1           R6_2.6.1                
+## [27] bslib_0.9.0              stringi_1.8.7           
+## [29] RColorBrewer_1.1-3       parallelly_1.43.0       
+## [31] rpart_4.1.24             lubridate_1.9.4         
+## [33] jquerylib_0.1.4          Rcpp_1.0.14             
+## [35] iterators_1.0.14         knitr_1.50              
+## [37] future.apply_1.11.3      NIRtools_0.0.0.9006     
+## [39] httpuv_1.6.15            Matrix_1.7-3            
+## [41] splines_4.5.1            nnet_7.3-20             
+## [43] timechange_0.3.0         tidyselect_1.2.1        
+## [45] rstudioapi_0.17.1        yaml_2.3.10             
+## [47] timeDate_4041.110        codetools_0.2-20        
+## [49] curl_6.2.2               listenv_0.9.1           
+## [51] plyr_1.8.9               withr_3.0.2             
+## [53] evaluate_1.0.3           xaringan_0.30.1         
+## [55] future_1.40.0            survival_3.8-3          
+## [57] proxy_0.4-27             xml2_1.3.8              
+## [59] pillar_1.10.2            rsconnect_1.3.4         
+## [61] whisker_0.4.1            stats4_4.5.1            
+## [63] foreach_1.5.2            generics_0.1.3          
+## [65] icons_0.2.0              servr_0.32              
+## [67] munsell_0.5.1            globals_0.16.3          
+## [69] class_7.3-23             glue_1.8.0              
+## [71] tools_4.5.1              xaringanExtra_0.8.0.9000
+## [73] ModelMetrics_1.2.2.2     gower_1.0.2             
+## [75] visNetwork_2.1.2         grid_4.5.1              
+## [77] ipred_0.9-15             colorspace_2.1-1        
+## [79] nlme_3.1-168             showtextdb_3.0          
+## [81] cli_3.6.4                DiceDesign_1.10         
+## [83] rappdirs_0.3.3           lava_1.8.1              
+## [85] V8_6.0.3                 gtable_0.3.6            
+## [87] GPfit_1.0-9              sass_0.4.10             
+## [89] digest_0.6.37            farver_2.1.2            
+## [91] htmlwidgets_1.6.4        htmltools_0.5.8.1       
+## [93] lifecycle_1.0.4          hardhat_1.4.1           
+## [95] mime_0.13
 ```
 
     </textarea>

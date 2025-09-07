@@ -375,63 +375,69 @@ caret::trainControl()
 
 .center2[
 ```{r diagrama, echo=FALSE, cache=FALSE, dev='png'}
-# fig.height=7, fig.width=12, 
-library("DiagrammeR")
-grViz("
-digraph fluxograma_modelagem {
-
-# a 'graph' statement
-  graph [overlap = true, fontname = Helvetica, fontsize = 150]
-
-# node definitions
-node [shape = box]
-
-a [label = '@@1']
-b [label = '@@2']
-e [label = '@@5']
-f [label = '@@6']
-j [label = '@@10']
-k [label = '@@11']
-
-node [shape = circle]
-
-c [label = '@@3']
-d [label = '@@4']
-g [label = '@@7']
-h [label = '@@8']
-i [label = '@@9']
-
-# edge definitions with the node IDs
-a -> b
-b -> c
-b -> d
-a -> e
-c -> e
-e -> f
-e -> g
-f -> h
-f -> i
-{a c} -> f
-g -> h
-{h i} -> j
-j -> k
-d -> j
-}
-
-[1]: 'Dados' # a
-[2]: 'Quebra dos dados \\n rsample::initial_split()'
-[3]: 'Treino' # c
-[4]: 'Teste' # d
-[5]: 'Receita  \\n recipes::recipe()' # e
-[6]: 'Interface caret \\n train()' # f
-[7]: 'PCA' # g
-[8]: 'LDA' # h
-[9]: 'PLS-DA' # i
-[10]: 'Predições' # j
-[11]: 'Avaliação \\n performance' # k
-",
-  engine = "dot")
-
+#| out-width: "70%"
+# fig.height=7, fig.width=12
+# library("DiagrammeR")
+# library("DiagrammeRsvg")  # for conversion to svg
+# library("rsvg")  # for saving svg
+# grViz("
+# digraph fluxograma_modelagem {
+# 
+# # a 'graph' statement
+#   graph [overlap = true, fontname = Helvetica, fontsize = 150]
+# 
+# # node definitions
+# node [shape = box]
+# 
+# a [label = '@@1']
+# b [label = '@@2']
+# e [label = '@@5']
+# f [label = '@@6']
+# j [label = '@@10']
+# k [label = '@@11']
+# 
+# node [shape = circle]
+# 
+# c [label = '@@3']
+# d [label = '@@4']
+# g [label = '@@7']
+# h [label = '@@8']
+# i [label = '@@9']
+# 
+# # edge definitions with the node IDs
+# a -> b
+# b -> c
+# b -> d
+# a -> e
+# c -> e
+# e -> f
+# e -> g
+# f -> h
+# f -> i
+# {a c} -> f
+# g -> h
+# {h i} -> j
+# j -> k
+# d -> j
+# }
+# 
+# [1]: 'Dados' # a
+# [2]: 'Quebra dos dados \\n rsample::initial_split()'
+# [3]: 'Treino' # c
+# [4]: 'Teste' # d
+# [5]: 'Receita  \\n recipes::recipe()' # e
+# [6]: 'Interface caret \\n train()' # f
+# [7]: 'PCA' # g
+# [8]: 'LDA' # h
+# [9]: 'PLS-DA' # i
+# [10]: 'Predições' # j
+# [11]: 'Avaliação \\n performance' # k
+# ",
+#   engine = "dot") |> 
+#   export_svg() |> 
+#   charToRaw() |> 
+#   rsvg_png("figuras/viz.png")
+knitr::include_graphics("figuras/viz.png")
 ```
 
 ]
