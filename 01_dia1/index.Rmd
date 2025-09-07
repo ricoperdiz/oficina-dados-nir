@@ -34,9 +34,10 @@ style_duo_accent(
 ```
 
 ```{r xaringanExtra, include=FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "scribble"))
-xaringanExtra::use_fit_screen()
-xaringanExtra::use_panelset()
+xaringanExtra::use_tile_view()
+xaringanExtra::use_scribble()
+# xaringanExtra::use_fit_screen()
+# xaringanExtra::use_panelset()
 xaringanExtra::use_tachyons()
 xaringanExtra::use_share_again()
 ```
@@ -391,7 +392,7 @@ class: middle
 .pull-left[
 # O que é o dplyr?
 
-![](doubt-1246169-639x521.jpg)
+![](figuras/doubt-1246169-639x521.jpg)
 
 ]
 
